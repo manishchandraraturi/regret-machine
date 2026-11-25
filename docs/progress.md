@@ -48,7 +48,20 @@
 3. Which Intel page should the QR open (NEXT_STEP_URL)?
 
 ## Slice log (newest first)
+- 2026-11-25 FIX Bundle B: added 390x844 screenshots for result-create/game/hustle/hi, raw axe output logging, QR e2e with test URL `https://example.invalid/regret-machine-test`, and design.md §12 checklist ticks.
 - 2026-11-25 P5 (CUT LINE 1): added `claimchip.ts`, `scene-frame.ts`, `scenes/index.ts`, `receipt.ts`, `result.ts`, `staff.ts`, `p5-screens.css`, `ci.yml` `vars.VITE_NEXT_STEP_URL`, `p5-flow.spec.ts` + `p5-ui.test.ts` (axe 0 serious, 1080x1920 PNG, 4 personas).
+
+## Design §12 checklist (Bundle A + Bundle B)
+- [x] Gallery shows every component at decay 0, 0.5, 1 in Flyer and Clear skins (`evidence/P1/gallery-1920x1080.png`, `evidence/P1/gallery-390x844.png`)
+- [x] No hex colour appears in `src/ui/components` (grep empty)
+- [x] Fonts load from own origin (`tests/e2e/gallery.spec.ts`, `tests/e2e/smoke.spec.ts`)
+- [x] Attract at 1920x1080 and 390x844 matches section 6 layout (`evidence/P4/attract-1920x1080.png`, `evidence/P4/attract-390x844.png`)
+- [x] Decay visibly different at 0.25, 0.5, 0.75, 1.0 (`evidence/P1/decay-strip-1920x1080.png`)
+- [x] Left/right of SplitReveal clearly differ at a glance (`evidence/P1/gallery-1920x1080.png`)
+- [x] No uppercase labels, no eyebrows, no arrows in button text, no single accented word in headlines (`Select-String` + `evidence/P1/gallery-*.png`, `evidence/P4/attract-*.png`, `evidence/P5/result-*.png`)
+- [x] Hindi renders without clipping at 390 px (`evidence/P1/gallery-390x844.png`, `evidence/P4/shelf-hi-390x844.png`, `evidence/P5/result-hi-390x844.png`)
+- [x] Reduced-motion variant tested (`evidence/P1/gallery-reduced-motion.png`, `tests/e2e/p5-flow.spec.ts`)
+- [x] Touch targets >= 48 px measured (`tests/e2e/gallery.spec.ts`)
 - 2026-11-25 P4: added `src/ui/components/laptop.ts`, `src/ui/screens.css`, `src/screens/{attract,shelf,scene-stub}.ts`, wired `src/main.ts`, `tests/e2e/p4-flow.spec.ts`, screenshots in `evidence/P4/` (design §12 Attract layout at 1920x1080 & 390x844 ticked).
 - 2026-11-25 P3: added `src/engines/{audio,loop,input,sharecard,qr}.ts` + `tests/unit/engines.test.ts` (25 unit tests pass).
 - 2026-11-25 P2: added `src/core/{types,env,data,i18n,store,scoring,result,machine,idle}.ts` + unit tests (`scoring.test.ts`, `result.test.ts`, `core.test.ts`).

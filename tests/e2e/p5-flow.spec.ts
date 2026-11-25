@@ -103,6 +103,17 @@ test.describe('P5 CUT LINE 1 end-to-end', () => {
 
     const assertNoSeriousAxe = async (screenName: string): Promise<void> => {
       const results = await new AxeBuilder({ page }).analyze();
+      console.log(
+        `AXE_RAW[${screenName}]=` +
+          JSON.stringify(
+            results.violations.map((v) => ({
+              id: v.id,
+              impact: v.impact,
+              nodes: v.nodes.length,
+              help: v.help,
+            })),
+          ),
+      );
       const serious = results.violations.filter(
         (v) => v.impact === 'serious' || v.impact === 'critical',
       );
@@ -132,9 +143,22 @@ test.describe('P5 CUT LINE 1 end-to-end', () => {
     await assertNoSeriousAxe('result');
     await page.screenshot({ path: 'evidence/P5/result-study-390x844.png' });
 
+    await page.getByRole('button', { name: 'हिन्दी' }).click();
+    await expect(page.locator('[data-screen="result"]')).toContainText('टॉपर');
+    await page.screenshot({ path: 'evidence/P5/result-hi-390x844.png' });
+    await page.getByRole('button', { name: 'English' }).click();
+
     await page.getByRole('button', { name: 'Show the store team' }).click();
     await assertNoSeriousAxe('staff');
     await page.screenshot({ path: 'evidence/P5/staff-390x844.png' });
+
+    for (const p of PERSONAS.slice(1)) {
+      await page.getByRole('button', { name: 'Play again' }).click();
+      await runToReceipt(page, p.label);
+      await page.getByRole('button', { name: 'See the fair fight' }).click();
+      await expect(page.getByRole('heading', { name: p.card })).toBeVisible();
+      await page.screenshot({ path: `evidence/P5/result-${p.id}-390x844.png` });
+    }
 
     expect(await csp.assertClean()).toEqual([]);
   });
