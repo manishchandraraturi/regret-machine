@@ -15,7 +15,7 @@
 | P9 | DONE | phase-P9, cutline-3 | CUT LINE 3: Creator night scene, stutter, C-03/C-04 + baseline, all 4 scenes live + evidence/P9/ |
 | P10 | DONE | phase-P10 | Fair Fight screen + fairfight.json (5 rows, 3 concessions), Hindi 390px pass + evidence/P10/ |
 | P11 | DONE | phase-P11 | Hardening: 120-180s timed run, jargon lint, axe 0 violations, 518.30 KB gzip, 0 third-party |
-| P12 | TODO | | |
+| P12 | DONE | phase-P12, v1.0 | Deliverables finalised, SPEC_CHECKLIST audited (0 TODO rows), freeze tag v1.0 |
 
 ## SPEC GAP log
 - `SPEC GAP: SRC-23 - human WhatsApp/registration not evidenced in repo - agent cannot perform it`
@@ -83,7 +83,13 @@
 - [x] axe: 0 serious issues (0 total violations after `tape.ts` `h2` fix)
 - [x] Screenshots at 1920x1080 and 390x844 for every screen (`evidence/P4`..`evidence/P11`)
 
+## P12 acceptance checklist
+- [x] Checklist has no TODO rows (`docs/SPEC_CHECKLIST.md` audit: 0 TODO, 0 IN PROGRESS)
+- [x] Public URL tested logged out on a phone (`390x844` fresh Playwright context)
+- [x] FREEZE tag `v1.0` created before Fri 09:00
+
 ## Slice log (newest first)
+- 2026-11-25 P12 (FREEZE v1.0): finalised `README.md`, `docs/system-design.md`, audited `docs/SPEC_CHECKLIST.md` (0 TODO rows), tagged `phase-P12` and `v1.0`.
 - 2026-11-25 P11: added `tests/unit/jargon.test.ts`, `tests/e2e/p11-hardening.spec.ts`, fixed `tape.ts` `h3`->`h2` (0 axe violations everywhere), verified 518.30 KB gzip, 0 forbidden APIs.
 - 2026-11-25 P10: added `src/data/fairfight.json`, `src/screens/fairfight.ts`, `getFairFight()` in `data.ts`, enabled `skipFairFight: false` in `main.ts`, 390px wrap rules, `tests/unit/fairfight.test.ts`, `tests/e2e/p10-fairfight.spec.ts`, screenshots in `evidence/P10/`.
 - 2026-11-25 P9 (CUT LINE 3): added `src/screens/scene-creator.ts`, `scene.creator.baseline` in copy.*.json, removed `createStubScene` from `scenes/index.ts`, `tests/unit/creator.test.ts`, `tests/e2e/p9-creator.spec.ts`, screenshots in `evidence/P9/`.

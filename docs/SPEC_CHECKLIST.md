@@ -19,10 +19,10 @@ Status values: TODO / IN PROGRESS / DONE / SPEC GAP. A row without Evidence is n
 | SRC-12 | Make Intel's advantages tangible compared to key competitors | P6-P10 | Split reveal in every scene + Fair Fight screen | DONE | done: P6,P7,P8,P9,P10 (all 4 SplitReveals + `fairfight.ts`, `evidence/P10/fairfight-*.png`) |
 | SRC-13 | End with a personalised AI PC recommendation | P5 | Unit test: 4 personas give 4 different recommendations | DONE | done: P5 (`result.test.ts`, `p5-flow.spec.ts` 4 distinct Result cards, `evidence/P5/result-*-1920x1080.png`) |
 | SRC-14 | End with a clear next step | P5 | Staff screen + QR + share card exist; e2e reaches them | DONE | done: P5 (`result.ts`, `staff.ts`, `p5-flow.spec.ts`, `evidence/P5/staff-1920x1080.png`) |
-| SRC-15 | Submit only public URLs or self-hosted URLs. Do NOT submit exe or code files | P12 | URL opens in a private window, logged out | TODO | |
-| SRC-16 | Submit Round 1 entry in the Google Form by 27 Nov 2026, 12 PM | P12 | HUMAN: screenshot of form confirmation | TODO | |
-| SRC-17 | Participate individually or in a team of max 4 members (we are 3) | P12 | HUMAN: form lists 3 names | TODO | |
-| SRC-18 | Shortlisted teams present before the Intel Jury on 28 Nov | P12 | HUMAN: demo-script rehearsed twice | TODO | |
+| SRC-15 | Submit only public URLs or self-hosted URLs. Do NOT submit exe or code files | P12 | URL opens in a private window, logged out | DONE | done: P12 (`https://manishchandraraturi.github.io/regret-machine/` verified logged-out 390x844) |
+| SRC-16 | Submit Round 1 entry in the Google Form by 27 Nov 2026, 12 PM | P12 | HUMAN: screenshot of form confirmation | SPEC GAP | SPEC GAP: SRC-16 - Round 1 Google Form submission is a human task - agent cannot submit |
+| SRC-17 | Participate individually or in a team of max 4 members (we are 3) | P12 | HUMAN: form lists 3 names | SPEC GAP | SPEC GAP: SRC-17 - Team of 3 names on Google Form is a human task - agent cannot submit |
+| SRC-18 | Shortlisted teams present before the Intel Jury on 28 Nov | P12 | HUMAN: demo-script rehearsed twice | SPEC GAP | SPEC GAP: SRC-18 - Jury presentation on 28 Nov is a human task - agent cannot perform |
 | SRC-19 | Judging: creativity of the game (3 points) | P1,P4-P9 | Design acceptance checklist ticked with screenshots | DONE | done: P1,P4,P5,P6,P7,P8,P9 (`evidence/P1/*`..`evidence/P9/*`) |
 | SRC-20 | Judging: persuasive impact towards buying (3 points) | P5-P9 | Every scene ends in a felt contrast + recommendation | DONE | done: P5,P6,P7,P8,P9 (all 4 scenes + `receipt.ts` + `result.ts`) |
 | SRC-21 | Judging: technical accuracy of AI PC features (3 points) | P2,P11 | Claims audit: 100% of shown numbers have source + baseline + tag | SPEC GAP | done: P2,P11 (`check_claims.py` exit 0); `--release` exit 1 for 9 UNVERIFIED claims (human teammate B task) |
@@ -49,8 +49,8 @@ Status values: TODO / IN PROGRESS / DONE / SPEC GAP. A row without Evidence is n
 | DSN-04 | Receipt tape: running regret list that prints as events happen | P1,P5 | Component test | DONE | done: P1,P5 (`tape.ts`, `receipt.ts`, `components.test.ts`, `evidence/P5/receipt-1920x1080.png`) |
 | DSN-05 | Motion: one orchestrated Year Flip; everything else answers user action | P1,P3 | Reduced-motion swap verified | DONE | done: P1,P3 (`yearflip.ts`, `loop.ts`, `input.ts`, `gallery.spec.ts`, `engines.test.ts`) |
 | DSN-06 | Clear skin for the reveal: cool white + Clear Blue, no stickers | P1,P5 | Screenshot vs design.md | DONE | done: P1,P5 (`tokens.css`, `splitreveal.ts`, `result.ts`, `evidence/P5/result-study-1920x1080.png`) |
-| DEL-01 | Public URL live (GitHub Pages) | P12 | Open in private window on a phone | TODO | |
-| DEL-02 | README: what it is, how to run, claims policy, credits | P12 | File exists, reviewed | TODO | |
-| DEL-03 | One-page system design for the jury (docs/system-design.md) | P12 | File exists | TODO | |
-| DEL-04 | Jury demo script, 3 minutes, timed (docs/demo-script.md) | P12 | Rehearsed | TODO | |
-| DEL-05 | 60-second screen recording as fallback if venue Wi-Fi fails | P12 | File on phone + Drive | TODO | |
+| DEL-01 | Public URL live (GitHub Pages) | P12 | Open in private window on a phone | DONE | done: P12 (https://manishchandraraturi.github.io/regret-machine/ verified logged-out 390x844) |
+| DEL-02 | README: what it is, how to run, claims policy, credits | P12 | File exists, reviewed | DONE | done: P12 (`README.md`) |
+| DEL-03 | One-page system design for the jury (docs/system-design.md) | P12 | File exists | DONE | done: P12 (`docs/system-design.md`) |
+| DEL-04 | Jury demo script, 3 minutes, timed (docs/demo-script.md) | P12 | Rehearsed | SPEC GAP | SPEC GAP: DEL-04 - docs/demo-script.md ready; live 2x human rehearsal not evidenced in repo |
+| DEL-05 | 60-second screen recording as fallback if venue Wi-Fi fails | P12 | File on phone + Drive | SPEC GAP | SPEC GAP: DEL-05 - 60s fallback screen recording on phone/Drive is a human task |
