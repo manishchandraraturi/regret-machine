@@ -25,6 +25,8 @@ None yet. Format: `SPEC GAP: <ID> - <WHAT> - <WHY>`.
 |---|---|---|---|
 | 2026-11-25 | Static Vite + vanilla TS on GitHub Pages | Spec: public URL only; smallest surface | architecture.md |
 | 2026-11-25 | Fictional decoy laptops | Accuracy and fairness | prd.md principle 2 |
+| 2026-11-25 | Node major 24 (v24.15.0) in `.nvmrc` | Matches local LTS environment | `node -v` |
+| 2026-11-25 | Repo URL `https://github.com/manishchandraraturi/regret-machine.git` (Pages-enabled status: verify on first deploy) | Remote already created and pushed | `git remote -v` |
 
 ## External facts the agent had to look up
 | Fact | Value | URL | Date | By |
@@ -38,9 +40,9 @@ None yet. Format: `SPEC GAP: <ID> - <WHAT> - <WHY>`.
 | Intel footnotes for C-05, C-06, C-07, C-08, C-16 | UNVERIFIED | Intel product brief / press deck | | teammate B |
 
 ## Open questions for the human
-1. `node -v` major version (set `.nvmrc`).
-2. GitHub repo URL and whether the remote exists.
+1. ~~`node -v` major version (set `.nvmrc`).~~ **Closed:** Node 24 (`v24.15.0`).
+2. ~~GitHub repo URL and whether the remote exists.~~ **Closed:** `https://github.com/manishchandraraturi/regret-machine.git` (remote exists; Pages-enabled status: verify on first deploy).
 3. Which Intel page should the QR open (NEXT_STEP_URL)?
 
 ## Slice log (newest first)
-(empty)
+- 2026-11-25 DOC SYNC: synced Node 24 in `.nvmrc` and `tools/gen_docs.py`, updated `AGENTS.md` §4/§13 for bundle workflow, regenerated docs.

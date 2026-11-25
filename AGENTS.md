@@ -18,7 +18,7 @@ If the prompt and a doc disagree, follow the doc and say so in the report.
 Build every requirement ID of the phase. Use exact names from schema.md and architecture.md. UI comes from docs/design.md only. Do not "improve" the design. Do not change requirement text (edit tools/requirements.py only if Capt says so, then run `python tools/gen_docs.py`).
 
 ## 4. Working method
-Restate the task in 3 lines. Work in small vertical pieces (one slice, about an hour, about 10 files or fewer). Run tests as you go. No unrelated refactors. If unsure, STOP and ask (see section 12).
+Restate the task in 3 lines. Work in bundles of phases, completing one phase gate at a time in order (commit and tag per phase, update progress.md after every phase). Run tests as you go. No unrelated refactors. If unsure, STOP and ask (see section 12).
 
 ## 5. Tech rules
 - Fixed stack: Vite, TypeScript (strict), Vitest, Playwright, axe-core. Fonts via `@fontsource` (Archivo, Mukta, DM Mono), self-hosted.
@@ -59,7 +59,7 @@ Commit to `main` in small steps, conventional commits (`feat:`, `fix:`, `test:`,
 Stop and report `BLOCKED: <what> - <need> - <done so far>` when: a key/account is needed, docs are ambiguous or contradict each other, a package or API differs from the docs, a change would be destructive, you need to touch a forbidden folder, or a claim cannot be verified.
 
 ## 13. Antigravity notes
-Keep plans short (5 lines). Open gallery.html and compare to docs/design.md before saying a UI task is done. Do not restyle. Use the screenshot tool for evidence. One slice per run.
+Keep plans short (5 lines). Open gallery.html and compare to docs/design.md before saying a UI task is done. Do not restyle. Use the screenshot tool for evidence. Work in bundles of phases, completing each phase gate before starting the next.
 
 ## 14. MANDATORY REPORT FORMAT
 ```
