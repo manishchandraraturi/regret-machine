@@ -64,7 +64,7 @@ export function createReceiptScreen(audio: Audio): Screen {
 
       const cta = createButton({
         label: ctx.t('receipt.cta'),
-        onClick: () => ctx.go('result'),
+        onClick: () => ctx.go('fairfight'),
       });
 
       wrap.append(heading, tape.element, scoreEl, small, cta);

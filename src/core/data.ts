@@ -1,4 +1,5 @@
 import claimsJson from '../data/claims.json';
+import fairfightJson from '../data/fairfight.json';
 import ladderJson from '../data/ladder.json';
 import laptopsJson from '../data/laptops.json';
 import personasJson from '../data/personas.json';
@@ -59,6 +60,28 @@ export function getPersonas(): PersonaSpec[] {
 
 export function getLaptops(): LaptopSpec[] {
   return laptopsList;
+}
+
+export interface FairFightCell {
+  text: { en: string; hi: string };
+  claim: string;
+  lead?: boolean;
+  concession?: boolean;
+}
+
+export interface FairFightRow {
+  rowKey: string;
+  cells: {
+    intel: FairFightCell;
+    amd: FairFightCell;
+    qc: FairFightCell;
+  };
+}
+
+const fairFightRows = assertArray<FairFightRow>(fairfightJson, 'fairfight.json');
+
+export function getFairFight(): FairFightRow[] {
+  return fairFightRows;
 }
 
 export function getLadder(): LadderConfig {

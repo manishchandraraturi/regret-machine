@@ -155,3 +155,64 @@
   background: var(--white);
   color: var(--clear-ink);
 }
+
+/* Fair Fight table & 390px Hindi wrap safety */
+.rm-ff-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.rm-ff-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+  color: var(--clear-ink);
+}
+
+.rm-ff-table th,
+.rm-ff-table td {
+  border: 2px solid var(--clear-ink);
+  padding: var(--s3);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.rm-ff-concession {
+  border-left: 6px solid var(--clear-blue);
+  background: var(--clear-white);
+}
+
+.rm-ff-source {
+  display: block;
+  margin-top: var(--s1);
+  color: var(--clear-blue);
+  font-weight: 600;
+}
+
+@media (max-width: 699px) {
+  .rm-ff-table thead {
+    display: none;
+  }
+
+  .rm-ff-table,
+  .rm-ff-table tbody,
+  .rm-ff-table tr,
+  .rm-ff-table th,
+  .rm-ff-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .rm-ff-table tr {
+    margin-bottom: var(--s4);
+  }
+}
+
+.type-title,
+.type-body,
+.type-flyer,
+.rm-btn,
+.rm-chip {
+  overflow-wrap: anywhere;
+}

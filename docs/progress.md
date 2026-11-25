@@ -13,7 +13,7 @@
 | P7 | DONE | phase-P7, cutline-2 | CUT LINE 2: Lecture hall scene, Wi-Fi drop, C-02 + NPU gloss, 22s e2e + evidence/P7/ |
 | P8 | DONE | phase-P8 | Private files scene, 6 file cards, upload banner, on-device reveal, 22s e2e + evidence/P8/ |
 | P9 | DONE | phase-P9, cutline-3 | CUT LINE 3: Creator night scene, stutter, C-03/C-04 + baseline, all 4 scenes live + evidence/P9/ |
-| P10 | TODO | | |
+| P10 | DONE | phase-P10 | Fair Fight screen + fairfight.json (5 rows, 3 concessions), Hindi 390px pass + evidence/P10/ |
 | P11 | TODO | | |
 | P12 | TODO | | |
 
@@ -70,7 +70,13 @@
 - [x] Unit + e2e pass (`tests/unit/creator.test.ts`, `tests/e2e/p9-creator.spec.ts`, `tests/e2e/p5-flow.spec.ts` 4 personas through all 4 real scenes)
 - [x] CUT LINE 3 tag created (`cutline-3`)
 
+## P10 acceptance checklist
+- [x] Each row shows source id (`tests/unit/fairfight.test.ts`, `tests/e2e/p10-fairfight.spec.ts`)
+- [x] At least 2 rows concede a rival strength (`tests/unit/fairfight.test.ts`, `tests/e2e/p10-fairfight.spec.ts`: 3 rival concession cells across C-12 and C-13)
+- [x] No Hindi text overflows at 390 px (`tests/e2e/p10-fairfight.spec.ts`, `evidence/P10/fairfight-hi-390x844.png`, `evidence/P10/result-after-ff-390x844.png`)
+
 ## Slice log (newest first)
+- 2026-11-25 P10: added `src/data/fairfight.json`, `src/screens/fairfight.ts`, `getFairFight()` in `data.ts`, enabled `skipFairFight: false` in `main.ts`, 390px wrap rules, `tests/unit/fairfight.test.ts`, `tests/e2e/p10-fairfight.spec.ts`, screenshots in `evidence/P10/`.
 - 2026-11-25 P9 (CUT LINE 3): added `src/screens/scene-creator.ts`, `scene.creator.baseline` in copy.*.json, removed `createStubScene` from `scenes/index.ts`, `tests/unit/creator.test.ts`, `tests/e2e/p9-creator.spec.ts`, screenshots in `evidence/P9/`.
 - 2026-11-25 P8: added `src/screens/scene-private.ts`, `scene.private.note` in copy.*.json, `tests/unit/private.test.ts`, `tests/e2e/p8-private.spec.ts`, screenshots in `evidence/P8/`; added P6 `fail-*.png` screenshots.
 - 2026-11-25 P7 (CUT LINE 2): added `src/screens/scene-lecture.ts`, registered in `scenes/index.ts`, `tests/unit/lecture.test.ts`, `tests/e2e/p7-lecture.spec.ts`, screenshots in `evidence/P7/`.
@@ -90,6 +96,9 @@
 - [x] Hindi renders without clipping at 390 px (`evidence/P1/gallery-390x844.png`, `evidence/P4/shelf-hi-390x844.png`, `evidence/P5/result-hi-390x844.png`)
 - [x] Reduced-motion variant tested (`evidence/P1/gallery-reduced-motion.png`, `tests/e2e/p5-flow.spec.ts`)
 - [x] Touch targets >= 48 px measured (`tests/e2e/gallery.spec.ts`)
+- [x] P8 Private files design & Hindi 390px check (`evidence/P8/play-*.png`, `upload-banner-*.png`, `reveal-*.png`, `reveal-hi-390x844.png`)
+- [x] P9 Creator night design & Hindi 390px check (`evidence/P9/play-*.png`, `stutter-*.png`, `reveal-*.png`, `reveal-hi-390x844.png`)
+- Known non-serious axe issue (P5-P9): moderate `heading-order` (`h1` -> `h3` in `src/ui/components/tape.ts`), 0 serious/critical violations.
 - 2026-11-25 P4: added `src/ui/components/laptop.ts`, `src/ui/screens.css`, `src/screens/{attract,shelf,scene-stub}.ts`, wired `src/main.ts`, `tests/e2e/p4-flow.spec.ts`, screenshots in `evidence/P4/` (design §12 Attract layout at 1920x1080 & 390x844 ticked).
 - 2026-11-25 P3: added `src/engines/{audio,loop,input,sharecard,qr}.ts` + `tests/unit/engines.test.ts` (25 unit tests pass).
 - 2026-11-25 P2: added `src/core/{types,env,data,i18n,store,scoring,result,machine,idle}.ts` + unit tests (`scoring.test.ts`, `result.test.ts`, `core.test.ts`).

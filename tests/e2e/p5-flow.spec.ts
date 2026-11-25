@@ -56,6 +56,8 @@ test.describe('P5 CUT LINE 1 end-to-end', () => {
         await page.screenshot({ path: 'evidence/P5/receipt-1920x1080.png' });
       }
       await page.getByRole('button', { name: 'See the fair fight' }).click();
+      await expect(page.locator('[data-screen="fairfight"]')).toBeVisible();
+      await page.getByRole('button', { name: 'Next' }).click();
       await expect(page.locator('[data-screen="result"]')).toBeVisible();
       await expect(page.getByRole('heading', { name: p.card })).toBeVisible();
       seenCards.push(p.card);
@@ -158,6 +160,8 @@ test.describe('P5 CUT LINE 1 end-to-end', () => {
     await page.screenshot({ path: 'evidence/P5/receipt-390x844.png' });
 
     await page.getByRole('button', { name: 'See the fair fight' }).click();
+    await expect(page.locator('[data-screen="fairfight"]')).toBeVisible();
+    await page.getByRole('button', { name: 'Next' }).click();
     await assertNoSeriousAxe('result');
     await page.screenshot({ path: 'evidence/P5/result-study-390x844.png' });
 
@@ -174,6 +178,7 @@ test.describe('P5 CUT LINE 1 end-to-end', () => {
       await page.getByRole('button', { name: 'Play again' }).click();
       await runToReceipt(page, p.label);
       await page.getByRole('button', { name: 'See the fair fight' }).click();
+      await page.getByRole('button', { name: 'Next' }).click();
       await expect(page.getByRole('heading', { name: p.card })).toBeVisible();
       await page.screenshot({ path: `evidence/P5/result-${p.id}-390x844.png` });
     }

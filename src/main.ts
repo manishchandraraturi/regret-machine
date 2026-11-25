@@ -15,10 +15,11 @@ import { createStore } from './core/store';
 import type { Ctx, Screen, ScreenId } from './core/types';
 import { createAudioEngine } from './engines/audio';
 import { createAttractScreen } from './screens/attract';
+import { createFairFightScreen } from './screens/fairfight';
 import { createReceiptScreen } from './screens/receipt';
 import { createResultScreen } from './screens/result';
 import { createSceneFrameScreen } from './screens/scene-frame';
-import { createFlipScreen, createStubScreen } from './screens/scene-stub';
+import { createFlipScreen } from './screens/scene-stub';
 import { createShelfScreen } from './screens/shelf';
 import { createStaffScreen } from './screens/staff';
 import { createButton } from './ui/components/button';
@@ -50,7 +51,7 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
   let cleanupScreen: (() => void) | null = null;
 
   const machine = createMachine(scenes, {
-    skipFairFight: true,
+    skipFairFight: false,
     onNavigate: (screenId) => renderScreen(screenId),
   });
 
@@ -121,7 +122,7 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
     flip3: createFlipScreen('year.3', 'private', 0.75, shell),
     private: createSceneFrameScreen('private', 'receipt', shell, audio),
     receipt: createReceiptScreen(audio),
-    fairfight: createStubScreen('SCENE_NOT_BUILT: fairfight', (c) => c.go('result')),
+    fairfight: createFairFightScreen(),
     result: createResultScreen(fullReset),
     staff: createStaffScreen(fullReset),
   };

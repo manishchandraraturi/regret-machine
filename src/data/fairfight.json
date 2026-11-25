@@ -1,0 +1,138 @@
+[
+  {
+    "rowKey": "ff.row.apps",
+    "cells": {
+      "intel": {
+        "text": {
+          "en": "Uses x86: runs existing Windows apps directly.",
+          "hi": "x86 इस्तेमाल करता है: मौजूदा Windows ऐप सीधे चलते हैं।"
+        },
+        "claim": "C-10",
+        "lead": true
+      },
+      "amd": {
+        "text": {
+          "en": "Uses x86: runs existing Windows apps directly.",
+          "hi": "x86 इस्तेमाल करता है: मौजूदा Windows ऐप सीधे चलते हैं।"
+        },
+        "claim": "C-10"
+      },
+      "qc": {
+        "text": {
+          "en": "Uses Arm: most apps work, some need emulation or updates.",
+          "hi": "Arm इस्तेमाल करता है: ज़्यादातर ऐप चलते हैं, कुछ को इमुलेशन चाहिए।"
+        },
+        "claim": "C-10",
+        "concession": false
+      }
+    }
+  },
+  {
+    "rowKey": "ff.row.gfx",
+    "cells": {
+      "intel": {
+        "text": {
+          "en": "Strongest built-in graphics (12 cores, Arc B390) on X-series.",
+          "hi": "X-सीरीज़ में सबसे दमदार बिल्ट-इन ग्राफिक्स (12 कोर, Arc B390)।"
+        },
+        "claim": "C-11",
+        "lead": true
+      },
+      "amd": {
+        "text": {
+          "en": "Solid built-in graphics; check exact model reviews.",
+          "hi": "अच्छे बिल्ट-इन ग्राफिक्स; सटीक मॉडल के रिव्यू देखें।"
+        },
+        "claim": "C-14"
+      },
+      "qc": {
+        "text": {
+          "en": "Built-in graphics for everyday tasks; high-end gaming goes further.",
+          "hi": "रोज़ के काम के लिए ठीक ग्राफिक्स; हाई-एंड गेमिंग अलग श्रेणी है।"
+        },
+        "claim": "C-14"
+      }
+    }
+  },
+  {
+    "rowKey": "ff.row.npu",
+    "cells": {
+      "intel": {
+        "text": {
+          "en": "Up to 50 TOPS on NPU; focus on real app feel.",
+          "hi": "NPU पर 50 TOPS तक; असली ऐप अनुभव पर ध्यान।"
+        },
+        "claim": "C-02"
+      },
+      "amd": {
+        "text": {
+          "en": "Rival lead: AMD Ryzen AI prints up to 60 TOPS on the box.",
+          "hi": "प्रतिद्वंद्वी बढ़त: AMD Ryzen AI डिब्बे पर 60 TOPS तक छापता है।"
+        },
+        "claim": "C-12",
+        "concession": true
+      },
+      "qc": {
+        "text": {
+          "en": "Rival lead: Snapdragon X2 Elite prints up to 80 TOPS on the box.",
+          "hi": "प्रतिद्वंद्वी बढ़त: Snapdragon X2 Elite डिब्बे पर 80 TOPS तक छापता है।"
+        },
+        "claim": "C-12",
+        "concession": true
+      }
+    }
+  },
+  {
+    "rowKey": "ff.row.battery",
+    "cells": {
+      "intel": {
+        "text": {
+          "en": "Up to 27 hours Netflix streaming (Intel-claimed).",
+          "hi": "Netflix स्ट्रीमिंग में 27 घंटे तक (Intel का दावा)।"
+        },
+        "claim": "C-05"
+      },
+      "amd": {
+        "text": {
+          "en": "Check independent battery tests for the exact laptop model.",
+          "hi": "सटीक लैपटॉप मॉडल के स्वतंत्र बैटरी टेस्ट ज़रूर जाँचें।"
+        },
+        "claim": "C-13"
+      },
+      "qc": {
+        "text": {
+          "en": "Rival lead: Snapdragon laptops are positioned battery-first.",
+          "hi": "प्रतिद्वंद्वी बढ़त: Snapdragon लैपटॉप बैटरी-पहले के रूप में पेश हैं।"
+        },
+        "claim": "C-13",
+        "concession": true
+      }
+    }
+  },
+  {
+    "rowKey": "ff.row.check",
+    "cells": {
+      "intel": {
+        "text": {
+          "en": "Check independent reviews and aim for 16-32 GB memory.",
+          "hi": "स्वतंत्र रिव्यू देखें और 16-32 GB मेमोरी चुनें।"
+        },
+        "claim": "C-15"
+      },
+      "amd": {
+        "text": {
+          "en": "Check independent reviews and aim for 16-32 GB memory.",
+          "hi": "स्वतंत्र रिव्यू देखें और 16-32 GB मेमोरी चुनें।"
+        },
+        "claim": "C-15"
+      },
+      "qc": {
+        "text": {
+          "en": "Check your required apps and independent reviews.",
+          "hi": "अपने ज़रूरी ऐप और स्वतंत्र रिव्यू ज़रूर जाँचें।"
+        },
+        "claim": "C-15"
+      }
+    }
+  }
+]
