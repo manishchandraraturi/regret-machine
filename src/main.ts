@@ -4,6 +4,7 @@ import './ui/base.css';
 import './ui/components.css';
 import './ui/overlays-and-gallery.css';
 import './ui/screens.css';
+import './ui/p5-screens.css';
 import { claim, getScenesConfig } from './core/data';
 import { getEnv } from './core/env';
 import { parseLangParam, translate } from './core/i18n';
@@ -13,8 +14,12 @@ import { createStore } from './core/store';
 import type { Ctx, Screen, ScreenId } from './core/types';
 import { createAudioEngine } from './engines/audio';
 import { createAttractScreen } from './screens/attract';
+import { createReceiptScreen } from './screens/receipt';
+import { createResultScreen } from './screens/result';
+import { createSceneFrameScreen } from './screens/scene-frame';
 import { createFlipScreen, createStubScreen } from './screens/scene-stub';
 import { createShelfScreen } from './screens/shelf';
+import { createStaffScreen } from './screens/staff';
 import { createButton } from './ui/components/button';
 import { setDecay } from './ui/decay';
 
@@ -40,7 +45,6 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
 
   const controls = document.createElement('div');
   controls.className = 'rm-controls';
-
   const main = document.createElement('main');
   let cleanupScreen: (() => void) | null = null;
 
@@ -50,12 +54,12 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
   });
 
   const t = (key: string): string => translate(store.getState().lang, key);
+  const ctx: Ctx = { store, t, claim, go: (to) => machine.go(to) };
 
-  const ctx: Ctx = {
-    store,
-    t,
-    claim,
-    go: (to) => machine.go(to),
+  const fullReset = (): void => {
+    store.reset();
+    setDecay(shell, 0);
+    machine.reset();
   };
 
   const langBtn = createButton({
@@ -92,25 +96,13 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
     bar.className = 'rm-facilitator';
     bar.dataset.testid = 'facilitator-bar';
     bar.append(
-      createButton({
-        label: t('btn.skip'),
-        variant: 'secondary',
-        onClick: () => machine.next(),
-      }),
+      createButton({ label: t('btn.skip'), variant: 'secondary', onClick: () => machine.next() }),
       createButton({
         label: t('result.title'),
         variant: 'secondary',
         onClick: () => machine.jumpToResult(),
       }),
-      createButton({
-        label: t('btn.again'),
-        variant: 'secondary',
-        onClick: () => {
-          store.reset();
-          setDecay(shell, 0);
-          machine.reset();
-        },
-      }),
+      createButton({ label: t('btn.again'), variant: 'secondary', onClick: fullReset }),
     );
     shell.appendChild(bar);
   }
@@ -121,32 +113,26 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
     attract: createAttractScreen(),
     shelf: createShelfScreen(audio),
     flip1: createFlipScreen('year.1', 'lecture', 0.25, shell),
-    lecture: createStubScreen('SCENE_NOT_BUILT: lecture', (c) => c.go('flip2')),
+    lecture: createSceneFrameScreen('lecture', 'flip2', shell),
     flip2: createFlipScreen('year.2', 'battery', 0.5, shell),
-    battery: createStubScreen('SCENE_NOT_BUILT: battery', (c) => c.go('creator')),
-    creator: createStubScreen('SCENE_NOT_BUILT: creator', (c) => c.go('flip3')),
+    battery: createSceneFrameScreen('battery', 'creator', shell),
+    creator: createSceneFrameScreen('creator', 'flip3', shell),
     flip3: createFlipScreen('year.3', 'private', 0.75, shell),
-    private: createStubScreen('SCENE_NOT_BUILT: private', (c) => c.go('receipt')),
-    receipt: createStubScreen('SCENE_NOT_BUILT: receipt', (c) => c.go('result')),
+    private: createSceneFrameScreen('private', 'receipt', shell),
+    receipt: createReceiptScreen(audio),
     fairfight: createStubScreen('SCENE_NOT_BUILT: fairfight', (c) => c.go('result')),
-    result: createStubScreen('SCENE_NOT_BUILT: result', (c) => c.go('staff')),
-    staff: createStubScreen('SCENE_NOT_BUILT: staff', (c) => {
-      store.reset();
-      setDecay(shell, 0);
-      c.go('attract');
-    }),
+    result: createResultScreen(fullReset),
+    staff: createStaffScreen(fullReset),
   };
 
   function renderScreen(screenId: ScreenId): void {
     cleanupScreen?.();
+    const isClear = screenId === 'result' || screenId === 'staff' || screenId === 'fairfight';
+    shell.classList.toggle('skin-clear', isClear);
     cleanupScreen = screenMap[screenId].mount(main, ctx);
   }
 
-  const idle = createIdleController(env.idleSeconds, () => {
-    store.reset();
-    setDecay(shell, 0);
-    machine.reset();
-  });
+  const idle = createIdleController(env.idleSeconds, fullReset);
   idle.start();
   renderScreen(machine.current());
 

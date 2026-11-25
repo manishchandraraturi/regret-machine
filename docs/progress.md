@@ -8,7 +8,7 @@
 | P2 | DONE | phase-P2 | Core types, env, data, i18n, store, scoring, result, machine, idle; 20 unit tests pass |
 | P3 | DONE | phase-P3 | Shared engines (audio, loop, input, sharecard, qr) + 5 unit tests pass |
 | P4 | DONE | phase-P4 | Laptop SVG, Attract, Shelf, main wiring, idle/facilitator/Hindi e2e + evidence/P4/ |
-| P5 | TODO | | cut line 1 |
+| P5 | DONE | phase-P5, cutline-1 | CUT LINE 1: ClaimChip, scene-frame + stub scenes, Receipt, Result (Clear skin), Staff + QR, share card 1080x1920, axe 0 serious |
 | P6 | TODO | | |
 | P7 | TODO | | cut line 2 |
 | P8 | TODO | | |
@@ -48,6 +48,7 @@
 3. Which Intel page should the QR open (NEXT_STEP_URL)?
 
 ## Slice log (newest first)
+- 2026-11-25 P5 (CUT LINE 1): added `claimchip.ts`, `scene-frame.ts`, `scenes/index.ts`, `receipt.ts`, `result.ts`, `staff.ts`, `p5-screens.css`, `ci.yml` `vars.VITE_NEXT_STEP_URL`, `p5-flow.spec.ts` + `p5-ui.test.ts` (axe 0 serious, 1080x1920 PNG, 4 personas).
 - 2026-11-25 P4: added `src/ui/components/laptop.ts`, `src/ui/screens.css`, `src/screens/{attract,shelf,scene-stub}.ts`, wired `src/main.ts`, `tests/e2e/p4-flow.spec.ts`, screenshots in `evidence/P4/` (design §12 Attract layout at 1920x1080 & 390x844 ticked).
 - 2026-11-25 P3: added `src/engines/{audio,loop,input,sharecard,qr}.ts` + `tests/unit/engines.test.ts` (25 unit tests pass).
 - 2026-11-25 P2: added `src/core/{types,env,data,i18n,store,scoring,result,machine,idle}.ts` + unit tests (`scoring.test.ts`, `result.test.ts`, `core.test.ts`).

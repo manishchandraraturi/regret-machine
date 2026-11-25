@@ -24,6 +24,8 @@ jobs:
         run: |
           if grep -rEn "localStorage|sessionStorage|document\.cookie|gtag\(|analytics" src; then echo "forbidden API found"; exit 1; fi
       - run: npm run build
+        env:
+          VITE_NEXT_STEP_URL: ${{ vars.VITE_NEXT_STEP_URL }}
       - run: npx playwright install --with-deps chromium
       - run: npm run e2e
       - run: npm audit --audit-level=high || true

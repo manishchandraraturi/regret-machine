@@ -26,6 +26,11 @@ body {
   overflow: hidden;
 }
 
+.decay-scope.skin-clear::before,
+.decay-scope.skin-clear::after {
+  display: none;
+}
+
 /* Scratches (decay >= 0.6): three thin diagonal lines */
 .decay-scope::before {
   content: '';

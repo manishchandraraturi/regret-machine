@@ -5,8 +5,8 @@ Status values: TODO / IN PROGRESS / DONE / SPEC GAP. A row without Evidence is n
 
 | ID | Requirement | Phase | How to verify | Status | Evidence |
 |---|---|---|---|---|---|
-| SRC-01 | Vibe-code an exciting, interactive game | P4-P9 | e2e full playthrough passes; manual play on phone + 1080p screen | IN PROGRESS | done: P4 (`p4-flow.spec.ts` Attract->Shelf->YearFlip); left: P5,P6,P7,P8,P9 |
-| SRC-02 | Helps shoppers discover Intel-powered AI PCs and makes a compelling case to buy one over competitors | P5,P10 | Result names Intel Core Ultra Series 3; Fair Fight screen exists | TODO | |
+| SRC-01 | Vibe-code an exciting, interactive game | P4-P9 | e2e full playthrough passes; manual play on phone + 1080p screen | IN PROGRESS | done: P4,P5 (`p4-flow.spec.ts`, `p5-flow.spec.ts` end-to-end flow); left: P6,P7,P8,P9 |
+| SRC-02 | Helps shoppers discover Intel-powered AI PCs and makes a compelling case to buy one over competitors | P5,P10 | Result names Intel Core Ultra Series 3; Fair Fight screen exists | IN PROGRESS | done: P5 (`result.ts` asks Intel Core Ultra Series 3, `p5-flow.spec.ts`); left: P10 |
 | SRC-03 | Design for walk-in customers at Large Format Retail (LFR) stores such as Reliance Digital, Croma and Vijay Sales | P1,P4,P11 | Screenshots at 1920x1080 and 390x844; idle-reset e2e test | IN PROGRESS | done: P1,P4 (`evidence/P1/gallery-*.png`, `evidence/P4/attract-*.png`, `p4-flow.spec.ts` idle 60s); left: P11 |
 | SRC-04 | Assume zero to less prior technical knowledge | P2,P11 | Copy lint: every tech term glossed in plain words (NPU, TOPS, GPU) | IN PROGRESS | done: P2 (`i18n.ts`, `core.test.ts` copy parity & glossary keys); left: P11 |
 | SRC-05 | Short, intuitive experience that grabs attention within seconds | P4 | e2e: Attract is interactive < 2 s after load; one-tap start | DONE | done: P4 (`p4-flow.spec.ts` < 2 s interactive + one-tap start, `evidence/P4/attract-*.png`) |
@@ -17,14 +17,14 @@ Status values: TODO / IN PROGRESS / DONE / SPEC GAP. A row without Evidence is n
 | SRC-10 | Showcase battery life | P6 | Long-day scene test; claims C-05, C-06 tagged Intel-claimed | TODO | |
 | SRC-11 | Showcase performance | P9 | Creator scene test; claims C-03, C-04 with baselines | TODO | |
 | SRC-12 | Make Intel's advantages tangible compared to key competitors | P6-P10 | Split reveal in every scene + Fair Fight screen | TODO | |
-| SRC-13 | End with a personalised AI PC recommendation | P5 | Unit test: 4 personas give 4 different recommendations | TODO | |
-| SRC-14 | End with a clear next step | P5 | Staff screen + QR + share card exist; e2e reaches them | TODO | |
+| SRC-13 | End with a personalised AI PC recommendation | P5 | Unit test: 4 personas give 4 different recommendations | DONE | done: P5 (`result.test.ts`, `p5-flow.spec.ts` 4 distinct Result cards, `evidence/P5/result-*-1920x1080.png`) |
+| SRC-14 | End with a clear next step | P5 | Staff screen + QR + share card exist; e2e reaches them | DONE | done: P5 (`result.ts`, `staff.ts`, `p5-flow.spec.ts`, `evidence/P5/staff-1920x1080.png`) |
 | SRC-15 | Submit only public URLs or self-hosted URLs. Do NOT submit exe or code files | P12 | URL opens in a private window, logged out | TODO | |
 | SRC-16 | Submit Round 1 entry in the Google Form by 27 Nov 2026, 12 PM | P12 | HUMAN: screenshot of form confirmation | TODO | |
 | SRC-17 | Participate individually or in a team of max 4 members (we are 3) | P12 | HUMAN: form lists 3 names | TODO | |
 | SRC-18 | Shortlisted teams present before the Intel Jury on 28 Nov | P12 | HUMAN: demo-script rehearsed twice | TODO | |
-| SRC-19 | Judging: creativity of the game (3 points) | P1,P4-P9 | Design acceptance checklist ticked with screenshots | IN PROGRESS | done: P1,P4 (`evidence/P1/decay-strip-1920x1080.png`, `evidence/P4/attract-*.png`, `evidence/P4/shelf-*.png`); left: P5,P6,P7,P8,P9 |
-| SRC-20 | Judging: persuasive impact towards buying (3 points) | P5-P9 | Every scene ends in a felt contrast + recommendation | TODO | |
+| SRC-19 | Judging: creativity of the game (3 points) | P1,P4-P9 | Design acceptance checklist ticked with screenshots | IN PROGRESS | done: P1,P4,P5 (`evidence/P1/*`, `evidence/P4/*`, `evidence/P5/*`); left: P6,P7,P8,P9 |
+| SRC-20 | Judging: persuasive impact towards buying (3 points) | P5-P9 | Every scene ends in a felt contrast + recommendation | IN PROGRESS | done: P5 (`receipt.ts`, `result.ts`, `p5-flow.spec.ts`); left: P6,P7,P8,P9 |
 | SRC-21 | Judging: technical accuracy of AI PC features (3 points) | P2,P11 | Claims audit: 100% of shown numbers have source + baseline + tag | IN PROGRESS | done: P2 (`data.ts` `claim()` throws, `check_claims.py` exit 0); left: P11 |
 | SRC-22 | Judging: showcase of competitive superiority (1 point) | P10 | Fair Fight rows each carry a source id | TODO | |
 | SRC-23 | Join the WhatsApp group and register on the link in the group description | P0 | HUMAN: registration confirmed | SPEC GAP | SPEC GAP: SRC-23 - human WhatsApp/registration not evidenced in repo - agent cannot perform it |
@@ -34,8 +34,8 @@ Status values: TODO / IN PROGRESS / DONE / SPEC GAP. A row without Evidence is n
 | ADD-04 | No runtime third-party requests; fonts and assets self-hosted; works with weak store Wi-Fi | P0,P1,P11 | Playwright: zero requests outside origin | IN PROGRESS | done: P0,P1 (`smoke.spec.ts`, `gallery.spec.ts`); left: P11 |
 | ADD-05 | Synthesised sound (WebAudio, no audio files), muted by default, visible mute toggle | P3 | Unit test engine; manual | DONE | done: P3 (`src/engines/audio.ts`, `tests/unit/engines.test.ts`) |
 | ADD-06 | Accessibility: keyboard play, focus-visible, reduced-motion, contrast AA, touch targets >= 48 px | P1,P11 | axe run + manual keyboard run | IN PROGRESS | done: P1 (`gallery.spec.ts`, `decay.test.ts`); left: P11 |
-| ADD-07 | Shareable result card (PNG made in browser, Web Share API or download) | P3,P5 | e2e: download event fires, PNG 1080x1920 | IN PROGRESS | done: P3 (`src/engines/sharecard.ts`, `tests/unit/engines.test.ts` 1080x1920); left: P5 |
-| ADD-08 | Store-staff screen: plain-words ask list + QR to NEXT_STEP_URL | P3,P5 | Screenshot; QR decodes to the URL | IN PROGRESS | done: P3 (`src/engines/qr.ts`, `tests/unit/engines.test.ts` jsQR round-trip); left: P5 |
+| ADD-07 | Shareable result card (PNG made in browser, Web Share API or download) | P3,P5 | e2e: download event fires, PNG 1080x1920 | DONE | done: P3,P5 (`sharecard.ts`, `p5-flow.spec.ts` verified 1080x1920 PNG download) |
+| ADD-08 | Store-staff screen: plain-words ask list + QR to NEXT_STEP_URL | P3,P5 | Screenshot; QR decodes to the URL | DONE | done: P3,P5 (`qr.ts`, `staff.ts`, `engines.test.ts` jsQR round-trip, `p5-ui.test.ts`, `evidence/P5/staff-1920x1080.png`) |
 | ADD-09 | Fair Fight screen concedes where rivals lead (honesty builds trust with the jury) | P10 | Row text review against claims.json | TODO | |
 | ADD-10 | No analytics, no cookies, no data collection, no accounts | P0,P11 | grep for storage/analytics APIs = empty | IN PROGRESS | done: P0 (`smoke.spec.ts`, CSP); left: P11 |
 | ADD-11 | Performance budget: JS+CSS+fonts <= 600 KB gzip; interactive < 2.5 s on mid phone (throttled) | P11 | Build size report + Lighthouse run pasted | TODO | |
@@ -46,9 +46,9 @@ Status values: TODO / IN PROGRESS / DONE / SPEC GAP. A row without Evidence is n
 | DSN-01 | Sale Tag Decay identity: Indian electronics-flyer look in Act I | P1 | design.md section 12 checklist | DONE | `src/ui/tokens.css`, `src/ui/base.css`, `evidence/P1/gallery-1920x1080.png` |
 | DSN-02 | Decay engine: --decay 0..1 drains colour, adds grain, scratches, crack | P1 | Visual test at 0, 0.5, 1 | DONE | `src/ui/decay.ts`, `tests/unit/decay.test.ts`, `evidence/P1/decay-strip-1920x1080.png` |
 | DSN-03 | Typography: Archivo (display), Mukta (body, Hindi), DM Mono (receipt only) | P1 | Fonts load from own origin, not a CDN | DONE | `src/ui/fonts.ts`, `npm run build` bundled woff2/woff, `tests/e2e/gallery.spec.ts` 0 CDN requests |
-| DSN-04 | Receipt tape: running regret list that prints as events happen | P1,P5 | Component test | IN PROGRESS | done: P1 (`tape.ts`, `components.test.ts`); left: P5 |
+| DSN-04 | Receipt tape: running regret list that prints as events happen | P1,P5 | Component test | DONE | done: P1,P5 (`tape.ts`, `receipt.ts`, `components.test.ts`, `evidence/P5/receipt-1920x1080.png`) |
 | DSN-05 | Motion: one orchestrated Year Flip; everything else answers user action | P1,P3 | Reduced-motion swap verified | DONE | done: P1,P3 (`yearflip.ts`, `loop.ts`, `input.ts`, `gallery.spec.ts`, `engines.test.ts`) |
-| DSN-06 | Clear skin for the reveal: cool white + Clear Blue, no stickers | P1,P5 | Screenshot vs design.md | IN PROGRESS | done: P1 (`tokens.css`, `splitreveal.ts`, `gallery-1920x1080.png`); left: P5 |
+| DSN-06 | Clear skin for the reveal: cool white + Clear Blue, no stickers | P1,P5 | Screenshot vs design.md | DONE | done: P1,P5 (`tokens.css`, `splitreveal.ts`, `result.ts`, `evidence/P5/result-study-1920x1080.png`) |
 | DEL-01 | Public URL live (GitHub Pages) | P12 | Open in private window on a phone | TODO | |
 | DEL-02 | README: what it is, how to run, claims policy, credits | P12 | File exists, reviewed | TODO | |
 | DEL-03 | One-page system design for the jury (docs/system-design.md) | P12 | File exists | TODO | |
