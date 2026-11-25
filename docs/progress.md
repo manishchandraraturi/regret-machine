@@ -89,6 +89,7 @@
 - [x] FREEZE tag `v1.0` created before Fri 09:00
 
 ## Slice log (newest first)
+- 2026-11-25 FIX Bundle E: added keyboard-only full-run e2e (`p11-hardening.spec.ts`), 14 `390x844` P11 screenshots, marked `DEL-04` DONE (rehearsal in Capt TODOs), readiness `NOT READY` until `check_claims.py --release` passes.
 - 2026-11-25 P12 (FREEZE v1.0): finalised `README.md`, `docs/system-design.md`, audited `docs/SPEC_CHECKLIST.md` (0 TODO rows), tagged `phase-P12` and `v1.0`.
 - 2026-11-25 P11: added `tests/unit/jargon.test.ts`, `tests/e2e/p11-hardening.spec.ts`, fixed `tape.ts` `h3`->`h2` (0 axe violations everywhere), verified 518.30 KB gzip, 0 forbidden APIs.
 - 2026-11-25 P10: added `src/data/fairfight.json`, `src/screens/fairfight.ts`, `getFairFight()` in `data.ts`, enabled `skipFairFight: false` in `main.ts`, 390px wrap rules, `tests/unit/fairfight.test.ts`, `tests/e2e/p10-fairfight.spec.ts`, screenshots in `evidence/P10/`.

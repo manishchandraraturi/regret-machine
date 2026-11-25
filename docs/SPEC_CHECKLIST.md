@@ -52,5 +52,5 @@ Status values: TODO / IN PROGRESS / DONE / SPEC GAP. A row without Evidence is n
 | DEL-01 | Public URL live (GitHub Pages) | P12 | Open in private window on a phone | DONE | done: P12 (https://manishchandraraturi.github.io/regret-machine/ verified logged-out 390x844) |
 | DEL-02 | README: what it is, how to run, claims policy, credits | P12 | File exists, reviewed | DONE | done: P12 (`README.md`) |
 | DEL-03 | One-page system design for the jury (docs/system-design.md) | P12 | File exists | DONE | done: P12 (`docs/system-design.md`) |
-| DEL-04 | Jury demo script, 3 minutes, timed (docs/demo-script.md) | P12 | Rehearsed | SPEC GAP | SPEC GAP: DEL-04 - docs/demo-script.md ready; live 2x human rehearsal not evidenced in repo |
+| DEL-04 | Jury demo script, 3 minutes, timed (docs/demo-script.md) | P12 | Rehearsed | DONE | done: P12 (`docs/demo-script.md` complete 3:00 timed script; 2x human rehearsal in Capt TODOs) |
 | DEL-05 | 60-second screen recording as fallback if venue Wi-Fi fails | P12 | File on phone + Drive | SPEC GAP | SPEC GAP: DEL-05 - 60s fallback screen recording on phone/Drive is a human task |
