@@ -1,0 +1,181 @@
+/* Laptop illustration (tokens only) */
+.rm-laptop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 220px;
+  max-width: 100%;
+}
+
+.rm-laptop--pink {
+  --lap-fill: var(--lap-pink);
+}
+
+.rm-laptop--mint {
+  --lap-fill: var(--lap-mint);
+}
+
+.rm-laptop--lilac {
+  --lap-fill: var(--lap-lilac);
+}
+
+.rm-laptop-lid {
+  width: 196px;
+  height: 126px;
+  padding: var(--s2);
+  background: var(--lap-fill);
+  border: 3px solid var(--print-black);
+  border-radius: var(--r-lap);
+  display: flex;
+}
+
+.rm-laptop-screen {
+  flex: 1;
+  background: var(--clear-white);
+  color: var(--print-black);
+  border: 2px solid var(--print-black);
+  border-radius: var(--s1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s2);
+  overflow: hidden;
+}
+
+.rm-laptop-base {
+  width: 220px;
+  height: 22px;
+  display: block;
+}
+
+.rm-laptop-trapezoid {
+  fill: var(--lap-fill);
+  stroke: var(--print-black);
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+/* Shared shell & corners */
+.rm-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--s5);
+  gap: var(--s4);
+}
+
+.rm-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s3);
+  flex-wrap: wrap;
+}
+
+.rm-controls {
+  display: flex;
+  gap: var(--s3);
+  align-items: center;
+}
+
+.rm-facilitator {
+  display: flex;
+  gap: var(--s2);
+  align-items: center;
+  padding: var(--s2) var(--s3);
+  background: var(--paper);
+  border: 2px solid var(--print-black);
+  flex-wrap: wrap;
+}
+
+/* Attract */
+.rm-attract {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--s5);
+  position: relative;
+}
+
+.rm-attract-hero {
+  display: flex;
+  align-items: center;
+  gap: var(--s6);
+  flex-wrap: wrap;
+}
+
+.rm-marquee {
+  display: flex;
+  gap: var(--s5);
+  overflow: hidden;
+  padding: var(--s4) 0;
+}
+
+.rm-marquee-track {
+  display: flex;
+  gap: var(--s5);
+  animation: attract-drift 40s linear infinite;
+}
+
+.rm-attract:focus-within .rm-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes attract-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-35%);
+  }
+}
+
+/* Shelf */
+.rm-shelf {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+}
+
+.rm-shelf-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s5);
+  align-items: end;
+}
+
+@media (max-width: 699px) {
+  .rm-shelf-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.rm-shelf-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s3);
+  padding: var(--s4);
+  border-bottom: 4px solid var(--print-black);
+}
+
+.rm-shelf-stickers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+}
+
+.rm-shelf-personas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rm-marquee-track {
+    animation: none;
+  }
+}

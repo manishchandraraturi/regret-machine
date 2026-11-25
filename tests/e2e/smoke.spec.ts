@@ -27,7 +27,8 @@ test.describe('P0 smoke', () => {
 
       await page.setViewportSize({ width: vp.width, height: vp.height });
       await page.goto('/');
-      await expect(page.getByRole('heading', { name: 'The Regret Machine' })).toBeVisible();
+      await expect(page.getByText('The Regret Machine')).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Pick your laptop' })).toBeVisible();
       await page.screenshot({ path: `evidence/P0/title-${vp.width}x${vp.height}.png` });
 
       await page.goto('/health.html');
