@@ -48,6 +48,9 @@ test.describe('P6 Long day (battery)', () => {
 
       await page.clock.runFor(13_000);
       await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
+      await page.locator('.rm-fail-banner').screenshot({
+        path: `evidence/P6/fail-${vp.width}x${vp.height}.png`,
+      });
       await expect(page.locator('[data-phase="REVEAL"]')).toContainText('Illustration');
       await expect(page.locator('[data-phase="REVEAL"]')).toContainText('Intel-claimed, up to');
       await page.screenshot({ path: `evidence/P6/reveal-${vp.width}x${vp.height}.png` });
@@ -66,7 +69,9 @@ test.describe('P6 Long day (battery)', () => {
       // Finish stubs to Receipt and verify 2 battery lines
       await page.getByRole('button', { name: 'Skip this scene' }).click();
       await page.getByRole('button', { name: 'Next' }).click();
-      await page.getByRole('button', { name: 'Skip this scene' }).click();
+      await expect(page.locator('[data-screen="private"]')).toBeVisible();
+      await page.clock.runFor(16_500);
+      await page.getByRole('button', { name: 'Next' }).click();
       await expect(page.locator('[data-screen="receipt"]')).toBeVisible();
       await page.clock.runFor(2_500);
       await expect(page.locator('.rm-tape')).toContainText('Dead battery at 2:30 pm');

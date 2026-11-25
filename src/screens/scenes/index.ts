@@ -2,6 +2,7 @@ import type { Audio, Ctx, SceneId, SceneResult } from '../../core/types';
 import { createButton } from '../../ui/components/button';
 import { createBatteryScene } from '../scene-battery';
 import { createLectureScene } from '../scene-lecture';
+import { createPrivateScene } from '../scene-private';
 
 export interface SceneFactory {
   mount(
@@ -46,6 +47,6 @@ export function createSceneRegistry(audio?: Audio): Record<SceneId, SceneFactory
     lecture: createLectureScene(audio),
     battery: createBatteryScene(audio),
     creator: createStubScene('creator'),
-    private: createStubScene('private'),
+    private: createPrivateScene(audio),
   };
 }

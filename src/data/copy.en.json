@@ -33,6 +33,7 @@
   "scene.private.keep": "Keep private",
   "scene.private.fail": "To get help, your private files had to leave your laptop.",
   "scene.private.win": "Same help. Files stayed on your laptop.",
+  "scene.private.note": "AI help can run on your laptop.",
   "file.report": "Report card",
   "file.bank": "Bank statement",
   "file.diary": "Diary",

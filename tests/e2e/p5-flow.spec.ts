@@ -26,7 +26,9 @@ async function runToReceipt(page: Page, personaLabel: string): Promise<void> {
   await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('button', { name: 'Skip this scene' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
-  await page.getByRole('button', { name: 'Skip this scene' }).click();
+  await expect(page.locator('[data-screen="private"]')).toBeVisible();
+  await page.clock.runFor(16_500);
+  await page.getByRole('button', { name: 'Next' }).click();
   await expect(page.locator('[data-screen="receipt"]')).toBeVisible();
 }
 
@@ -144,7 +146,9 @@ test.describe('P5 CUT LINE 1 end-to-end', () => {
     await page.getByRole('button', { name: 'Next' }).click();
     await page.getByRole('button', { name: 'Skip this scene' }).click();
     await page.getByRole('button', { name: 'Next' }).click();
-    await page.getByRole('button', { name: 'Skip this scene' }).click();
+    await expect(page.locator('[data-screen="private"]')).toBeVisible();
+    await page.clock.runFor(16_500);
+    await page.getByRole('button', { name: 'Next' }).click();
 
     await assertNoSeriousAxe('receipt');
     await page.screenshot({ path: 'evidence/P5/receipt-390x844.png' });

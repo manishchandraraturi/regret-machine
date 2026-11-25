@@ -11,7 +11,7 @@
 | P5 | DONE | phase-P5, cutline-1 | CUT LINE 1: ClaimChip, scene-frame + stub scenes, Receipt, Result (Clear skin), Staff + QR, share card 1080x1920, axe 0 serious |
 | P6 | DONE | phase-P6 | Long day (battery) scene, C-05/C-06 (unconfirmed), 2 receipt lines, 22s e2e + evidence/P6/ |
 | P7 | DONE | phase-P7, cutline-2 | CUT LINE 2: Lecture hall scene, Wi-Fi drop, C-02 + NPU gloss, 22s e2e + evidence/P7/ |
-| P8 | TODO | | |
+| P8 | DONE | phase-P8 | Private files scene, 6 file cards, upload banner, on-device reveal, 22s e2e + evidence/P8/ |
 | P9 | TODO | | cut line 3 |
 | P10 | TODO | | |
 | P11 | TODO | | |
@@ -59,7 +59,13 @@
 - [x] Unit + e2e pass (`tests/unit/lecture.test.ts`, `tests/e2e/p7-lecture.spec.ts`)
 - [x] CUT LINE 2 tag created (`cutline-2`)
 
+## P8 acceptance checklist
+- [x] Scene 22 s (`tests/e2e/p8-private.spec.ts`)
+- [x] Copy says 'can run on your laptop', never 'always private' (`src/data/copy.en.json`, `tests/e2e/p8-private.spec.ts`)
+- [x] Unit + e2e pass (`tests/unit/private.test.ts`, `tests/e2e/p8-private.spec.ts`)
+
 ## Slice log (newest first)
+- 2026-11-25 P8: added `src/screens/scene-private.ts`, `scene.private.note` in copy.*.json, `tests/unit/private.test.ts`, `tests/e2e/p8-private.spec.ts`, screenshots in `evidence/P8/`; added P6 `fail-*.png` screenshots.
 - 2026-11-25 P7 (CUT LINE 2): added `src/screens/scene-lecture.ts`, registered in `scenes/index.ts`, `tests/unit/lecture.test.ts`, `tests/e2e/p7-lecture.spec.ts`, screenshots in `evidence/P7/`.
 - 2026-11-25 P6: added `src/screens/scene-battery.ts`, `src/ui/scenes.css`, 2-line receipt support in `receipt.ts`/`scene-frame.ts`, `unconfirmed` label in `claimchip.ts`, `tests/unit/battery.test.ts`, `tests/e2e/p6-battery.spec.ts`, screenshots in `evidence/P6/`.
 - 2026-11-25 CARRYOVER: updated `ADD-08` evidence with `168feab` and `P5_QR_E2E_DECODED`; recorded known non-serious axe moderate `heading-order` on Receipt (`h1` -> `h3` in `tape.ts`).
