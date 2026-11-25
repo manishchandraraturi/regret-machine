@@ -32,10 +32,10 @@ Status values: TODO / IN PROGRESS / DONE / SPEC GAP. A row without Evidence is n
 | ADD-02 | English/Hindi toggle on every screen | P2,P10 | e2e: switch language mid-game, state kept | IN PROGRESS | done: P2 (`i18n.ts`, `store.ts`, `core.test.ts` hostiles/parity); left: P10 |
 | ADD-03 | claims.json: every number shown has source, baseline, conditions, tag, verified_on | P2,P11 | tools/check_claims.py exits 0 | IN PROGRESS | done: P2 (`data.ts`, `check_claims.py` exit 0); left: P11 |
 | ADD-04 | No runtime third-party requests; fonts and assets self-hosted; works with weak store Wi-Fi | P0,P1,P11 | Playwright: zero requests outside origin | IN PROGRESS | done: P0,P1 (`smoke.spec.ts`, `gallery.spec.ts`); left: P11 |
-| ADD-05 | Synthesised sound (WebAudio, no audio files), muted by default, visible mute toggle | P3 | Unit test engine; manual | TODO | |
+| ADD-05 | Synthesised sound (WebAudio, no audio files), muted by default, visible mute toggle | P3 | Unit test engine; manual | DONE | done: P3 (`src/engines/audio.ts`, `tests/unit/engines.test.ts`) |
 | ADD-06 | Accessibility: keyboard play, focus-visible, reduced-motion, contrast AA, touch targets >= 48 px | P1,P11 | axe run + manual keyboard run | IN PROGRESS | done: P1 (`gallery.spec.ts`, `decay.test.ts`); left: P11 |
-| ADD-07 | Shareable result card (PNG made in browser, Web Share API or download) | P3,P5 | e2e: download event fires, PNG 1080x1920 | TODO | |
-| ADD-08 | Store-staff screen: plain-words ask list + QR to NEXT_STEP_URL | P3,P5 | Screenshot; QR decodes to the URL | TODO | |
+| ADD-07 | Shareable result card (PNG made in browser, Web Share API or download) | P3,P5 | e2e: download event fires, PNG 1080x1920 | IN PROGRESS | done: P3 (`src/engines/sharecard.ts`, `tests/unit/engines.test.ts` 1080x1920); left: P5 |
+| ADD-08 | Store-staff screen: plain-words ask list + QR to NEXT_STEP_URL | P3,P5 | Screenshot; QR decodes to the URL | IN PROGRESS | done: P3 (`src/engines/qr.ts`, `tests/unit/engines.test.ts` jsQR round-trip); left: P5 |
 | ADD-09 | Fair Fight screen concedes where rivals lead (honesty builds trust with the jury) | P10 | Row text review against claims.json | TODO | |
 | ADD-10 | No analytics, no cookies, no data collection, no accounts | P0,P11 | grep for storage/analytics APIs = empty | IN PROGRESS | done: P0 (`smoke.spec.ts`, CSP); left: P11 |
 | ADD-11 | Performance budget: JS+CSS+fonts <= 600 KB gzip; interactive < 2.5 s on mid phone (throttled) | P11 | Build size report + Lighthouse run pasted | TODO | |
@@ -47,7 +47,7 @@ Status values: TODO / IN PROGRESS / DONE / SPEC GAP. A row without Evidence is n
 | DSN-02 | Decay engine: --decay 0..1 drains colour, adds grain, scratches, crack | P1 | Visual test at 0, 0.5, 1 | DONE | `src/ui/decay.ts`, `tests/unit/decay.test.ts`, `evidence/P1/decay-strip-1920x1080.png` |
 | DSN-03 | Typography: Archivo (display), Mukta (body, Hindi), DM Mono (receipt only) | P1 | Fonts load from own origin, not a CDN | DONE | `src/ui/fonts.ts`, `npm run build` bundled woff2/woff, `tests/e2e/gallery.spec.ts` 0 CDN requests |
 | DSN-04 | Receipt tape: running regret list that prints as events happen | P1,P5 | Component test | IN PROGRESS | done: P1 (`tape.ts`, `components.test.ts`); left: P5 |
-| DSN-05 | Motion: one orchestrated Year Flip; everything else answers user action | P1,P3 | Reduced-motion swap verified | IN PROGRESS | done: P1 (`yearflip.ts`, `gallery.spec.ts`); left: P3 |
+| DSN-05 | Motion: one orchestrated Year Flip; everything else answers user action | P1,P3 | Reduced-motion swap verified | DONE | done: P1,P3 (`yearflip.ts`, `loop.ts`, `input.ts`, `gallery.spec.ts`, `engines.test.ts`) |
 | DSN-06 | Clear skin for the reveal: cool white + Clear Blue, no stickers | P1,P5 | Screenshot vs design.md | IN PROGRESS | done: P1 (`tokens.css`, `splitreveal.ts`, `gallery-1920x1080.png`); left: P5 |
 | DEL-01 | Public URL live (GitHub Pages) | P12 | Open in private window on a phone | TODO | |
 | DEL-02 | README: what it is, how to run, claims policy, credits | P12 | File exists, reviewed | TODO | |
