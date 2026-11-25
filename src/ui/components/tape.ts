@@ -13,7 +13,7 @@ export function createTape(headerText = 'Receipt'): TapeHandle {
   const aside = document.createElement('aside');
   aside.className = 'rm-tape';
 
-  const header = document.createElement('h3');
+  const header = document.createElement('h2');
   header.className = 'rm-tape-header';
   header.textContent = headerText;
 

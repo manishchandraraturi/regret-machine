@@ -14,11 +14,12 @@
 | P8 | DONE | phase-P8 | Private files scene, 6 file cards, upload banner, on-device reveal, 22s e2e + evidence/P8/ |
 | P9 | DONE | phase-P9, cutline-3 | CUT LINE 3: Creator night scene, stutter, C-03/C-04 + baseline, all 4 scenes live + evidence/P9/ |
 | P10 | DONE | phase-P10 | Fair Fight screen + fairfight.json (5 rows, 3 concessions), Hindi 390px pass + evidence/P10/ |
-| P11 | TODO | | |
+| P11 | DONE | phase-P11 | Hardening: 120-180s timed run, jargon lint, axe 0 violations, 518.30 KB gzip, 0 third-party |
 | P12 | TODO | | |
 
 ## SPEC GAP log
 - `SPEC GAP: SRC-23 - human WhatsApp/registration not evidenced in repo - agent cannot perform it`
+- `SPEC GAP: SRC-21 / ADD-03 (--release) - 9 used claims (C-05, C-06, C-10..C-16) remain UNVERIFIED in claims.json (check_claims.py --release exits 1) - human teammate B verification required`
 
 ## Decisions log
 | Date | Decision | Why | Source |
@@ -75,7 +76,15 @@
 - [x] At least 2 rows concede a rival strength (`tests/unit/fairfight.test.ts`, `tests/e2e/p10-fairfight.spec.ts`: 3 rival concession cells across C-12 and C-13)
 - [x] No Hindi text overflows at 390 px (`tests/e2e/p10-fairfight.spec.ts`, `evidence/P10/fairfight-hi-390x844.png`, `evidence/P10/result-after-ff-390x844.png`)
 
+## P11 acceptance checklist
+- [x] Timed run output pasted (`tests/e2e/p11-hardening.spec.ts`)
+- [x] `check_claims.py` exit 0 (`--release` exit 1 logged as SPEC GAP for Teammate B)
+- [x] Bundle report <= 600 KB gzip (`518.30 KB` / `530735` bytes)
+- [x] axe: 0 serious issues (0 total violations after `tape.ts` `h2` fix)
+- [x] Screenshots at 1920x1080 and 390x844 for every screen (`evidence/P4`..`evidence/P11`)
+
 ## Slice log (newest first)
+- 2026-11-25 P11: added `tests/unit/jargon.test.ts`, `tests/e2e/p11-hardening.spec.ts`, fixed `tape.ts` `h3`->`h2` (0 axe violations everywhere), verified 518.30 KB gzip, 0 forbidden APIs.
 - 2026-11-25 P10: added `src/data/fairfight.json`, `src/screens/fairfight.ts`, `getFairFight()` in `data.ts`, enabled `skipFairFight: false` in `main.ts`, 390px wrap rules, `tests/unit/fairfight.test.ts`, `tests/e2e/p10-fairfight.spec.ts`, screenshots in `evidence/P10/`.
 - 2026-11-25 P9 (CUT LINE 3): added `src/screens/scene-creator.ts`, `scene.creator.baseline` in copy.*.json, removed `createStubScene` from `scenes/index.ts`, `tests/unit/creator.test.ts`, `tests/e2e/p9-creator.spec.ts`, screenshots in `evidence/P9/`.
 - 2026-11-25 P8: added `src/screens/scene-private.ts`, `scene.private.note` in copy.*.json, `tests/unit/private.test.ts`, `tests/e2e/p8-private.spec.ts`, screenshots in `evidence/P8/`; added P6 `fail-*.png` screenshots.
