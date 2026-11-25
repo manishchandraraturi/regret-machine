@@ -89,6 +89,18 @@
 - [x] FREEZE tag `v1.0` created before Fri 09:00
 
 ## Slice log (newest first)
+- 2026-11-25 TEST-HARDENING: added `tests/e2e/cross-domain.spec.ts` (4 e2e tests) and `tests/unit/edge-cases.test.ts` (5 unit tests); 41 unit + 27 e2e pass, live Pages 390x844 logged-out walkthrough 0 third-party / 0 CSP violations, 518.30 KB gzip, forbidden API grep empty.
+
+## Domain Test Matrix (TEST-HARDENING)
+| Domain | New/Existing test | Result | Evidence |
+|---|---|---|---|
+| Hostile URL params & flags | `tests/e2e/cross-domain.spec.ts` (`hostile ?lang=xx...`), `tests/unit/core.test.ts` | PASS | 0 third-party, 0 CSP, `lang=en`, facilitator bar hidden |
+| Direct static routes & CSP | `tests/e2e/cross-domain.spec.ts` (`direct /health.html and /gallery.html...`), `tests/e2e/smoke.spec.ts` | PASS | `/health.html` & `/gallery.html` 0 CSP, 0 third-party |
+| Mobile 390x844 overflow & Staff QR | `tests/e2e/cross-domain.spec.ts` (`390x844 has no horizontal overflow...`), `tests/unit/edge-cases.test.ts` | PASS | `scrollWidth <= innerWidth` across all screens; `not_configured: VITE_NEXT_STEP_URL` |
+| Keyboard-only & reduced-motion | `tests/e2e/cross-domain.spec.ts`, `tests/e2e/p11-hardening.spec.ts`, `tests/e2e/gallery.spec.ts` | PASS | Full flow to Staff (keyboard) & Result (reduced-motion) |
+| Unit edge cases (claims/i18n/idle/share) | `tests/unit/edge-cases.test.ts` (5 tests) | PASS | `claim()` throws, `CONTENT_MISSING`, idle clears state, `AbortError` -> `cancelled` |
+| Accessibility (axe-core) | `tests/e2e/p5-flow.spec.ts`, `p6`–`p11` specs | PASS | 0 serious/critical/moderate violations (`AXE_*=[]` on all screens) |
+| Live GitHub Pages (390x844) | `https://manishchandraraturi.github.io/regret-machine/` Playwright walkthrough | PASS | All 10 screens `overflow_ok=true`, `THIRD_PARTY=[]`, `CSP=[]` |
 - 2026-11-25 FIX Bundle E: added keyboard-only full-run e2e (`p11-hardening.spec.ts`), 14 `390x844` P11 screenshots, marked `DEL-04` DONE (rehearsal in Capt TODOs), readiness `NOT READY` until `check_claims.py --release` passes.
 - 2026-11-25 P12 (FREEZE v1.0): finalised `README.md`, `docs/system-design.md`, audited `docs/SPEC_CHECKLIST.md` (0 TODO rows), tagged `phase-P12` and `v1.0`.
 - 2026-11-25 P11: added `tests/unit/jargon.test.ts`, `tests/e2e/p11-hardening.spec.ts`, fixed `tape.ts` `h3`->`h2` (0 axe violations everywhere), verified 518.30 KB gzip, 0 forbidden APIs.
