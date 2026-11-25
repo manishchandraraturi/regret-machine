@@ -17,7 +17,9 @@ async function runToReceipt(page: Page, personaLabel: string): Promise<void> {
 
   // flip1 -> lecture -> flip2 -> battery -> creator -> flip3 -> private -> receipt
   await page.getByRole('button', { name: 'Next' }).click();
-  await page.getByRole('button', { name: 'Skip this scene' }).click();
+  await expect(page.locator('[data-screen="lecture"]')).toBeVisible();
+  await page.clock.runFor(16_500);
+  await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
   await expect(page.locator('[data-screen="battery"]')).toBeVisible();
   await page.clock.runFor(16_500);
@@ -133,7 +135,9 @@ test.describe('P5 CUT LINE 1 end-to-end', () => {
     await page.getByRole('button', { name: 'Buy it' }).click();
 
     await page.getByRole('button', { name: 'Next' }).click();
-    await page.getByRole('button', { name: 'Skip this scene' }).click();
+    await expect(page.locator('[data-screen="lecture"]')).toBeVisible();
+    await page.clock.runFor(16_500);
+    await page.getByRole('button', { name: 'Next' }).click();
     await page.getByRole('button', { name: 'Next' }).click();
     await expect(page.locator('[data-screen="battery"]')).toBeVisible();
     await page.clock.runFor(16_500);

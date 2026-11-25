@@ -29,7 +29,9 @@ test.describe('P6 Long day (battery)', () => {
       await page.getByRole('button', { name: 'Buy it' }).click();
 
       await page.getByRole('button', { name: 'Next' }).click();
-      await page.getByRole('button', { name: 'Skip this scene' }).click();
+      await expect(page.locator('[data-screen="lecture"]')).toBeVisible();
+      await page.clock.runFor(16_500);
+      await page.getByRole('button', { name: 'Next' }).click();
       await page.getByRole('button', { name: 'Next' }).click();
 
       await expect(page.locator('[data-screen="battery"]')).toBeVisible();
@@ -57,14 +59,6 @@ test.describe('P6 Long day (battery)', () => {
       );
       expect(axeReveal.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')).toEqual([]);
 
-      // Hindi reveal screenshot
-      await page.getByRole('button', { name: 'हिन्दी' }).click();
-      await page.clock.runFor(16_500);
-      await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
-      await page.screenshot({ path: `evidence/P6/reveal-hi-${vp.width}x${vp.height}.png` });
-      await page.getByRole('button', { name: 'English' }).click();
-      await page.clock.runFor(16_500);
-
       // Auto-completes at 22s total -> moves to creator
       await page.clock.runFor(6_000);
       await expect(page.locator('[data-screen="creator"]')).toBeVisible();
@@ -77,6 +71,20 @@ test.describe('P6 Long day (battery)', () => {
       await page.clock.runFor(2_500);
       await expect(page.locator('.rm-tape')).toContainText('Dead battery at 2:30 pm');
       await expect(page.locator('.rm-tape')).toContainText('Battery 0%. Charger is at home.');
+
+      // Hindi reveal screenshot
+      await page.goto('/?lang=hi');
+      await page.getByRole('button', { name: 'अपना लैपटॉप चुनो' }).click();
+      await page.getByRole('button', { name: /Zesta Glow/ }).click();
+      await page.getByRole('button', { name: 'पढ़ाई', exact: true }).click();
+      await page.getByRole('button', { name: 'खरीद लो' }).click();
+      await page.getByRole('button', { name: 'आगे' }).click();
+      await page.clock.runFor(16_500);
+      await page.getByRole('button', { name: 'आगे' }).click();
+      await page.getByRole('button', { name: 'आगे' }).click();
+      await page.clock.runFor(16_500);
+      await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
+      await page.screenshot({ path: `evidence/P6/reveal-hi-${vp.width}x${vp.height}.png` });
 
       expect(thirdParty).toEqual([]);
       expect(await csp.assertClean()).toEqual([]);
