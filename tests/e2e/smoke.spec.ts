@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { attachCspGuard } from './csp';
 
 const VIEWPORTS = [
   { name: 'desktop', width: 1920, height: 1080 },
@@ -11,7 +12,8 @@ test.describe('P0 smoke', () => {
       page,
     }) => {
       const thirdParty: string[] = [];
-      const cspViolations: string[] = [];
+      const pageErrors: string[] = [];
+      const csp = await attachCspGuard(page);
 
       page.on('request', (req) => {
         const url = new URL(req.url());
@@ -20,7 +22,7 @@ test.describe('P0 smoke', () => {
         }
       });
       page.on('pageerror', (err) => {
-        cspViolations.push(err.message);
+        pageErrors.push(err.message);
       });
 
       await page.setViewportSize({ width: vp.width, height: vp.height });
@@ -33,7 +35,8 @@ test.describe('P0 smoke', () => {
       await page.screenshot({ path: `evidence/P0/health-${vp.width}x${vp.height}.png` });
 
       expect(thirdParty).toEqual([]);
-      expect(cspViolations).toEqual([]);
+      expect(pageErrors).toEqual([]);
+      expect(await csp.assertClean()).toEqual([]);
     });
   }
 });

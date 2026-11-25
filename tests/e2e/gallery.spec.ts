@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { attachCspGuard } from './csp';
 
 const VIEWPORTS = [
   { name: 'desktop', width: 1920, height: 1080 },
@@ -11,6 +12,7 @@ test.describe('P1 gallery', () => {
       page,
     }) => {
       const thirdParty: string[] = [];
+      const csp = await attachCspGuard(page);
       page.on('request', (req) => {
         const url = new URL(req.url());
         if (url.origin !== 'http://127.0.0.1:4173') {
@@ -22,7 +24,6 @@ test.describe('P1 gallery', () => {
       await page.goto('/gallery.html');
       await expect(page.getByRole('heading', { name: 'Component Gallery' })).toBeVisible();
 
-      // Verify touch targets >= 48px
       const buttons = page.locator('button');
       const count = await buttons.count();
       expect(count).toBeGreaterThan(0);
@@ -35,7 +36,6 @@ test.describe('P1 gallery', () => {
         }
       }
 
-      // Verify Hindi heading does not overflow viewport width
       const hiHeading = page.locator('[lang="hi"] .type-flyer');
       await expect(hiHeading).toBeVisible();
       const hiBox = await hiHeading.boundingBox();
@@ -44,7 +44,6 @@ test.describe('P1 gallery', () => {
         expect(hiBox.width).toBeLessThanOrEqual(vp.width);
       }
 
-      // Decay strip screenshot on desktop
       if (vp.width === 1920) {
         await page
           .getByTestId('decay-strip')
@@ -53,10 +52,12 @@ test.describe('P1 gallery', () => {
       await page.screenshot({ path: `evidence/P1/gallery-${vp.width}x${vp.height}.png` });
 
       expect(thirdParty).toEqual([]);
+      expect(await csp.assertClean()).toEqual([]);
     });
   }
 
   test('honours prefers-reduced-motion on YearFlip', async ({ page }) => {
+    const csp = await attachCspGuard(page);
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.setViewportSize({ width: 1920, height: 1080 });
     await page.goto('/gallery.html');
@@ -65,5 +66,6 @@ test.describe('P1 gallery', () => {
     await flipBtn.click();
     await expect(page.locator('.rm-yearflip').first()).toContainText('Year 2');
     await page.screenshot({ path: 'evidence/P1/gallery-reduced-motion.png' });
+    expect(await csp.assertClean()).toEqual([]);
   });
 });
