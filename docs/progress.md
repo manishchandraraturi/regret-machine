@@ -5,7 +5,7 @@
 |---|---|---|---|
 | P0 | DONE | phase-P0 | Scaffold, CI/e2e, CSP, health.html, screenshots in evidence/P0/ |
 | P1 | DONE | phase-P1 | Design tokens, self-hosted fonts, decay engine, 8 P1 components, gallery.html |
-| P2 | TODO | | |
+| P2 | DONE | phase-P2 | Core types, env, data, i18n, store, scoring, result, machine, idle; 20 unit tests pass |
 | P3 | TODO | | |
 | P4 | TODO | | |
 | P5 | TODO | | cut line 1 |
@@ -47,6 +47,7 @@
 3. Which Intel page should the QR open (NEXT_STEP_URL)?
 
 ## Slice log (newest first)
+- 2026-11-25 P2: added `src/core/{types,env,data,i18n,store,scoring,result,machine,idle}.ts` + unit tests (`scoring.test.ts`, `result.test.ts`, `core.test.ts`).
 - 2026-11-25 A-CLOSEOUT: trimmed font subsets to latin (+ devanagari for Mukta), added e2e CSP guard helper, aligned SPEC_CHECKLIST multi-phase rows to IN PROGRESS.
 - 2026-11-25 FIX Bundle A: split `src/ui/base.css` into `base.css`, `components.css`, and `overlays-and-gallery.css` (all <= 300 lines); verified deployed Pages title & `base: './'`, ticked design.md §12 copy rule.
 - 2026-11-25 P1: added `tokens.css`, `base.css`, `fonts.ts`, `decay.ts`, 8 components in `src/ui/components/`, `gallery.html` + `src/gallery.ts`, unit & e2e tests, screenshots in `evidence/P1/`.
