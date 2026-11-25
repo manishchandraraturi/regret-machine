@@ -47,6 +47,7 @@
 3. Which Intel page should the QR open (NEXT_STEP_URL)?
 
 ## Slice log (newest first)
+- 2026-11-25 FIX Bundle A: split `src/ui/base.css` into `base.css`, `components.css`, and `overlays-and-gallery.css` (all <= 300 lines); verified deployed Pages title & `base: './'`, ticked design.md §12 copy rule.
 - 2026-11-25 P1: added `tokens.css`, `base.css`, `fonts.ts`, `decay.ts`, 8 components in `src/ui/components/`, `gallery.html` + `src/gallery.ts`, unit & e2e tests, screenshots in `evidence/P1/`.
 - 2026-11-25 P0: scaffolded Vite + TS strict, ESLint, Vitest, Playwright; added CSP meta, `base: './'`, `public/health.html`, `tests/e2e/smoke.spec.ts`, updated `ci.yml` with e2e.
 - 2026-11-25 DOC SYNC: synced Node 24 in `.nvmrc` and `tools/gen_docs.py`, updated `AGENTS.md` §4/§13 for bundle workflow, regenerated docs.

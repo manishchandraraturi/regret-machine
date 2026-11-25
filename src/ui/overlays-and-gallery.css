@@ -1,0 +1,266 @@
+/* Tape (receipt) */
+.rm-tape {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  background: var(--paper);
+  color: var(--print-black);
+  border-radius: var(--r-paper);
+  padding: var(--s4) var(--s4) var(--s6);
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 0, #000 calc(100% - 10px), transparent calc(100% - 10px)),
+    repeating-linear-gradient(
+      -45deg,
+      #000 0 7px,
+      transparent 7px 14px
+    );
+  mask-image:
+    linear-gradient(to bottom, #000 0, #000 calc(100% - 10px), transparent calc(100% - 10px)),
+    conic-gradient(from 135deg at bottom, transparent 0 90deg, #000 0);
+  mask-size: 100% 100%, 16px 10px;
+  mask-position: top, bottom;
+  mask-repeat: no-repeat, repeat-x;
+}
+
+.rm-tape-header {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 var(--s2);
+  border-bottom: 1px dashed var(--dust);
+  padding-bottom: var(--s1);
+}
+
+.rm-tape-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+.rm-tape-line {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s2);
+  font-family: var(--font-receipt);
+  font-size: 20px;
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums;
+  animation: tape-slide var(--t-fast) var(--ease);
+}
+
+.rm-tape-leader {
+  flex: 1;
+  border-bottom: 2px dotted var(--dust);
+  min-width: 12px;
+}
+
+.rm-tape-pts {
+  text-align: right;
+  font-weight: 400;
+}
+
+.rm-tape-footer {
+  margin-top: var(--s3);
+  padding-top: var(--s2);
+  border-top: 2px solid var(--print-black);
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-receipt);
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes tape-slide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* SplitReveal */
+.rm-split {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 3px solid var(--print-black);
+  overflow: hidden;
+}
+
+@media (max-width: 699px) {
+  .rm-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+.rm-split-half {
+  padding: var(--s5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+  min-height: 220px;
+}
+
+.rm-split-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  background: var(--print-black);
+  transform: translateX(-50%) scaleY(1);
+  transform-origin: center;
+  animation: split-wipe 500ms var(--ease);
+  z-index: 6;
+}
+
+@media (max-width: 699px) {
+  .rm-split-divider {
+    display: none;
+  }
+}
+
+@keyframes split-wipe {
+  from {
+    transform: translateX(-50%) scaleY(0);
+  }
+  to {
+    transform: translateX(-50%) scaleY(1);
+  }
+}
+
+.rm-split-claim {
+  display: inline-block;
+  align-self: flex-start;
+  background: var(--clear-white);
+  color: var(--clear-ink);
+  border: 2px solid var(--clear-blue);
+  border-radius: var(--r-btn);
+  padding: var(--s1) var(--s3);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.rm-split-illustration {
+  position: absolute;
+  left: var(--s3);
+  bottom: var(--s2);
+  z-index: 6;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--white);
+  color: var(--print-black);
+  padding: 2px var(--s2);
+  border: 1px solid var(--print-black);
+}
+
+/* YearFlip */
+.rm-yearflip {
+  position: relative;
+  min-height: 240px;
+  perspective: 1000px;
+  border: 3px solid var(--print-black);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.rm-yearflip-sheet {
+  padding: var(--s6);
+  background: var(--bg);
+  color: var(--fg);
+  transform-origin: top center;
+}
+
+.rm-yearflip-sheet--peeling {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  animation: year-peel 700ms var(--ease) forwards;
+}
+
+@keyframes year-peel {
+  from {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: rotateX(82deg);
+    opacity: 0;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .rm-btn,
+  .rm-starburst {
+    transition: none;
+  }
+
+  .rm-tape-line,
+  .rm-split-divider {
+    animation: none;
+  }
+
+  .rm-yearflip-sheet--peeling {
+    animation: year-fade 300ms linear forwards;
+  }
+
+  @keyframes year-fade {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+}
+
+/* Gallery layout */
+.gallery-page {
+  padding: var(--s6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s7);
+}
+
+.gallery-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s4);
+  padding: var(--s5);
+  border: 2px solid var(--print-black);
+}
+
+.gallery-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s5);
+  align-items: center;
+}
+
+.gallery-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--s3);
+}
+
+@media (max-width: 699px) {
+  .gallery-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gallery-cell {
+  padding: var(--s4);
+  border: 2px solid var(--print-black);
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+}

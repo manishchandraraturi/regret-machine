@@ -1,6 +1,8 @@
 import './ui/fonts';
 import './ui/tokens.css';
 import './ui/base.css';
+import './ui/components.css';
+import './ui/overlays-and-gallery.css';
 
 export function mountApp(root: HTMLElement): void {
   const main = document.createElement('main');

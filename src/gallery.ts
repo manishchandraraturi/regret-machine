@@ -1,6 +1,8 @@
 import './ui/fonts';
 import './ui/tokens.css';
 import './ui/base.css';
+import './ui/components.css';
+import './ui/overlays-and-gallery.css';
 import { createCrackOverlay, setDecay } from './ui/decay';
 import { createButton } from './ui/components/button';
 import { createChip } from './ui/components/chip';
