@@ -27,17 +27,17 @@ Status values: TODO / IN PROGRESS / DONE / SPEC GAP. A row without Evidence is n
 | SRC-20 | Judging: persuasive impact towards buying (3 points) | P5-P9 | Every scene ends in a felt contrast + recommendation | TODO | |
 | SRC-21 | Judging: technical accuracy of AI PC features (3 points) | P2,P11 | Claims audit: 100% of shown numbers have source + baseline + tag | TODO | |
 | SRC-22 | Judging: showcase of competitive superiority (1 point) | P10 | Fair Fight rows each carry a source id | TODO | |
-| SRC-23 | Join the WhatsApp group and register on the link in the group description | P0 | HUMAN: registration confirmed | TODO | |
+| SRC-23 | Join the WhatsApp group and register on the link in the group description | P0 | HUMAN: registration confirmed | SPEC GAP | SPEC GAP: SRC-23 - human WhatsApp/registration not evidenced in repo - agent cannot perform it |
 | ADD-01 | Kiosk mode: auto-reset to Attract after 60 s idle (config VITE_IDLE_SECONDS) | P2,P4 | Unit test with fake timers + e2e | TODO | |
 | ADD-02 | English/Hindi toggle on every screen | P2,P10 | e2e: switch language mid-game, state kept | TODO | |
 | ADD-03 | claims.json: every number shown has source, baseline, conditions, tag, verified_on | P2,P11 | tools/check_claims.py exits 0 | TODO | |
-| ADD-04 | No runtime third-party requests; fonts and assets self-hosted; works with weak store Wi-Fi | P0,P1,P11 | Playwright: zero requests outside origin | TODO | |
+| ADD-04 | No runtime third-party requests; fonts and assets self-hosted; works with weak store Wi-Fi | P0,P1,P11 | Playwright: zero requests outside origin | IN PROGRESS | P0: `tests/e2e/smoke.spec.ts` verified 0 third-party requests at 1920x1080 & 390x844 (`evidence/P0/title-*.png`) |
 | ADD-05 | Synthesised sound (WebAudio, no audio files), muted by default, visible mute toggle | P3 | Unit test engine; manual | TODO | |
 | ADD-06 | Accessibility: keyboard play, focus-visible, reduced-motion, contrast AA, touch targets >= 48 px | P1,P11 | axe run + manual keyboard run | TODO | |
 | ADD-07 | Shareable result card (PNG made in browser, Web Share API or download) | P3,P5 | e2e: download event fires, PNG 1080x1920 | TODO | |
 | ADD-08 | Store-staff screen: plain-words ask list + QR to NEXT_STEP_URL | P3,P5 | Screenshot; QR decodes to the URL | TODO | |
 | ADD-09 | Fair Fight screen concedes where rivals lead (honesty builds trust with the jury) | P10 | Row text review against claims.json | TODO | |
-| ADD-10 | No analytics, no cookies, no data collection, no accounts | P0,P11 | grep for storage/analytics APIs = empty | TODO | |
+| ADD-10 | No analytics, no cookies, no data collection, no accounts | P0,P11 | grep for storage/analytics APIs = empty | IN PROGRESS | P0: `src/main.ts` & `index.html` static only, CSP `form-action 'none'` (`tests/e2e/smoke.spec.ts`) |
 | ADD-11 | Performance budget: JS+CSS+fonts <= 600 KB gzip; interactive < 2.5 s on mid phone (throttled) | P11 | Build size report + Lighthouse run pasted | TODO | |
 | ADD-12 | Evidence: unit tests for scoring/result; Playwright e2e screenshots per screen | P11 | evidence/ folder + test names | TODO | |
 | ADD-13 | Facilitator mode (?facilitator=1): skip scene, jump to result, reset. Demo-day lifesaver | P2,P4 | e2e | TODO | |

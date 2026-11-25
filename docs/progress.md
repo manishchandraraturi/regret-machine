@@ -3,7 +3,7 @@
 ## Phase status
 | Phase | Status | Tag | Notes |
 |---|---|---|---|
-| P0 | TODO | | |
+| P0 | DONE | phase-P0 | Scaffold, CI/e2e, CSP, health.html, screenshots in evidence/P0/ |
 | P1 | TODO | | |
 | P2 | TODO | | |
 | P3 | TODO | | |
@@ -18,7 +18,7 @@
 | P12 | TODO | | |
 
 ## SPEC GAP log
-None yet. Format: `SPEC GAP: <ID> - <WHAT> - <WHY>`.
+- `SPEC GAP: SRC-23 - human WhatsApp/registration not evidenced in repo - agent cannot perform it`
 
 ## Decisions log
 | Date | Decision | Why | Source |
@@ -27,6 +27,7 @@ None yet. Format: `SPEC GAP: <ID> - <WHAT> - <WHY>`.
 | 2026-11-25 | Fictional decoy laptops | Accuracy and fairness | prd.md principle 2 |
 | 2026-11-25 | Node major 24 (v24.15.0) in `.nvmrc` | Matches local LTS environment | `node -v` |
 | 2026-11-25 | Repo URL `https://github.com/manishchandraraturi/regret-machine.git` (Pages-enabled status: verify on first deploy) | Remote already created and pushed | `git remote -v` |
+| 2026-11-25 | Dev deps: `vite`, `typescript`, `vitest`, `@playwright/test`, `eslint`, `@eslint/js`, `typescript-eslint`, `jsdom`, `@axe-core/playwright` | Fixed stack per AGENTS.md §5 & architecture.md §2 | package.json |
 
 ## External facts the agent had to look up
 | Fact | Value | URL | Date | By |
@@ -45,4 +46,5 @@ None yet. Format: `SPEC GAP: <ID> - <WHAT> - <WHY>`.
 3. Which Intel page should the QR open (NEXT_STEP_URL)?
 
 ## Slice log (newest first)
+- 2026-11-25 P0: scaffolded Vite + TS strict, ESLint, Vitest, Playwright; added CSP meta, `base: './'`, `public/health.html`, `tests/e2e/smoke.spec.ts`, updated `ci.yml` with e2e.
 - 2026-11-25 DOC SYNC: synced Node 24 in `.nvmrc` and `tools/gen_docs.py`, updated `AGENTS.md` §4/§13 for bundle workflow, regenerated docs.
