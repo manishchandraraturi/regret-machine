@@ -1,15 +1,18 @@
 import { getScenesConfig } from '../core/data';
 import { computeRegret } from '../core/scoring';
-import type { Ctx, SceneId, SceneResult, Screen, ScreenId } from '../core/types';
+import type { Audio, Ctx, SceneId, SceneResult, Screen, ScreenId } from '../core/types';
 import { createTape } from '../ui/components/tape';
 import { tweenDecay } from '../ui/decay';
-import { sceneRegistry } from './scenes';
+import { createSceneRegistry } from './scenes';
 
 export function createSceneFrameScreen(
   sceneId: SceneId,
   nextScreen: ScreenId,
   decayScope: HTMLElement,
+  audio?: Audio,
 ): Screen {
+  const registry = createSceneRegistry(audio);
+
   return {
     mount(root: HTMLElement, ctx: Ctx): () => void {
       const config = getScenesConfig();
@@ -43,7 +46,10 @@ export function createSceneFrameScreen(
       const currentBreakdown = computeRegret(persona, state.results, config);
       for (const r of state.results) {
         const pts = currentBreakdown.lines.find((l) => l.sceneId === r.sceneId)?.points ?? 0;
-        tape.addLine({ label: ctx.t(`regret.${r.sceneId}`), points: pts });
+        const evs = r.events.length > 0 ? r.events : [{ sceneId: r.sceneId, lineKey: `regret.${r.sceneId}`, points: pts }];
+        evs.forEach((ev, idx) => {
+          tape.addLine({ label: ctx.t(ev.lineKey), points: idx === 0 ? pts : 0 });
+        });
       }
 
       const hint = document.createElement('p');
@@ -53,7 +59,7 @@ export function createSceneFrameScreen(
       stage.append(head, tape.element, playArea, hint);
       root.replaceChildren(stage);
 
-      const factory = sceneRegistry[sceneId];
+      const factory = registry[sceneId];
       const cleanupScene = factory.mount(playArea, ctx, (result: SceneResult) => {
         ctx.store.addSceneResult(result);
         const prevDecay = ctx.store.getState().decay;

@@ -11,17 +11,20 @@ export function createClaimChip(props: ClaimChipProps): HTMLElement {
   const wrap = document.createElement('div');
   wrap.className = 'rm-claimchip-wrap';
 
+  const suffix =
+    props.claim.status === 'UNVERIFIED' ? `${props.tagLabel} (unconfirmed)` : props.tagLabel;
+
   const pill = document.createElement('button');
   pill.type = 'button';
   pill.className = 'rm-claimchip';
-  pill.textContent = `${props.claim.metric} — ${props.tagLabel}`;
+  pill.textContent = `${props.claim.metric}: ${suffix}`;
 
   const dialog = document.createElement('dialog');
   dialog.className = 'rm-claim-sheet';
 
   const title = document.createElement('h3');
   title.className = 'type-body';
-  title.textContent = `${props.claim.id} (${props.tagLabel})`;
+  title.textContent = `${props.claim.id} (${suffix})`;
 
   const baseline = document.createElement('p');
   baseline.className = 'type-small';

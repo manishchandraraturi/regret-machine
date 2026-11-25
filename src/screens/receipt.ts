@@ -12,6 +12,21 @@ export function createReceiptScreen(audio: Audio): Screen {
       const persona = state.persona ?? 'study';
       const breakdown = computeRegret(persona, state.results, getScenesConfig());
 
+      const printLines: Array<{ label: string; points: number }> = [];
+      for (const line of breakdown.lines) {
+        const result = state.results.find((r) => r.sceneId === line.sceneId);
+        const events =
+          result && result.events.length > 0
+            ? result.events
+            : [{ sceneId: line.sceneId, lineKey: `regret.${line.sceneId}`, points: line.points }];
+        events.forEach((ev, idx) => {
+          printLines.push({
+            label: ctx.t(ev.lineKey),
+            points: idx === 0 ? line.points : 0,
+          });
+        });
+      }
+
       const wrap = document.createElement('section');
       wrap.className = 'rm-receipt-wrap';
       wrap.dataset.screen = 'receipt';
@@ -24,14 +39,14 @@ export function createReceiptScreen(audio: Audio): Screen {
       const timers: number[] = [];
 
       if (prefersReducedMotion()) {
-        for (const line of breakdown.lines) {
-          tape.addLine({ label: ctx.t(`regret.${line.sceneId}`), points: line.points });
+        for (const pl of printLines) {
+          tape.addLine(pl);
         }
       } else {
-        breakdown.lines.forEach((line, idx) => {
+        printLines.forEach((pl, idx) => {
           const id = window.setTimeout(() => {
             audio.tick();
-            tape.addLine({ label: ctx.t(`regret.${line.sceneId}`), points: line.points });
+            tape.addLine(pl);
           }, idx * 350);
           timers.push(id);
         });

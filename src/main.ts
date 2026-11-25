@@ -5,6 +5,7 @@ import './ui/components.css';
 import './ui/overlays-and-gallery.css';
 import './ui/screens.css';
 import './ui/p5-screens.css';
+import './ui/scenes.css';
 import { claim, getScenesConfig } from './core/data';
 import { getEnv } from './core/env';
 import { parseLangParam, translate } from './core/i18n';
@@ -113,12 +114,12 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
     attract: createAttractScreen(),
     shelf: createShelfScreen(audio),
     flip1: createFlipScreen('year.1', 'lecture', 0.25, shell),
-    lecture: createSceneFrameScreen('lecture', 'flip2', shell),
+    lecture: createSceneFrameScreen('lecture', 'flip2', shell, audio),
     flip2: createFlipScreen('year.2', 'battery', 0.5, shell),
-    battery: createSceneFrameScreen('battery', 'creator', shell),
-    creator: createSceneFrameScreen('creator', 'flip3', shell),
+    battery: createSceneFrameScreen('battery', 'creator', shell, audio),
+    creator: createSceneFrameScreen('creator', 'flip3', shell, audio),
     flip3: createFlipScreen('year.3', 'private', 0.75, shell),
-    private: createSceneFrameScreen('private', 'receipt', shell),
+    private: createSceneFrameScreen('private', 'receipt', shell, audio),
     receipt: createReceiptScreen(audio),
     fairfight: createStubScreen('SCENE_NOT_BUILT: fairfight', (c) => c.go('result')),
     result: createResultScreen(fullReset),

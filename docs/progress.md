@@ -9,7 +9,7 @@
 | P3 | DONE | phase-P3 | Shared engines (audio, loop, input, sharecard, qr) + 5 unit tests pass |
 | P4 | DONE | phase-P4 | Laptop SVG, Attract, Shelf, main wiring, idle/facilitator/Hindi e2e + evidence/P4/ |
 | P5 | DONE | phase-P5, cutline-1 | CUT LINE 1: ClaimChip, scene-frame + stub scenes, Receipt, Result (Clear skin), Staff + QR, share card 1080x1920, axe 0 serious |
-| P6 | TODO | | |
+| P6 | DONE | phase-P6 | Long day (battery) scene, C-05/C-06 (unconfirmed), 2 receipt lines, 22s e2e + evidence/P6/ |
 | P7 | TODO | | cut line 2 |
 | P8 | TODO | | |
 | P9 | TODO | | cut line 3 |
@@ -47,7 +47,15 @@
 2. ~~GitHub repo URL and whether the remote exists.~~ **Closed:** `https://github.com/manishchandraraturi/regret-machine.git` (remote exists; Pages-enabled status: verify on first deploy).
 3. Which Intel page should the QR open (NEXT_STEP_URL)?
 
+## P6 acceptance checklist
+- [x] Scene runs 22 s +- 2 s (`tests/e2e/p6-battery.spec.ts`)
+- [x] Reveal shows 'Illustration' tag and 'Intel-claimed' tag (`evidence/P6/reveal-1920x1080.png`, `evidence/P6/reveal-390x844.png`)
+- [x] Regret tape prints 2 lines (`tests/e2e/p6-battery.spec.ts`)
+- [x] Unit + e2e pass (`tests/unit/battery.test.ts`, `tests/e2e/p6-battery.spec.ts`)
+
 ## Slice log (newest first)
+- 2026-11-25 P6: added `src/screens/scene-battery.ts`, `src/ui/scenes.css`, 2-line receipt support in `receipt.ts`/`scene-frame.ts`, `unconfirmed` label in `claimchip.ts`, `tests/unit/battery.test.ts`, `tests/e2e/p6-battery.spec.ts`, screenshots in `evidence/P6/`.
+- 2026-11-25 CARRYOVER: updated `ADD-08` evidence with `168feab` and `P5_QR_E2E_DECODED`; recorded known non-serious axe moderate `heading-order` on Receipt (`h1` -> `h3` in `tape.ts`).
 - 2026-11-25 FIX Bundle B: added 390x844 screenshots for result-create/game/hustle/hi, raw axe output logging, QR e2e with test URL `https://example.invalid/regret-machine-test`, and design.md §12 checklist ticks.
 - 2026-11-25 P5 (CUT LINE 1): added `claimchip.ts`, `scene-frame.ts`, `scenes/index.ts`, `receipt.ts`, `result.ts`, `staff.ts`, `p5-screens.css`, `ci.yml` `vars.VITE_NEXT_STEP_URL`, `p5-flow.spec.ts` + `p5-ui.test.ts` (axe 0 serious, 1080x1920 PNG, 4 personas).
 

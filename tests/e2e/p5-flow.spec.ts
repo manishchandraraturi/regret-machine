@@ -19,7 +19,9 @@ async function runToReceipt(page: Page, personaLabel: string): Promise<void> {
   await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('button', { name: 'Skip this scene' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
-  await page.getByRole('button', { name: 'Skip this scene' }).click();
+  await expect(page.locator('[data-screen="battery"]')).toBeVisible();
+  await page.clock.runFor(16_500);
+  await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('button', { name: 'Skip this scene' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('button', { name: 'Skip this scene' }).click();
@@ -37,6 +39,7 @@ test.describe('P5 CUT LINE 1 end-to-end', () => {
       if (url.origin !== 'http://127.0.0.1:4173') thirdParty.push(req.url());
     });
 
+    await page.clock.install();
     await page.setViewportSize({ width: 1920, height: 1080 });
     await page.goto('/');
 
@@ -97,6 +100,7 @@ test.describe('P5 CUT LINE 1 end-to-end', () => {
     page,
   }) => {
     const csp = await attachCspGuard(page);
+    await page.clock.install();
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
@@ -131,7 +135,9 @@ test.describe('P5 CUT LINE 1 end-to-end', () => {
     await page.getByRole('button', { name: 'Next' }).click();
     await page.getByRole('button', { name: 'Skip this scene' }).click();
     await page.getByRole('button', { name: 'Next' }).click();
-    await page.getByRole('button', { name: 'Skip this scene' }).click();
+    await expect(page.locator('[data-screen="battery"]')).toBeVisible();
+    await page.clock.runFor(16_500);
+    await page.getByRole('button', { name: 'Next' }).click();
     await page.getByRole('button', { name: 'Skip this scene' }).click();
     await page.getByRole('button', { name: 'Next' }).click();
     await page.getByRole('button', { name: 'Skip this scene' }).click();
