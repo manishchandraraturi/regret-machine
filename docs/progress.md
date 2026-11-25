@@ -12,7 +12,7 @@
 | P6 | DONE | phase-P6 | Long day (battery) scene, C-05/C-06 (unconfirmed), 2 receipt lines, 22s e2e + evidence/P6/ |
 | P7 | DONE | phase-P7, cutline-2 | CUT LINE 2: Lecture hall scene, Wi-Fi drop, C-02 + NPU gloss, 22s e2e + evidence/P7/ |
 | P8 | DONE | phase-P8 | Private files scene, 6 file cards, upload banner, on-device reveal, 22s e2e + evidence/P8/ |
-| P9 | TODO | | cut line 3 |
+| P9 | DONE | phase-P9, cutline-3 | CUT LINE 3: Creator night scene, stutter, C-03/C-04 + baseline, all 4 scenes live + evidence/P9/ |
 | P10 | TODO | | |
 | P11 | TODO | | |
 | P12 | TODO | | |
@@ -64,7 +64,14 @@
 - [x] Copy says 'can run on your laptop', never 'always private' (`src/data/copy.en.json`, `tests/e2e/p8-private.spec.ts`)
 - [x] Unit + e2e pass (`tests/unit/private.test.ts`, `tests/e2e/p8-private.spec.ts`)
 
+## P9 acceptance checklist
+- [x] Scene 22 s (`tests/e2e/p9-creator.spec.ts`)
+- [x] Baseline text shown: vs earlier-generation Intel chip, Intel-measured (`tests/e2e/p9-creator.spec.ts`, `evidence/P9/reveal-1920x1080.png`)
+- [x] Unit + e2e pass (`tests/unit/creator.test.ts`, `tests/e2e/p9-creator.spec.ts`, `tests/e2e/p5-flow.spec.ts` 4 personas through all 4 real scenes)
+- [x] CUT LINE 3 tag created (`cutline-3`)
+
 ## Slice log (newest first)
+- 2026-11-25 P9 (CUT LINE 3): added `src/screens/scene-creator.ts`, `scene.creator.baseline` in copy.*.json, removed `createStubScene` from `scenes/index.ts`, `tests/unit/creator.test.ts`, `tests/e2e/p9-creator.spec.ts`, screenshots in `evidence/P9/`.
 - 2026-11-25 P8: added `src/screens/scene-private.ts`, `scene.private.note` in copy.*.json, `tests/unit/private.test.ts`, `tests/e2e/p8-private.spec.ts`, screenshots in `evidence/P8/`; added P6 `fail-*.png` screenshots.
 - 2026-11-25 P7 (CUT LINE 2): added `src/screens/scene-lecture.ts`, registered in `scenes/index.ts`, `tests/unit/lecture.test.ts`, `tests/e2e/p7-lecture.spec.ts`, screenshots in `evidence/P7/`.
 - 2026-11-25 P6: added `src/screens/scene-battery.ts`, `src/ui/scenes.css`, 2-line receipt support in `receipt.ts`/`scene-frame.ts`, `unconfirmed` label in `claimchip.ts`, `tests/unit/battery.test.ts`, `tests/e2e/p6-battery.spec.ts`, screenshots in `evidence/P6/`.

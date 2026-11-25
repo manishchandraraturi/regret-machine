@@ -5,26 +5,26 @@ Status values: TODO / IN PROGRESS / DONE / SPEC GAP. A row without Evidence is n
 
 | ID | Requirement | Phase | How to verify | Status | Evidence |
 |---|---|---|---|---|---|
-| SRC-01 | Vibe-code an exciting, interactive game | P4-P9 | e2e full playthrough passes; manual play on phone + 1080p screen | IN PROGRESS | done: P4,P5 (`p4-flow.spec.ts`, `p5-flow.spec.ts` end-to-end flow); left: P6,P7,P8,P9 |
+| SRC-01 | Vibe-code an exciting, interactive game | P4-P9 | e2e full playthrough passes; manual play on phone + 1080p screen | DONE | done: P4,P5,P6,P7,P8,P9 (`p5-flow.spec.ts` 4 personas through all 4 real scenes) |
 | SRC-02 | Helps shoppers discover Intel-powered AI PCs and makes a compelling case to buy one over competitors | P5,P10 | Result names Intel Core Ultra Series 3; Fair Fight screen exists | IN PROGRESS | done: P5 (`result.ts` asks Intel Core Ultra Series 3, `p5-flow.spec.ts`); left: P10 |
 | SRC-03 | Design for walk-in customers at Large Format Retail (LFR) stores such as Reliance Digital, Croma and Vijay Sales | P1,P4,P11 | Screenshots at 1920x1080 and 390x844; idle-reset e2e test | IN PROGRESS | done: P1,P4 (`evidence/P1/gallery-*.png`, `evidence/P4/attract-*.png`, `p4-flow.spec.ts` idle 60s); left: P11 |
 | SRC-04 | Assume zero to less prior technical knowledge | P2,P11 | Copy lint: every tech term glossed in plain words (NPU, TOPS, GPU) | IN PROGRESS | done: P2 (`i18n.ts`, `core.test.ts` copy parity & glossary keys); left: P11 |
 | SRC-05 | Short, intuitive experience that grabs attention within seconds | P4 | e2e: Attract is interactive < 2 s after load; one-tap start | DONE | done: P4 (`p4-flow.spec.ts` < 2 s interactive + one-tap start, `evidence/P4/attract-*.png`) |
 | SRC-06 | Delivers its core message in 2-3 minutes | P11 | e2e timed run at default pace lands 120-180 s | TODO | |
-| SRC-07 | Playable challenges spanning distinctive use cases in learning, work, creativity, gaming and everyday life | P6-P9 | scenes.json use-case map + 4 scene tests | IN PROGRESS | done: P6,P7,P8 (`scene-battery.ts`, `scene-lecture.ts`, `scene-private.ts`, unit+e2e); left: P9 |
+| SRC-07 | Playable challenges spanning distinctive use cases in learning, work, creativity, gaming and everyday life | P6-P9 | scenes.json use-case map + 4 scene tests | DONE | done: P6,P7,P8,P9 (`scene-battery.ts`, `scene-lecture.ts`, `scene-private.ts`, `scene-creator.ts`, unit+e2e) |
 | SRC-08 | Showcase AI on-device application support | P7 | Lecture scene test; claim C-02 shown with glossary | DONE | done: P7 (`scene-lecture.ts`, `lecture.test.ts`, `p7-lecture.spec.ts`, `evidence/P7/reveal-*.png`) |
 | SRC-09 | Showcase privacy | P8 | Private-files scene test | DONE | done: P8 (`scene-private.ts`, `private.test.ts`, `p8-private.spec.ts`, `evidence/P8/reveal-*.png`) |
 | SRC-10 | Showcase battery life | P6 | Long-day scene test; claims C-05, C-06 tagged Intel-claimed | DONE | done: P6 (`scene-battery.ts`, `battery.test.ts`, `p6-battery.spec.ts`, `evidence/P6/reveal-*.png`) |
-| SRC-11 | Showcase performance | P9 | Creator scene test; claims C-03, C-04 with baselines | TODO | |
-| SRC-12 | Make Intel's advantages tangible compared to key competitors | P6-P10 | Split reveal in every scene + Fair Fight screen | IN PROGRESS | done: P6,P7,P8 (`scene-battery.ts`, `scene-lecture.ts`, `scene-private.ts` SplitReveal); left: P9,P10 |
+| SRC-11 | Showcase performance | P9 | Creator scene test; claims C-03, C-04 with baselines | DONE | done: P9 (`scene-creator.ts`, `creator.test.ts`, `p9-creator.spec.ts`, `evidence/P9/reveal-*.png`) |
+| SRC-12 | Make Intel's advantages tangible compared to key competitors | P6-P10 | Split reveal in every scene + Fair Fight screen | IN PROGRESS | done: P6,P7,P8,P9 (all 4 SplitReveals); left: P10 |
 | SRC-13 | End with a personalised AI PC recommendation | P5 | Unit test: 4 personas give 4 different recommendations | DONE | done: P5 (`result.test.ts`, `p5-flow.spec.ts` 4 distinct Result cards, `evidence/P5/result-*-1920x1080.png`) |
 | SRC-14 | End with a clear next step | P5 | Staff screen + QR + share card exist; e2e reaches them | DONE | done: P5 (`result.ts`, `staff.ts`, `p5-flow.spec.ts`, `evidence/P5/staff-1920x1080.png`) |
 | SRC-15 | Submit only public URLs or self-hosted URLs. Do NOT submit exe or code files | P12 | URL opens in a private window, logged out | TODO | |
 | SRC-16 | Submit Round 1 entry in the Google Form by 27 Nov 2026, 12 PM | P12 | HUMAN: screenshot of form confirmation | TODO | |
 | SRC-17 | Participate individually or in a team of max 4 members (we are 3) | P12 | HUMAN: form lists 3 names | TODO | |
 | SRC-18 | Shortlisted teams present before the Intel Jury on 28 Nov | P12 | HUMAN: demo-script rehearsed twice | TODO | |
-| SRC-19 | Judging: creativity of the game (3 points) | P1,P4-P9 | Design acceptance checklist ticked with screenshots | IN PROGRESS | done: P1,P4,P5 (`evidence/P1/*`, `evidence/P4/*`, `evidence/P5/*`); left: P6,P7,P8,P9 |
-| SRC-20 | Judging: persuasive impact towards buying (3 points) | P5-P9 | Every scene ends in a felt contrast + recommendation | IN PROGRESS | done: P5,P6,P7,P8 (`receipt.ts`, `result.ts`, `scene-battery.ts`, `scene-lecture.ts`, `scene-private.ts`); left: P9 |
+| SRC-19 | Judging: creativity of the game (3 points) | P1,P4-P9 | Design acceptance checklist ticked with screenshots | DONE | done: P1,P4,P5,P6,P7,P8,P9 (`evidence/P1/*`..`evidence/P9/*`) |
+| SRC-20 | Judging: persuasive impact towards buying (3 points) | P5-P9 | Every scene ends in a felt contrast + recommendation | DONE | done: P5,P6,P7,P8,P9 (all 4 scenes + `receipt.ts` + `result.ts`) |
 | SRC-21 | Judging: technical accuracy of AI PC features (3 points) | P2,P11 | Claims audit: 100% of shown numbers have source + baseline + tag | IN PROGRESS | done: P2 (`data.ts` `claim()` throws, `check_claims.py` exit 0); left: P11 |
 | SRC-22 | Judging: showcase of competitive superiority (1 point) | P10 | Fair Fight rows each carry a source id | TODO | |
 | SRC-23 | Join the WhatsApp group and register on the link in the group description | P0 | HUMAN: registration confirmed | SPEC GAP | SPEC GAP: SRC-23 - human WhatsApp/registration not evidenced in repo - agent cannot perform it |
@@ -42,7 +42,7 @@ Status values: TODO / IN PROGRESS / DONE / SPEC GAP. A row without Evidence is n
 | ADD-12 | Evidence: unit tests for scoring/result; Playwright e2e screenshots per screen | P11 | evidence/ folder + test names | TODO | |
 | ADD-13 | Facilitator mode (?facilitator=1): skip scene, jump to result, reset. Demo-day lifesaver | P2,P4 | e2e | DONE | done: P2,P4 (`idle.ts`, `main.ts`, `p4-flow.spec.ts` facilitator bar skip) |
 | ADD-14 | Layouts: kiosk landscape 16:9 and phone portrait 390x844, same code | P1,P11 | Screenshots both | IN PROGRESS | done: P1 (`evidence/P1/gallery-*.png`); left: P11 |
-| ADD-15 | Honest labelling: scenes are marked 'Illustration'; vendor numbers marked 'Intel-claimed, up to' | P2,P6-P10 | Visual check each scene | IN PROGRESS | done: P2,P6,P7,P8 (`scene-battery.ts`, `scene-lecture.ts`, `scene-private.ts` Illustration + tags); left: P9,P10 |
+| ADD-15 | Honest labelling: scenes are marked 'Illustration'; vendor numbers marked 'Intel-claimed, up to' | P2,P6-P10 | Visual check each scene | IN PROGRESS | done: P2,P6,P7,P8,P9 (all 4 scenes Illustration + claim tags); left: P10 |
 | DSN-01 | Sale Tag Decay identity: Indian electronics-flyer look in Act I | P1 | design.md section 12 checklist | DONE | `src/ui/tokens.css`, `src/ui/base.css`, `evidence/P1/gallery-1920x1080.png` |
 | DSN-02 | Decay engine: --decay 0..1 drains colour, adds grain, scratches, crack | P1 | Visual test at 0, 0.5, 1 | DONE | `src/ui/decay.ts`, `tests/unit/decay.test.ts`, `evidence/P1/decay-strip-1920x1080.png` |
 | DSN-03 | Typography: Archivo (display), Mukta (body, Hindi), DM Mono (receipt only) | P1 | Fonts load from own origin, not a CDN | DONE | `src/ui/fonts.ts`, `npm run build` bundled woff2/woff, `tests/e2e/gallery.spec.ts` 0 CDN requests |

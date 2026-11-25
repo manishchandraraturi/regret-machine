@@ -26,6 +26,7 @@
   "scene.creator.hint": "एक्सपोर्ट के लिए बटन दबाए रखो",
   "scene.creator.fail": "अटक रहा है। डेडलाइन छूट गई।",
   "scene.creator.win": "स्मूथ। समय पर पोस्ट।",
+  "scene.creator.baseline": "पिछली पीढ़ी के Intel चिप की तुलना में, Intel द्वारा मापा गया",
   "scene.private.title": "तुम्हारी प्राइवेट फाइलें",
   "scene.private.hint": "AI से मदद माँगो। अपलोड की इजाज़त दो या प्राइवेट रखो।",
   "scene.private.upload": "सर्वर पर अपलोड हो रहा है...",

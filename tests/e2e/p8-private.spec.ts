@@ -35,7 +35,9 @@ test.describe('P8 Private files (privacy)', () => {
       await page.getByRole('button', { name: 'Next' }).click();
       await page.clock.runFor(16_500);
       await page.getByRole('button', { name: 'Next' }).click();
-      await page.getByRole('button', { name: 'Skip this scene' }).click();
+      await expect(page.locator('[data-screen="creator"]')).toBeVisible();
+      await page.clock.runFor(16_500);
+      await page.getByRole('button', { name: 'Next' }).click();
       await page.getByRole('button', { name: 'Next' }).click();
 
       await expect(page.locator('[data-screen="private"]')).toBeVisible();
@@ -84,7 +86,9 @@ test.describe('P8 Private files (privacy)', () => {
       await page.getByRole('button', { name: 'आगे' }).click();
       await page.clock.runFor(16_500);
       await page.getByRole('button', { name: 'आगे' }).click();
-      await page.locator('[data-stub="true"] button').click();
+      await expect(page.locator('[data-screen="creator"]')).toBeVisible();
+      await page.clock.runFor(16_500);
+      await page.getByRole('button', { name: 'आगे' }).click();
       await page.getByRole('button', { name: 'आगे' }).click();
       await page.clock.runFor(16_500);
       await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();

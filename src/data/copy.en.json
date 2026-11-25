@@ -26,6 +26,7 @@
   "scene.creator.hint": "Hold the button to export",
   "scene.creator.fail": "Stuttering. Deadline missed.",
   "scene.creator.win": "Smooth. Posted on time.",
+  "scene.creator.baseline": "vs earlier-generation Intel chip, Intel-measured",
   "scene.private.title": "Your private files",
   "scene.private.hint": "Ask AI for help. Allow the upload or keep it private.",
   "scene.private.upload": "Uploading to a server...",

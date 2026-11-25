@@ -66,8 +66,10 @@ test.describe('P6 Long day (battery)', () => {
       await page.clock.runFor(6_000);
       await expect(page.locator('[data-screen="creator"]')).toBeVisible();
 
-      // Finish stubs to Receipt and verify 2 battery lines
-      await page.getByRole('button', { name: 'Skip this scene' }).click();
+      // Finish remaining scenes to Receipt and verify 2 battery lines
+      await expect(page.locator('[data-screen="creator"]')).toBeVisible();
+      await page.clock.runFor(16_500);
+      await page.getByRole('button', { name: 'Next' }).click();
       await page.getByRole('button', { name: 'Next' }).click();
       await expect(page.locator('[data-screen="private"]')).toBeVisible();
       await page.clock.runFor(16_500);

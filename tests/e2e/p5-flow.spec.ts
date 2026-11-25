@@ -24,7 +24,9 @@ async function runToReceipt(page: Page, personaLabel: string): Promise<void> {
   await expect(page.locator('[data-screen="battery"]')).toBeVisible();
   await page.clock.runFor(16_500);
   await page.getByRole('button', { name: 'Next' }).click();
-  await page.getByRole('button', { name: 'Skip this scene' }).click();
+  await expect(page.locator('[data-screen="creator"]')).toBeVisible();
+  await page.clock.runFor(16_500);
+  await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
   await expect(page.locator('[data-screen="private"]')).toBeVisible();
   await page.clock.runFor(16_500);
@@ -144,7 +146,9 @@ test.describe('P5 CUT LINE 1 end-to-end', () => {
     await expect(page.locator('[data-screen="battery"]')).toBeVisible();
     await page.clock.runFor(16_500);
     await page.getByRole('button', { name: 'Next' }).click();
-    await page.getByRole('button', { name: 'Skip this scene' }).click();
+    await expect(page.locator('[data-screen="creator"]')).toBeVisible();
+    await page.clock.runFor(16_500);
+    await page.getByRole('button', { name: 'Next' }).click();
     await page.getByRole('button', { name: 'Next' }).click();
     await expect(page.locator('[data-screen="private"]')).toBeVisible();
     await page.clock.runFor(16_500);
