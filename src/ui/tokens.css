@@ -1,0 +1,79 @@
+:root {
+  /* colour roles, Act I flyer */
+  --sale-yellow: #ffd21f;
+  --stock-red: #e4262b;
+  --print-black: #000000;
+  --thermal: #ecebe6;
+  --dust: #7c8084;
+  --clear-blue: #0b63f6;
+  --clear-white: #f7faff;
+  --clear-ink: #0a1530;
+  --white: #ffffff;
+
+  /* laptop colourways (decoys) */
+  --lap-pink: #ff6fa5;
+  --lap-mint: #66e0be;
+  --lap-lilac: #b9a7ff;
+
+  /* semantic */
+  --bg: var(--sale-yellow);
+  --fg: var(--print-black);
+  --accent: var(--stock-red);
+  --paper: var(--thermal);
+  --danger: var(--stock-red);
+  --ok: var(--clear-blue);
+  --btn-primary-bg: var(--print-black);
+  --btn-primary-fg: var(--sale-yellow);
+
+  /* typography */
+  --font-display: 'Archivo Variable', 'Archivo', sans-serif;
+  --font-body: 'Mukta', sans-serif;
+  --font-receipt: 'DM Mono', monospace;
+
+  /* decay (set by decay.ts; 0..1) */
+  --decay: 0;
+  --sat: calc(1 - 0.85 * var(--decay));
+  --dim: calc(1 - 0.12 * var(--decay));
+  --grain-opacity: calc(0.05 + 0.22 * var(--decay));
+  --scratch-opacity: 0;
+  --crack-opacity: 0;
+
+  /* spacing, 4-pt base */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
+  --s8: 72px;
+
+  /* radii: different per element role */
+  --r-tag: 6px 18px 6px 6px;
+  --r-btn: 999px;
+  --r-paper: 2px;
+  --r-lap: 14px;
+
+  /* layout */
+  --tap: 56px;
+  --stage-w: 1920;
+  --stage-h: 1080;
+
+  /* motion */
+  --t-fast: 120ms;
+  --t-flip: 1200ms;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.skin-clear {
+  --bg: var(--clear-white);
+  --fg: var(--clear-ink);
+  --accent: var(--clear-blue);
+  --btn-primary-bg: var(--clear-blue);
+  --btn-primary-fg: var(--white);
+  --sat: 1;
+  --dim: 1;
+  --grain-opacity: 0;
+  --scratch-opacity: 0;
+  --crack-opacity: 0;
+}

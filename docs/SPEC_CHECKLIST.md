@@ -7,7 +7,7 @@ Status values: TODO / IN PROGRESS / DONE / SPEC GAP. A row without Evidence is n
 |---|---|---|---|---|---|
 | SRC-01 | Vibe-code an exciting, interactive game | P4-P9 | e2e full playthrough passes; manual play on phone + 1080p screen | TODO | |
 | SRC-02 | Helps shoppers discover Intel-powered AI PCs and makes a compelling case to buy one over competitors | P5,P10 | Result names Intel Core Ultra Series 3; Fair Fight screen exists | TODO | |
-| SRC-03 | Design for walk-in customers at Large Format Retail (LFR) stores such as Reliance Digital, Croma and Vijay Sales | P1,P4,P11 | Screenshots at 1920x1080 and 390x844; idle-reset e2e test | TODO | |
+| SRC-03 | Design for walk-in customers at Large Format Retail (LFR) stores such as Reliance Digital, Croma and Vijay Sales | P1,P4,P11 | Screenshots at 1920x1080 and 390x844; idle-reset e2e test | IN PROGRESS | P1: `tests/e2e/gallery.spec.ts` screenshots at 1920x1080 & 390x844 (`evidence/P1/gallery-*.png`) |
 | SRC-04 | Assume zero to less prior technical knowledge | P2,P11 | Copy lint: every tech term glossed in plain words (NPU, TOPS, GPU) | TODO | |
 | SRC-05 | Short, intuitive experience that grabs attention within seconds | P4 | e2e: Attract is interactive < 2 s after load; one-tap start | TODO | |
 | SRC-06 | Delivers its core message in 2-3 minutes | P11 | e2e timed run at default pace lands 120-180 s | TODO | |
@@ -23,7 +23,7 @@ Status values: TODO / IN PROGRESS / DONE / SPEC GAP. A row without Evidence is n
 | SRC-16 | Submit Round 1 entry in the Google Form by 27 Nov 2026, 12 PM | P12 | HUMAN: screenshot of form confirmation | TODO | |
 | SRC-17 | Participate individually or in a team of max 4 members (we are 3) | P12 | HUMAN: form lists 3 names | TODO | |
 | SRC-18 | Shortlisted teams present before the Intel Jury on 28 Nov | P12 | HUMAN: demo-script rehearsed twice | TODO | |
-| SRC-19 | Judging: creativity of the game (3 points) | P1,P4-P9 | Design acceptance checklist ticked with screenshots | TODO | |
+| SRC-19 | Judging: creativity of the game (3 points) | P1,P4-P9 | Design acceptance checklist ticked with screenshots | IN PROGRESS | P1: Sale Tag Decay system & gallery (`evidence/P1/decay-strip-1920x1080.png`, `evidence/P1/gallery-1920x1080.png`) |
 | SRC-20 | Judging: persuasive impact towards buying (3 points) | P5-P9 | Every scene ends in a felt contrast + recommendation | TODO | |
 | SRC-21 | Judging: technical accuracy of AI PC features (3 points) | P2,P11 | Claims audit: 100% of shown numbers have source + baseline + tag | TODO | |
 | SRC-22 | Judging: showcase of competitive superiority (1 point) | P10 | Fair Fight rows each carry a source id | TODO | |
@@ -31,9 +31,9 @@ Status values: TODO / IN PROGRESS / DONE / SPEC GAP. A row without Evidence is n
 | ADD-01 | Kiosk mode: auto-reset to Attract after 60 s idle (config VITE_IDLE_SECONDS) | P2,P4 | Unit test with fake timers + e2e | TODO | |
 | ADD-02 | English/Hindi toggle on every screen | P2,P10 | e2e: switch language mid-game, state kept | TODO | |
 | ADD-03 | claims.json: every number shown has source, baseline, conditions, tag, verified_on | P2,P11 | tools/check_claims.py exits 0 | TODO | |
-| ADD-04 | No runtime third-party requests; fonts and assets self-hosted; works with weak store Wi-Fi | P0,P1,P11 | Playwright: zero requests outside origin | IN PROGRESS | P0: `tests/e2e/smoke.spec.ts` verified 0 third-party requests at 1920x1080 & 390x844 (`evidence/P0/title-*.png`) |
+| ADD-04 | No runtime third-party requests; fonts and assets self-hosted; works with weak store Wi-Fi | P0,P1,P11 | Playwright: zero requests outside origin | IN PROGRESS | P0+P1: `smoke.spec.ts` & `gallery.spec.ts` 0 third-party requests; fonts self-hosted via `@fontsource*` |
 | ADD-05 | Synthesised sound (WebAudio, no audio files), muted by default, visible mute toggle | P3 | Unit test engine; manual | TODO | |
-| ADD-06 | Accessibility: keyboard play, focus-visible, reduced-motion, contrast AA, touch targets >= 48 px | P1,P11 | axe run + manual keyboard run | TODO | |
+| ADD-06 | Accessibility: keyboard play, focus-visible, reduced-motion, contrast AA, touch targets >= 48 px | P1,P11 | axe run + manual keyboard run | IN PROGRESS | P1: `gallery.spec.ts` touch targets >= 48px & reduced-motion; `decay.test.ts` reduced-motion |
 | ADD-07 | Shareable result card (PNG made in browser, Web Share API or download) | P3,P5 | e2e: download event fires, PNG 1080x1920 | TODO | |
 | ADD-08 | Store-staff screen: plain-words ask list + QR to NEXT_STEP_URL | P3,P5 | Screenshot; QR decodes to the URL | TODO | |
 | ADD-09 | Fair Fight screen concedes where rivals lead (honesty builds trust with the jury) | P10 | Row text review against claims.json | TODO | |
@@ -41,14 +41,14 @@ Status values: TODO / IN PROGRESS / DONE / SPEC GAP. A row without Evidence is n
 | ADD-11 | Performance budget: JS+CSS+fonts <= 600 KB gzip; interactive < 2.5 s on mid phone (throttled) | P11 | Build size report + Lighthouse run pasted | TODO | |
 | ADD-12 | Evidence: unit tests for scoring/result; Playwright e2e screenshots per screen | P11 | evidence/ folder + test names | TODO | |
 | ADD-13 | Facilitator mode (?facilitator=1): skip scene, jump to result, reset. Demo-day lifesaver | P2,P4 | e2e | TODO | |
-| ADD-14 | Layouts: kiosk landscape 16:9 and phone portrait 390x844, same code | P1,P11 | Screenshots both | TODO | |
+| ADD-14 | Layouts: kiosk landscape 16:9 and phone portrait 390x844, same code | P1,P11 | Screenshots both | IN PROGRESS | P1: `evidence/P1/gallery-1920x1080.png`, `evidence/P1/gallery-390x844.png` |
 | ADD-15 | Honest labelling: scenes are marked 'Illustration'; vendor numbers marked 'Intel-claimed, up to' | P2,P6-P10 | Visual check each scene | TODO | |
-| DSN-01 | Sale Tag Decay identity: Indian electronics-flyer look in Act I | P1 | design.md section 12 checklist | TODO | |
-| DSN-02 | Decay engine: --decay 0..1 drains colour, adds grain, scratches, crack | P1 | Visual test at 0, 0.5, 1 | TODO | |
-| DSN-03 | Typography: Archivo (display), Mukta (body, Hindi), DM Mono (receipt only) | P1 | Fonts load from own origin, not a CDN | TODO | |
-| DSN-04 | Receipt tape: running regret list that prints as events happen | P1,P5 | Component test | TODO | |
-| DSN-05 | Motion: one orchestrated Year Flip; everything else answers user action | P1,P3 | Reduced-motion swap verified | TODO | |
-| DSN-06 | Clear skin for the reveal: cool white + Clear Blue, no stickers | P1,P5 | Screenshot vs design.md | TODO | |
+| DSN-01 | Sale Tag Decay identity: Indian electronics-flyer look in Act I | P1 | design.md section 12 checklist | DONE | `src/ui/tokens.css`, `src/ui/base.css`, `evidence/P1/gallery-1920x1080.png` |
+| DSN-02 | Decay engine: --decay 0..1 drains colour, adds grain, scratches, crack | P1 | Visual test at 0, 0.5, 1 | DONE | `src/ui/decay.ts`, `tests/unit/decay.test.ts`, `evidence/P1/decay-strip-1920x1080.png` |
+| DSN-03 | Typography: Archivo (display), Mukta (body, Hindi), DM Mono (receipt only) | P1 | Fonts load from own origin, not a CDN | DONE | `src/ui/fonts.ts`, `npm run build` bundled woff2/woff, `tests/e2e/gallery.spec.ts` 0 CDN requests |
+| DSN-04 | Receipt tape: running regret list that prints as events happen | P1,P5 | Component test | IN PROGRESS | P1: `src/ui/components/tape.ts`, `tests/unit/components.test.ts` |
+| DSN-05 | Motion: one orchestrated Year Flip; everything else answers user action | P1,P3 | Reduced-motion swap verified | IN PROGRESS | P1: `src/ui/components/yearflip.ts`, `tests/e2e/gallery.spec.ts` reduced-motion |
+| DSN-06 | Clear skin for the reveal: cool white + Clear Blue, no stickers | P1,P5 | Screenshot vs design.md | IN PROGRESS | P1: `.skin-clear` in `src/ui/tokens.css`, `src/ui/components/splitreveal.ts`, `evidence/P1/gallery-1920x1080.png` |
 | DEL-01 | Public URL live (GitHub Pages) | P12 | Open in private window on a phone | TODO | |
 | DEL-02 | README: what it is, how to run, claims policy, credits | P12 | File exists, reviewed | TODO | |
 | DEL-03 | One-page system design for the jury (docs/system-design.md) | P12 | File exists | TODO | |
