@@ -1,0 +1,107 @@
+{
+  "order": [
+    "lecture",
+    "battery",
+    "creator",
+    "private"
+  ],
+  "scenes": {
+    "lecture": {
+      "year": 1,
+      "durationMs": 22000,
+      "playMs": 16000,
+      "revealMs": 6000,
+      "useCase": "learning",
+      "base": 20,
+      "claims": [
+        "C-02",
+        "C-16"
+      ],
+      "notesTotal": 8,
+      "wifiDropAtMs": 9000
+    },
+    "battery": {
+      "year": 2,
+      "durationMs": 22000,
+      "playMs": 16000,
+      "revealMs": 6000,
+      "useCase": "work and everyday",
+      "base": 30,
+      "claims": [
+        "C-05",
+        "C-06"
+      ],
+      "taskEveryMs": 1600,
+      "deathAtClock": "14:30"
+    },
+    "creator": {
+      "year": 2,
+      "durationMs": 22000,
+      "playMs": 16000,
+      "revealMs": 6000,
+      "useCase": "creativity and gaming",
+      "base": 25,
+      "claims": [
+        "C-03",
+        "C-04",
+        "C-14"
+      ],
+      "fillPerSecHeld": 1.0,
+      "drainPerSecReleased": 0.5,
+      "slowAfterMs": 8000,
+      "slowFillPerSec": 0.6
+    },
+    "private": {
+      "year": 3,
+      "durationMs": 22000,
+      "playMs": 16000,
+      "revealMs": 6000,
+      "useCase": "everyday privacy",
+      "base": 25,
+      "claims": [],
+      "files": [
+        {
+          "id": "report",
+          "sensitive": true
+        },
+        {
+          "id": "bank",
+          "sensitive": true
+        },
+        {
+          "id": "diary",
+          "sensitive": true
+        },
+        {
+          "id": "resume",
+          "sensitive": true
+        },
+        {
+          "id": "photos",
+          "sensitive": false
+        },
+        {
+          "id": "notes",
+          "sensitive": false
+        }
+      ]
+    }
+  },
+  "boost": {
+    "study": {
+      "lecture": 1.5,
+      "battery": 1.25
+    },
+    "create": {
+      "creator": 1.5
+    },
+    "game": {
+      "creator": 1.5
+    },
+    "hustle": {
+      "battery": 1.5,
+      "private": 1.5
+    }
+  },
+  "decayPerScene": 0.25
+}

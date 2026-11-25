@@ -1,0 +1,22 @@
+[
+  {
+    "id": "study",
+    "en": "Study",
+    "hi": "पढ़ाई"
+  },
+  {
+    "id": "create",
+    "en": "Create",
+    "hi": "क्रिएट करना"
+  },
+  {
+    "id": "game",
+    "en": "Game",
+    "hi": "गेमिंग"
+  },
+  {
+    "id": "hustle",
+    "en": "Work and side hustle",
+    "hi": "काम और साइड हसल"
+  }
+]

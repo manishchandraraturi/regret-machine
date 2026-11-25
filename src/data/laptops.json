@@ -1,0 +1,23 @@
+[
+  {
+    "id": "zesta",
+    "name": "Zesta Glow",
+    "colourway": "pink",
+    "price": 38990,
+    "mrp": 54990
+  },
+  {
+    "id": "voltra",
+    "name": "Voltra Slim",
+    "colourway": "mint",
+    "price": 41990,
+    "mrp": 57990
+  },
+  {
+    "id": "nimbus",
+    "name": "Nimbus Air",
+    "colourway": "lilac",
+    "price": 44990,
+    "mrp": 59990
+  }
+]

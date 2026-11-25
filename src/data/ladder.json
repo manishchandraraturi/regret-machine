@@ -1,0 +1,86 @@
+{
+  "study": {
+    "card": {
+      "en": "The Topper",
+      "hi": "टॉपर"
+    },
+    "tier": {
+      "en": "Core Ultra 5 or 7 class laptop",
+      "hi": "Core Ultra 5 या 7 क्लास लैपटॉप"
+    },
+    "tiebreak": [
+      "lecture",
+      "battery",
+      "private",
+      "creator"
+    ],
+    "asks": [
+      "ask.series3",
+      "ask.battery",
+      "ask.memory16"
+    ]
+  },
+  "create": {
+    "card": {
+      "en": "The Reel Machine",
+      "hi": "रील मशीन"
+    },
+    "tier": {
+      "en": "Core Ultra X7 or X9 class laptop",
+      "hi": "Core Ultra X7 या X9 क्लास लैपटॉप"
+    },
+    "tiebreak": [
+      "creator",
+      "private",
+      "battery",
+      "lecture"
+    ],
+    "asks": [
+      "ask.series3x",
+      "ask.graphics",
+      "ask.memory32"
+    ]
+  },
+  "game": {
+    "card": {
+      "en": "The Frame Chaser",
+      "hi": "फ्रेम चेज़र"
+    },
+    "tier": {
+      "en": "Core Ultra X7 or X9 class laptop",
+      "hi": "Core Ultra X7 या X9 क्लास लैपटॉप"
+    },
+    "tiebreak": [
+      "creator",
+      "battery",
+      "lecture",
+      "private"
+    ],
+    "asks": [
+      "ask.series3x",
+      "ask.graphics",
+      "ask.memory16"
+    ]
+  },
+  "hustle": {
+    "card": {
+      "en": "The Always-On Operator",
+      "hi": "हमेशा-ऑन ऑपरेटर"
+    },
+    "tier": {
+      "en": "Core Ultra 7 class laptop",
+      "hi": "Core Ultra 7 क्लास लैपटॉप"
+    },
+    "tiebreak": [
+      "battery",
+      "private",
+      "lecture",
+      "creator"
+    ],
+    "asks": [
+      "ask.series3",
+      "ask.battery",
+      "ask.memory16"
+    ]
+  }
+}

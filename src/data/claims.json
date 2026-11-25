@@ -1,0 +1,242 @@
+[
+  {
+    "id": "C-01",
+    "tag": "intel-claimed",
+    "text": {
+      "en": "First AI PC platform built on Intel 18A, in over 200 laptop and PC designs.",
+      "hi": "Intel 18A पर बना पहला AI PC प्लेटफॉर्म, 200 से ज़्यादा लैपटॉप और पीसी डिज़ाइन में।"
+    },
+    "metric": "platform",
+    "baseline": "n/a",
+    "conditions": "Intel Core Ultra Series 3 (Panther Lake)",
+    "source_name": "Intel newsroom, CES 2026",
+    "source_url": "https://newsroom.intel.com/artificial-intelligence/ces-2026-intel-core-ultra-series-3-debut-first-built-on-intel-18a",
+    "verified_on": "2026-11-25",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "C-02",
+    "tag": "intel-claimed",
+    "text": {
+      "en": "Up to 50 TOPS on the dedicated AI chip (NPU).",
+      "hi": "समर्पित AI चिप (NPU) पर 50 TOPS तक।"
+    },
+    "metric": "NPU TOPS",
+    "baseline": "n/a (peak rating)",
+    "conditions": "Top Series 3 configurations; lower-tier chips differ",
+    "source_name": "Intel newsroom, CES 2026",
+    "source_url": "https://newsroom.intel.com/artificial-intelligence/ces-2026-intel-core-ultra-series-3-debut-first-built-on-intel-18a",
+    "verified_on": "2026-11-25",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "C-03",
+    "tag": "intel-claimed",
+    "text": {
+      "en": "Up to 60% better multi-core performance than the previous generation at similar power.",
+      "hi": "पिछली जेनरेशन से समान पावर पर 60% तक बेहतर मल्टी-कोर परफॉर्मेंस।"
+    },
+    "metric": "multithread",
+    "baseline": "Intel Core Ultra 9 288V (Lunar Lake)",
+    "conditions": "Core Ultra X9 388H at 25 W, Cinebench 2024 multi-core, Intel-measured",
+    "source_name": "Intel newsroom, CES 2026, footnote 1",
+    "source_url": "https://newsroom.intel.com/artificial-intelligence/ces-2026-intel-core-ultra-series-3-debut-first-built-on-intel-18a",
+    "verified_on": "2026-11-25",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "C-04",
+    "tag": "intel-claimed",
+    "text": {
+      "en": "Up to 77% better gaming performance than the previous generation.",
+      "hi": "पिछली जेनरेशन से गेमिंग परफॉर्मेंस 77% तक बेहतर।"
+    },
+    "metric": "gaming",
+    "baseline": "Intel Core Ultra 9 288V (Lunar Lake)",
+    "conditions": "Core Ultra X9 388H, geomean of 45 games at 1080p High with 2x upscaling where supported, Intel reference platforms",
+    "source_name": "Intel newsroom, CES 2026, footnote 2",
+    "source_url": "https://newsroom.intel.com/artificial-intelligence/ces-2026-intel-core-ultra-series-3-debut-first-built-on-intel-18a",
+    "verified_on": "2026-11-25",
+    "status": "VERIFIED"
+  },
+  {
+    "id": "C-05",
+    "tag": "intel-claimed",
+    "text": {
+      "en": "Up to 27 hours of battery life in Netflix streaming.",
+      "hi": "Netflix स्ट्रीमिंग में 27 घंटे तक बैटरी।"
+    },
+    "metric": "battery",
+    "baseline": "n/a",
+    "conditions": "Netflix streaming test on a top Series 3 design; full test configuration (footnote 3) NOT YET OPENED",
+    "source_name": "Intel newsroom, CES 2026 (headline); Micro Center CES coverage",
+    "source_url": "https://newsroom.intel.com/artificial-intelligence/ces-2026-intel-core-ultra-series-3-debut-first-built-on-intel-18a",
+    "verified_on": "",
+    "status": "UNVERIFIED"
+  },
+  {
+    "id": "C-06",
+    "tag": "intel-claimed",
+    "text": {
+      "en": "Up to 9 hours of video calls with background effects on.",
+      "hi": "बैकग्राउंड इफेक्ट के साथ वीडियो कॉल पर 9 घंटे तक।"
+    },
+    "metric": "battery",
+    "baseline": "n/a",
+    "conditions": "Microsoft Teams 3x3 video conference with studio effects, per secondary coverage; primary footnote NOT YET OPENED",
+    "source_name": "PCPer CES 2026 coverage",
+    "source_url": "https://pcper.com/2026/01/ces-2026-intel-launches-core-ultra-3-series-panther-lake-processors/",
+    "verified_on": "",
+    "status": "UNVERIFIED"
+  },
+  {
+    "id": "C-07",
+    "tag": "intel-claimed",
+    "text": {
+      "en": "Up to 4.3x the large-language-model speed of AMD's Ryzen AI 9 HX 370.",
+      "hi": "AMD Ryzen AI 9 HX 370 से 4.3 गुना तक तेज़ लार्ज-लैंग्वेज-मॉडल स्पीड।"
+    },
+    "metric": "LLM inference",
+    "baseline": "AMD Ryzen AI 9 HX 370 (previous-generation AMD chip)",
+    "conditions": "Two outlets describe it differently (NPU LLM inference vs LLM performance); Intel footnote NOT YET OPENED",
+    "source_name": "HotHardware; PCPer (CES 2026)",
+    "source_url": "https://hothardware.com/news/intel-ces-2026-panther-lake-is-a-go",
+    "verified_on": "",
+    "status": "UNVERIFIED"
+  },
+  {
+    "id": "C-08",
+    "tag": "intel-claimed",
+    "text": {
+      "en": "Up to 73% better gaming than AMD's Ryzen AI 9 HX 370 with upscaling on.",
+      "hi": "अपस्केलिंग ऑन होने पर AMD Ryzen AI 9 HX 370 से गेमिंग 73% तक बेहतर।"
+    },
+    "metric": "gaming",
+    "baseline": "AMD Ryzen AI 9 HX 370",
+    "conditions": "Per Tom's Hardware reporting of Intel slides; Intel footnote NOT YET OPENED",
+    "source_name": "Tom's Hardware (CES 2026)",
+    "source_url": "https://www.tomshardware.com/pc-components/cpus/intel-doubles-down-on-gaming-with-panther-lake-claims-76-percent-faster-gaming-performance-new-x-series-chips-deliver-up-to-12-xe3-cores",
+    "verified_on": "",
+    "status": "UNVERIFIED"
+  },
+  {
+    "id": "C-09",
+    "tag": "public-fact",
+    "text": {
+      "en": "Core Ultra Series 3 laptops started reaching shops from 27 January 2026.",
+      "hi": "Core Ultra Series 3 लैपटॉप 27 जनवरी 2026 से दुकानों में आने लगे।"
+    },
+    "metric": "availability",
+    "baseline": "n/a",
+    "conditions": "Global schedule; India availability varies by model",
+    "source_name": "TechSpot; YourStory",
+    "source_url": "https://www.techspot.com/news/110816-intel-launches-core-ultra-series-3-panther-lake.html",
+    "verified_on": "",
+    "status": "UNVERIFIED"
+  },
+  {
+    "id": "C-10",
+    "tag": "third-party",
+    "text": {
+      "en": "Intel and AMD laptops use x86, which runs existing Windows apps directly. Snapdragon laptops use Arm: most apps work, some may need emulation or an update. Check the apps you use.",
+      "hi": "Intel और AMD लैपटॉप x86 इस्तेमाल करते हैं, जो मौजूदा Windows ऐप सीधे चलाता है। Snapdragon लैपटॉप Arm इस्तेमाल करते हैं: ज़्यादातर ऐप चलते हैं, कुछ के लिए इमुलेशन या अपडेट चाहिए। अपने ऐप ज़रूर जाँचो।"
+    },
+    "metric": "app compatibility",
+    "baseline": "Qualcomm Snapdragon X-series (Arm)",
+    "conditions": "Compatibility improves over time; test your own apps",
+    "source_name": "PCQuest, April 2026; Infobits comparison",
+    "source_url": "https://www.magzter.com/stories/technology/PCQuest/CHOOSING-AN-AI-LAPTOP-IN-2026-WHAT-REALLY-MATTERS",
+    "verified_on": "",
+    "status": "UNVERIFIED"
+  },
+  {
+    "id": "C-11",
+    "tag": "public-fact",
+    "text": {
+      "en": "The strongest built-in graphics (12 graphics cores, Arc B390) are on the X-series chips. Non-X chips like the Core Ultra 9 386H have 4.",
+      "hi": "सबसे दमदार बिल्ट-इन ग्राफिक्स (12 ग्राफिक्स कोर, Arc B390) X-सीरीज़ चिप्स में है। Core Ultra 9 386H जैसे non-X चिप्स में 4 हैं।"
+    },
+    "metric": "graphics cores",
+    "baseline": "n/a",
+    "conditions": "Series 3 launch lineup",
+    "source_name": "PC Gamer (CES 2026)",
+    "source_url": "https://www.pcgamer.com/hardware/processors/intels-new-top-end-core-ultra-series-3-mobile-chips-promise-up-to-77-percent-faster-igpu-gaming-performance-than-lunar-lake-and-come-with-a-whole-host-of-friends",
+    "verified_on": "",
+    "status": "UNVERIFIED"
+  },
+  {
+    "id": "C-12",
+    "tag": "third-party",
+    "text": {
+      "en": "Rivals can print bigger AI chip numbers on the box (Snapdragon X2 Elite up to 80 TOPS, AMD Ryzen AI up to 60). The number on the box is not the same as how it feels to use.",
+      "hi": "दूसरे ब्रांड डिब्बे पर बड़े AI चिप नंबर छाप सकते हैं (Snapdragon X2 Elite 80 TOPS तक, AMD Ryzen AI 60 तक)। डिब्बे का नंबर और चलाने का अनुभव एक चीज़ नहीं हैं।"
+    },
+    "metric": "NPU TOPS",
+    "baseline": "Snapdragon X2 Elite; AMD Ryzen AI",
+    "conditions": "Peak ratings as listed by a comparison guide",
+    "source_name": "Infobits comparison guide",
+    "source_url": "https://www.infobits.in/?p=39342",
+    "verified_on": "",
+    "status": "UNVERIFIED"
+  },
+  {
+    "id": "C-13",
+    "tag": "third-party",
+    "text": {
+      "en": "Snapdragon laptops are positioned battery-first.",
+      "hi": "Snapdragon लैपटॉप बैटरी-पहले के रूप में पेश किए जाते हैं।"
+    },
+    "metric": "positioning",
+    "baseline": "n/a",
+    "conditions": "Vendor and retailer guides; check independent battery tests",
+    "source_name": "HP India Tech Takes; Laptop Outlet",
+    "source_url": "https://www.hp.com/in-en/tech-takes/ai/comparison/ai-laptop-processor-comparison-snapdragon-ryzen-intel.html",
+    "verified_on": "",
+    "status": "UNVERIFIED"
+  },
+  {
+    "id": "C-14",
+    "tag": "third-party",
+    "text": {
+      "en": "Built-in graphics suit everyday gaming and editing on thin laptops. A high-end gaming laptop still goes further.",
+      "hi": "बिल्ट-इन ग्राफिक्स पतले लैपटॉप पर रोज़ की गेमिंग और एडिटिंग के लिए ठीक हैं। हाई-एंड गेमिंग लैपटॉप फिर भी आगे जाता है।"
+    },
+    "metric": "positioning",
+    "baseline": "n/a",
+    "conditions": "Intel describes Series 3 graphics as an entry-level replacement, not the future of mobile gaming (Tom's Hardware)",
+    "source_name": "Tom's Hardware (CES 2026)",
+    "source_url": "https://www.tomshardware.com/pc-components/cpus/intel-doubles-down-on-gaming-with-panther-lake-claims-76-percent-faster-gaming-performance-new-x-series-chips-deliver-up-to-12-xe3-cores",
+    "verified_on": "",
+    "status": "UNVERIFIED"
+  },
+  {
+    "id": "C-15",
+    "tag": "our-advice",
+    "text": {
+      "en": "For AI that runs on your laptop, memory matters. Aim for 16 GB, and 32 GB if you can afford it.",
+      "hi": "जो AI आपके लैपटॉप पर चलता है उसके लिए मेमोरी मायने रखती है। 16 GB लो, बजट हो तो 32 GB।"
+    },
+    "metric": "RAM guidance",
+    "baseline": "n/a",
+    "conditions": "General buying guidance, not an Intel claim",
+    "source_name": "Infobits comparison guide",
+    "source_url": "https://www.infobits.in/?p=39342",
+    "verified_on": "",
+    "status": "UNVERIFIED"
+  },
+  {
+    "id": "C-16",
+    "tag": "intel-claimed",
+    "text": {
+      "en": "Up to 180 TOPS of AI power in total (about 120 from the graphics, 50 from the AI chip).",
+      "hi": "कुल मिलाकर 180 TOPS तक AI पावर (लगभग 120 ग्राफिक्स से, 50 AI चिप से)।"
+    },
+    "metric": "platform TOPS",
+    "baseline": "n/a",
+    "conditions": "Top configurations; reported from Intel slides by HotHardware, PC Gamer, PCPer; primary NOT YET OPENED",
+    "source_name": "HotHardware (CES 2026)",
+    "source_url": "https://hothardware.com/news/intel-ces-2026-panther-lake-is-a-go",
+    "verified_on": "",
+    "status": "UNVERIFIED"
+  }
+]

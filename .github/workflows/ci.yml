@@ -1,0 +1,40 @@
+# NOTE: action major versions below are last-known. Agent must verify current majors in P0 and record in docs/progress.md.
+name: ci-deploy
+on:
+  push: { branches: [main] }
+  pull_request:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency: { group: pages, cancel-in-progress: true }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test
+      - run: python3 tools/check_claims.py
+      - name: Forbidden APIs (privacy)
+        run: |
+          if grep -rEn "localStorage|sessionStorage|document\.cookie|gtag\(|analytics" src; then echo "forbidden API found"; exit 1; fi
+      - run: npm run build
+      - run: npm audit --audit-level=high || true
+      - uses: actions/configure-pages@v5
+        if: github.ref == 'refs/heads/main'
+      - uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main'
+        with: { path: dist }
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    environment: { name: github-pages, url: "${{ steps.d.outputs.page_url }}" }
+    steps:
+      - id: d
+        uses: actions/deploy-pages@v4
