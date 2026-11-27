@@ -20,6 +20,13 @@ const PERSONA_RIM: Record<Persona, number> = {
   hustle: 0xb9a7ff,
 };
 
+const C_BG_DARK = new THREE.Color(0x0b0c0e);
+const C_DUST = new THREE.Color(0x7e8a83);
+const C_WARM = new THREE.Color(0xfff3e0);
+const C_NEON = new THREE.Color(0xff2b33);
+const C_CLEAR_BG = new THREE.Color(0xeef3fa);
+const C_WORK = new THREE.Color();
+
 export function createShowroomLights(scene: THREE.Scene, softwareFallback = false): ShowroomLights {
   const ambient = new THREE.AmbientLight(0xfff3e0, softwareFallback ? 0.9 : 0.35);
   const hemi = new THREE.HemisphereLight(0xfff3e0, 0x17191d, softwareFallback ? 0.9 : 0.25);
@@ -27,6 +34,11 @@ export function createShowroomLights(scene: THREE.Scene, softwareFallback = fals
     ? new THREE.DirectionalLight(0xfff3e0, 1.45)
     : new THREE.SpotLight(0xfff3e0, 26, 22, Math.PI / 4, 0.55, 1.4);
   keySpot.position.set(1.8, 5.4, 4.6);
+  if (!softwareFallback) {
+    keySpot.castShadow = true;
+    keySpot.shadow.mapSize.set(1024, 1024);
+    keySpot.shadow.bias = -0.0005;
+  }
 
   const fillSpot = softwareFallback
     ? new THREE.DirectionalLight(0xfff3e0, 0.75)
@@ -58,8 +70,10 @@ export function createShowroomLights(scene: THREE.Scene, softwareFallback = fals
       const d = Math.max(0, Math.min(1, decay));
       const spotScale = softwareFallback ? 0.06 : 1;
       if (isClear) {
-        scene.background = new THREE.Color(0xeef3fa);
-        scene.fog = new THREE.FogExp2(0xeef3fa, 0.015);
+        scene.background = C_CLEAR_BG;
+        if (!scene.fog || scene.fog.color.getHex() !== 0xeef3fa) {
+          scene.fog = new THREE.FogExp2(0xeef3fa, 0.015);
+        }
         ambient.color.setHex(0xffffff);
         ambient.intensity = softwareFallback ? 1.5 : 1.15;
         hemi.color.setHex(0xffffff);
@@ -74,23 +88,30 @@ export function createShowroomLights(scene: THREE.Scene, softwareFallback = fals
         return;
       }
 
-      const bgCol = new THREE.Color(0x0b0c0e).lerp(new THREE.Color(0x7e8a83), d * 0.28);
-      scene.background = bgCol;
-      scene.fog = new THREE.FogExp2(bgCol.getHex(), 0.045 + d * 0.055);
+      C_WORK.copy(C_BG_DARK).lerp(C_DUST, d * 0.28);
+      scene.background = C_WORK;
+      if (!scene.fog) {
+        scene.fog = new THREE.FogExp2(C_WORK.getHex(), 0.045 + d * 0.055);
+      } else {
+        scene.fog.color.copy(C_WORK);
+        if (scene.fog instanceof THREE.FogExp2) {
+          scene.fog.density = 0.045 + d * 0.055;
+        }
+      }
       neonTube.visible = isPlinth && !isFlip;
 
       const sweep = isFlip ? 0.35 + 0.65 * Math.cos(tSec * 2.4) : 1;
       const flicker =
         d > 0.35 ? 0.72 + 0.28 * Math.sin(tSec * 19) * Math.cos(tSec * 7) : 0.94 + 0.06 * Math.sin(tSec * 5.2);
 
-      ambient.color.setHex(0xfff3e0).lerp(new THREE.Color(0x7e8a83), d * 0.75);
+      ambient.color.copy(C_WARM).lerp(C_DUST, d * 0.75);
       ambient.intensity = (softwareFallback ? 0.75 : 0.35 + d * 0.15) * sweep;
-      hemi.color.setHex(0xfff3e0).lerp(new THREE.Color(0x7e8a83), d * 0.65);
-      keySpot.color.setHex(0xfff3e0).lerp(new THREE.Color(0x7e8a83), d * 0.6);
+      hemi.color.copy(C_WARM).lerp(C_DUST, d * 0.65);
+      keySpot.color.copy(C_WARM).lerp(C_DUST, d * 0.6);
       keySpot.intensity = 26 * spotScale * (1 - d * 0.58) * sweep;
       fillSpot.intensity = 14 * spotScale * (1 - d * 0.5) * sweep;
       neonLight.intensity = 8.5 * (1 - d * 0.75) * flicker;
-      neonMat.color.setHex(0xff2b33).lerp(new THREE.Color(0x7e8a83), d * 0.65);
+      neonMat.color.copy(C_NEON).lerp(C_DUST, d * 0.65);
       rimLight.intensity = 4 * spotScale;
     },
     dispose(): void {

@@ -22,13 +22,16 @@ test.describe('V2 R3 Three.js showroom & fallback', () => {
 
       await page.clock.install({ time: 0 });
       await page.setViewportSize({ width: vp.width, height: vp.height });
-      await page.goto('/');
+      await page.goto('/?perf=1');
 
       await expect(page.locator('[data-screen="attract"]')).toBeVisible();
       await page.clock.runFor(100);
       await expect(page.locator('#app[data-stage-mode="webgl2"]')).toBeVisible({ timeout: 10_000 });
       await expect(page.locator('canvas#stage3d.rm-stage3d--ready')).toBeVisible();
       await page.clock.runFor(650);
+      if (vp.width === 1536) {
+        console.log('PERF_ATTRACT=' + (await page.getByTestId('perf-overlay').textContent()));
+      }
       await page.screenshot({ path: `evidence/V2-r3/attract-${vp.width}x${vp.height}.png` });
 
       await page.getByRole('button', { name: 'Pick your laptop' }).click();
@@ -48,12 +51,18 @@ test.describe('V2 R3 Three.js showroom & fallback', () => {
 
       await expect(page.locator('[data-screen="lecture"]')).toBeVisible();
       await page.clock.runFor(600);
+      if (vp.width === 1536) {
+        console.log('PERF_SCENE=' + (await page.getByTestId('perf-overlay').textContent()));
+      }
       await page.screenshot({ path: `evidence/U1/lecture-play-${vp.width}x${vp.height}.png` });
       await runClockUntilVisible(page, '[data-phase="REVEAL"]', 18_000);
       await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
       await expect(page.locator('[data-screen="lecture"] .stage-window')).toBeAttached();
       await expect(page.getByRole('button', { name: 'Next' })).toHaveCount(0);
       await page.clock.runFor(450);
+      if (vp.width === 1536) {
+        console.log('PERF_REVEAL=' + (await page.getByTestId('perf-overlay').textContent()));
+      }
       await page.screenshot({ path: `evidence/U1/reveal-${vp.width}x${vp.height}.png` });
 
       await runClockUntilVisible(page, '[data-screen="battery"]', 10_000);

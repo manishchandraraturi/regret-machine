@@ -5,7 +5,9 @@ export interface DustMotes {
   dispose(): void;
 }
 
-const TOTAL_COUNT = 220;
+const TOTAL_COUNT = 150;
+const WARM_COLOR = new THREE.Color(0xfff3e0);
+const DUST_COLOR = new THREE.Color(0x7e8a83);
 
 export function createDustMotes(scene: THREE.Scene): DustMotes {
   const positions = new Float32Array(TOTAL_COUNT * 3);
@@ -40,7 +42,7 @@ export function createDustMotes(scene: THREE.Scene): DustMotes {
       geo.setDrawRange(0, limit);
       const d = Math.max(0, Math.min(1, decay));
       mat.opacity = 0.22 + d * 0.52;
-      mat.color.setHex(0xfff3e0).lerp(new THREE.Color(0x7e8a83), d * 0.7);
+      mat.color.copy(WARM_COLOR).lerp(DUST_COLOR, d * 0.7);
 
       const posAttr = geo.getAttribute('position') as THREE.BufferAttribute;
       const arr = posAttr.array as Float32Array;

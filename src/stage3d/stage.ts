@@ -49,10 +49,12 @@ export function createWebGLStage(
     powerPreference: automated ? 'low-power' : 'high-performance',
   });
   const softGpu = isSoftwareGpu(renderer);
-  const initialDpr = softGpu ? computeSoftDpr() : window.devicePixelRatio || 1;
-  const quality = createAdaptiveQuality(initialDpr);
+  const initialDpr = softGpu ? computeSoftDpr() : Math.min(1.5, Math.max(1, window.devicePixelRatio || 1));
+  const quality = createAdaptiveQuality(initialDpr, 60, 20);
   renderer.setPixelRatio(initialDpr);
   renderer.setSize(window.innerWidth, window.innerHeight, false);
+  renderer.shadowMap.enabled = !softGpu;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.08;
 
@@ -91,6 +93,15 @@ export function createWebGLStage(
   let targetOffY = 0;
   let curOffX = 0;
   let curOffY = 0;
+  const showPerf = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('perf') === '1';
+  let perfEl: HTMLElement | null = null;
+  if (showPerf && typeof document !== 'undefined') {
+    perfEl = document.createElement('aside');
+    perfEl.setAttribute('aria-label', 'Performance');
+    perfEl.dataset.testid = 'perf-overlay';
+    perfEl.className = 'rm-perf-overlay';
+    document.body.appendChild(perfEl);
+  }
 
   const applyViewOffset = (dtMs: number): void => {
     const W = Math.max(1, window.innerWidth);
@@ -117,8 +128,12 @@ export function createWebGLStage(
     const dtSec = dtMs / 1000;
     const tSec = (nowMs - startMs) / 1000;
     const q = quality.recordFrame(dtMs);
-    if (q.degraded && !softGpu && renderer.getPixelRatio() > 1) {
-      renderer.setPixelRatio(1);
+    if (q.degraded && !softGpu) {
+      if (renderer.getPixelRatio() > 1) renderer.setPixelRatio(1);
+      if (renderer.shadowMap.enabled) renderer.shadowMap.enabled = false;
+    }
+    if (perfEl) {
+      perfEl.textContent = `${q.avgFrameMs.toFixed(1)} ms | DPR ${renderer.getPixelRatio().toFixed(2)}`;
     }
     const isClear =
       state.screen === 'fairfight' || state.screen === 'result' || state.screen === 'staff';
@@ -149,14 +164,36 @@ export function createWebGLStage(
   };
 
   const tick = (nowMs: number): void => {
-    if (disposed) return;
-    const minInterval = quality.getState().degraded ? 45 : 16;
+    if (disposed || document.hidden) {
+      rafId = 0;
+      return;
+    }
+    const isStatic =
+      state.scenePhase === 'REVEAL' ||
+      state.screen === 'receipt' ||
+      state.screen === 'fairfight' ||
+      state.screen === 'result' ||
+      state.screen === 'staff';
+    const minInterval = isStatic ? 33.3 : quality.getState().degraded ? 45 : 16;
     if (dirty || nowMs - lastPointerRenderMs >= minInterval) {
       dirty = false;
       renderFrame(nowMs);
       lastPointerRenderMs = nowMs;
     }
     rafId = window.requestAnimationFrame(tick);
+  };
+
+  const onVisibility = (): void => {
+    if (disposed) return;
+    if (document.hidden) {
+      window.cancelAnimationFrame(rafId);
+      rafId = 0;
+    } else if (softGpu) {
+      scheduleSoftFrame();
+    } else if (rafId === 0) {
+      lastMs = performance.now();
+      rafId = window.requestAnimationFrame(tick);
+    }
   };
 
   const onResize = (): void => {
@@ -180,6 +217,7 @@ export function createWebGLStage(
 
   window.addEventListener('resize', onResize);
   window.addEventListener('pointermove', onPointerMove, { passive: true });
+  document.addEventListener('visibilitychange', onVisibility);
   canvas.addEventListener('webglcontextlost', handleLost);
 
   if (softGpu) {
@@ -218,7 +256,9 @@ export function createWebGLStage(
       window.cancelAnimationFrame(rafId);
       window.removeEventListener('resize', onResize);
       window.removeEventListener('pointermove', onPointerMove);
+      document.removeEventListener('visibilitychange', onVisibility);
       canvas.removeEventListener('webglcontextlost', handleLost);
+      perfEl?.remove();
       models.dispose();
       lights.dispose();
       particles.dispose();

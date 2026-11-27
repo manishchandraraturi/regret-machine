@@ -18,9 +18,7 @@
   font-weight: 700;
   line-height: 1.1;
   cursor: pointer;
-  transition:
-    transform var(--t-fast) var(--ease),
-    box-shadow var(--t-fast) var(--ease);
+  transition: transform var(--t-fast) var(--ease);
 }
 
 .rm-btn--secondary {
@@ -46,7 +44,6 @@
 @media (hover: hover) {
   .rm-btn:not([aria-disabled='true']):hover {
     transform: translateY(-1px);
-    box-shadow: 0 12px 28px color-mix(in oklab, var(--ink-black) 52%, transparent);
   }
 }
 
@@ -67,14 +64,10 @@
 @keyframes rm-buy-pulse {
   0%,
   100% {
-    box-shadow:
-      0 8px 24px color-mix(in oklab, var(--ink-black) 42%, transparent),
-      0 0 0 0 color-mix(in oklab, var(--spot-warm) 55%, transparent);
+    opacity: 1;
   }
   50% {
-    box-shadow:
-      0 8px 24px color-mix(in oklab, var(--ink-black) 42%, transparent),
-      0 0 0 10px color-mix(in oklab, var(--spot-warm) 0%, transparent);
+    opacity: 0.88;
   }
 }
 

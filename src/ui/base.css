@@ -131,11 +131,6 @@ html.skin-clear {
   text-transform: uppercase;
   line-height: 0.94;
   margin: 0;
-  text-shadow: 0 8px 32px color-mix(in oklab, var(--ink-black) 65%, transparent);
-}
-
-.skin-clear .type-flyer {
-  text-shadow: none;
 }
 
 .type-title {
