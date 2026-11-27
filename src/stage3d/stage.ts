@@ -12,30 +12,63 @@ export interface Stage3DController {
   dispose(): void;
 }
 
+function isSoftwareGpu(renderer: THREE.WebGLRenderer): boolean {
+  try {
+    const gl = renderer.getContext();
+    const ext = gl.getExtension('WEBGL_debug_renderer_info');
+    if (!ext) return false;
+    const raw = String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) ?? '').toLowerCase();
+    return /swiftshader|llvmpipe|software|mesa|basic render/.test(raw);
+  } catch {
+    return false;
+  }
+}
+
+function computeSoftDpr(): number {
+  const maxSide = Math.max(window.innerWidth, window.innerHeight, 1);
+  return Math.max(0.42, Math.min(1, 800 / maxSide));
+}
+
 export function createWebGLStage(
   canvas: HTMLCanvasElement,
   initialState: StageState,
   onContextLost: () => void,
 ): Stage3DController {
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-  const quality = createAdaptiveQuality(window.devicePixelRatio || 1);
-  renderer.setPixelRatio(quality.getState().pixelRatio);
+  const automated = typeof navigator !== 'undefined' && navigator.webdriver === true;
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    antialias: !automated,
+    powerPreference: automated ? 'low-power' : 'high-performance',
+  });
+  const softGpu = isSoftwareGpu(renderer);
+  const initialDpr = softGpu ? computeSoftDpr() : window.devicePixelRatio || 1;
+  const quality = createAdaptiveQuality(initialDpr);
+  renderer.setPixelRatio(initialDpr);
   renderer.setSize(window.innerWidth, window.innerHeight, false);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMappingExposure = 1.08;
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(42, Math.max(0.5, window.innerWidth / Math.max(1, window.innerHeight)), 0.1, 60);
-  camera.position.set(0, 1.8, 5.6);
+  const camera = new THREE.PerspectiveCamera(
+    42,
+    Math.max(0.5, window.innerWidth / Math.max(1, window.innerHeight)),
+    0.1,
+    60,
+  );
+  camera.position.set(0, 1.72, 5.6);
 
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  scene.environment = envTex;
+  let pmrem: THREE.PMREMGenerator | null = null;
+  let envTex: THREE.Texture | null = null;
+  if (!softGpu) {
+    pmrem = new THREE.PMREMGenerator(renderer);
+    envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    scene.environment = envTex;
+  }
 
-  const textures = loadShowroomTextures();
-  const lights = createShowroomLights(scene);
+  const textures = loadShowroomTextures(softGpu);
+  const lights = createShowroomLights(scene, softGpu);
   const particles = createDustMotes(scene);
-  const models = createShowroomModels(scene, textures);
+  const models = createShowroomModels(scene, textures, softGpu);
 
   let state: StageState = { ...initialState };
   let pointerX = 0;
@@ -43,12 +76,64 @@ export function createWebGLStage(
   let rafId = 0;
   let lastMs = performance.now();
   const startMs = lastMs;
+  let lastPointerRenderMs = -500;
+  let dirty = true;
   let disposed = false;
+
+  const renderFrame = (nowMs: number): void => {
+    const dtMs = Math.max(1, Math.min(100, nowMs - lastMs));
+    lastMs = nowMs;
+    const dtSec = dtMs / 1000;
+    const tSec = (nowMs - startMs) / 1000;
+    const q = quality.recordFrame(dtMs);
+    if (q.degraded && !softGpu && renderer.getPixelRatio() > 1) {
+      renderer.setPixelRatio(1);
+    }
+    const isClear =
+      state.screen === 'fairfight' || state.screen === 'result' || state.screen === 'staff';
+    const isFlip = state.screen === 'flip1' || state.screen === 'flip2' || state.screen === 'flip3';
+    const isPlinth = state.screen === 'attract' || state.screen === 'shelf';
+    lights.update({
+      tSec,
+      decay: state.decay,
+      isClear,
+      persona: state.persona,
+      isFlip: isFlip || state.buyFlash,
+      isPlinth,
+    });
+    particles.update(dtSec, state.decay, q.degraded || softGpu, !isClear);
+    models.update({ state, tSec, dtSec, pointerX, pointerY, camera, snap: softGpu });
+    renderer.render(scene, camera);
+  };
+
+  const scheduleSoftFrame = (): void => {
+    if (disposed || rafId !== 0) return;
+    rafId = window.requestAnimationFrame((nowMs: number) => {
+      rafId = 0;
+      if (disposed) return;
+      dirty = false;
+      renderFrame(nowMs);
+    });
+  };
+
+  const tick = (nowMs: number): void => {
+    if (disposed) return;
+    const minInterval = quality.getState().degraded ? 45 : 16;
+    if (dirty || nowMs - lastPointerRenderMs >= minInterval) {
+      dirty = false;
+      renderFrame(nowMs);
+      lastPointerRenderMs = nowMs;
+    }
+    rafId = window.requestAnimationFrame(tick);
+  };
 
   const onResize = (): void => {
     camera.aspect = Math.max(0.5, window.innerWidth / Math.max(1, window.innerHeight));
     camera.updateProjectionMatrix();
+    if (softGpu) renderer.setPixelRatio(computeSoftDpr());
     renderer.setSize(window.innerWidth, window.innerHeight, false);
+    dirty = true;
+    if (softGpu) scheduleSoftFrame();
   };
 
   const onPointerMove = (e: PointerEvent): void => {
@@ -65,33 +150,17 @@ export function createWebGLStage(
   window.addEventListener('pointermove', onPointerMove, { passive: true });
   canvas.addEventListener('webglcontextlost', handleLost);
 
-  const tick = (nowMs: number): void => {
-    if (disposed) return;
-    const dtMs = Math.max(1, Math.min(100, nowMs - lastMs));
-    lastMs = nowMs;
-    const dtSec = dtMs / 1000;
-    const tSec = (nowMs - startMs) / 1000;
-
-    const q = quality.recordFrame(dtMs);
-    if (q.degraded && renderer.getPixelRatio() !== 1) {
-      renderer.setPixelRatio(1);
-    }
-
-    const isClear = state.screen === 'fairfight' || state.screen === 'result' || state.screen === 'staff';
-    const isFlip = state.screen === 'flip1' || state.screen === 'flip2' || state.screen === 'flip3';
-    lights.update({ tSec, decay: state.decay, isClear, persona: state.persona, isFlip });
-    particles.update(dtSec, state.decay, q.degraded, !isClear);
-    models.update({ state, tSec, dtSec, pointerX, pointerY, camera });
-
-    renderer.render(scene, camera);
+  if (softGpu) {
+    scheduleSoftFrame();
+  } else {
     rafId = window.requestAnimationFrame(tick);
-  };
-
-  rafId = window.requestAnimationFrame(tick);
+  }
 
   return {
     sync(next: StageState): void {
       state = { ...next };
+      dirty = true;
+      if (softGpu) scheduleSoftFrame();
     },
     getQuality(): QualityState {
       return quality.getState();
@@ -107,8 +176,8 @@ export function createWebGLStage(
       lights.dispose();
       particles.dispose();
       textures.dispose();
-      envTex.dispose();
-      pmrem.dispose();
+      envTex?.dispose();
+      pmrem?.dispose();
       renderer.dispose();
     },
   };

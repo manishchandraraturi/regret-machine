@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { attachCspGuard } from './csp';
+import { gotoLite } from './helpers';
 
 const FIT_VIEWPORTS = [
   { width: 1536, height: 730, saveEvidence: true },
@@ -21,7 +22,7 @@ test.describe('v1.2 Viewport fit (no vertical scroll >= 1280x640) & Attract tag 
       });
 
       await page.setViewportSize({ width: vp.width, height: vp.height });
-      await page.goto('/');
+      await gotoLite(page, '/');
       await expect(page.locator('[data-screen="attract"]')).toBeVisible();
 
       const attractFit = await page.evaluate(() => ({

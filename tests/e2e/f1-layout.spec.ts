@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { attachCspGuard } from './csp';
+import { gotoLite } from './helpers';
 
 const VIEWPORTS = [
   { width: 2560, height: 1300 },
@@ -24,7 +25,7 @@ test.describe('F1 Layout polish: centered stage, marquee fade, Attract hero', ()
 
       await page.clock.install();
       await page.setViewportSize({ width: vp.width, height: vp.height });
-      await page.goto('/');
+      await gotoLite(page, '/');
 
       await expect(page.locator('[data-screen="attract"]')).toBeVisible();
       await expect(page.locator('.rm-attract-visual .rm-laptop--pink')).toBeVisible();

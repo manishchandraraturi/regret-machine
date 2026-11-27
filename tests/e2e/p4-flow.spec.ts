@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { attachCspGuard } from './csp';
+import { gotoLite } from './helpers';
 
 const VIEWPORTS = [
   { name: 'desktop', width: 1920, height: 1080 },
@@ -22,7 +23,7 @@ test.describe('P4 Attract & Shelf', () => {
 
       await page.setViewportSize({ width: vp.width, height: vp.height });
       const t0 = Date.now();
-      await page.goto('/');
+      await gotoLite(page, '/');
       const cta = page.getByRole('button', { name: 'Pick your laptop' });
       await expect(cta).toBeVisible();
       expect(Date.now() - t0).toBeLessThan(2000);
@@ -61,7 +62,7 @@ test.describe('P4 Attract & Shelf', () => {
   test('idle 60s returns to Attract and clears state; facilitator bar skips', async ({ page }) => {
     const csp = await attachCspGuard(page);
     await page.clock.install();
-    await page.goto('/?facilitator=1');
+    await gotoLite(page, '/?facilitator=1');
 
     await page.getByRole('button', { name: 'Pick your laptop' }).click();
     await expect(page.locator('[data-screen="shelf"]')).toBeVisible();

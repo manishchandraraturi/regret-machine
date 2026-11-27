@@ -37,13 +37,21 @@ function loadRepeatTex(
   return tex;
 }
 
-export function loadShowroomTextures(): ShowroomTextures {
+export function loadShowroomTextures(lowCost = false): ShowroomTextures {
   const loader = new THREE.TextureLoader();
   const concreteColor = loadRepeatTex(loader, concreteColorUrl, 4, THREE.SRGBColorSpace);
-  const concreteNormal = loadRepeatTex(loader, concreteNormalUrl, 4, THREE.NoColorSpace);
-  const concreteRoughness = loadRepeatTex(loader, concreteRoughnessUrl, 4, THREE.NoColorSpace);
-  const metalNormal = loadRepeatTex(loader, metalNormalUrl, 2, THREE.NoColorSpace);
-  const metalRoughness = loadRepeatTex(loader, metalRoughnessUrl, 2, THREE.NoColorSpace);
+  const concreteNormal = lowCost
+    ? concreteColor
+    : loadRepeatTex(loader, concreteNormalUrl, 4, THREE.NoColorSpace);
+  const concreteRoughness = lowCost
+    ? concreteColor
+    : loadRepeatTex(loader, concreteRoughnessUrl, 4, THREE.NoColorSpace);
+  const metalNormal = lowCost
+    ? concreteColor
+    : loadRepeatTex(loader, metalNormalUrl, 2, THREE.NoColorSpace);
+  const metalRoughness = lowCost
+    ? concreteColor
+    : loadRepeatTex(loader, metalRoughnessUrl, 2, THREE.NoColorSpace);
 
   return {
     concreteColor,
@@ -126,11 +134,14 @@ export function createScreenSurface(accentHex: string): {
   redraw: (mode: ScreenMode, decay: number) => void;
 } {
   const canvas = document.createElement('canvas');
-  canvas.width = 512;
-  canvas.height = 320;
+  canvas.width = 384;
+  canvas.height = 240;
   const ctx = canvas.getContext('2d');
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
+  texture.generateMipmaps = false;
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
   let lastKey = '';
 
   const redraw = (mode: ScreenMode, decay: number): void => {

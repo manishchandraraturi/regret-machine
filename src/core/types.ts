@@ -66,11 +66,19 @@ export interface Store {
   reset(): void;
 }
 
+export interface StageHint {
+  hoveredLaptopId: string | null;
+  scenePhase: 'PLAY' | 'FAIL' | 'REVEAL';
+  sceneAlert: boolean;
+  buyFlash: boolean;
+}
+
 export interface Ctx {
   store: Store;
   t: (key: string) => string;
   claim: (id: string) => Claim;
   go: (to: ScreenId) => void;
+  setStageHint?: (hint: Partial<StageHint>) => void;
 }
 
 export interface Screen {

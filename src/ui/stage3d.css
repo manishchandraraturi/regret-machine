@@ -14,7 +14,6 @@
   opacity: 1;
 }
 
-/* When 3D WebGL stage is active, soften DOM shell backdrop so 3D showroom shines through */
 [data-stage-mode='webgl2'] .rm-shell.decay-scope:not(.skin-clear) {
   background-color: transparent;
   background-image: radial-gradient(
@@ -28,13 +27,29 @@
   background-color: transparent;
   background-image: radial-gradient(
     circle at 75% 24%,
-    color-mix(in oklab, var(--studio-white) 24%, transparent),
+    color-mix(in oklab, var(--studio-white) 22%, transparent),
     transparent 65%
   );
 }
 
-/* In WebGL 3D mode, DOM Attract & Shelf laptop SVGs step aside transparently while preserving accessible DOM metrics/controls */
-[data-stage-mode='webgl2'] .rm-attract-stage .rm-laptop,
-[data-stage-mode='webgl2'] .rm-shelf-item .rm-laptop {
-  opacity: 0.04;
+[data-stage-mode='webgl2'] .rm-attract-stage .rm-laptop {
+  opacity: 0;
+}
+
+@media (min-width: 700px) {
+  [data-stage-mode='webgl2'] .rm-shelf-item {
+    background: color-mix(in oklab, var(--wall-obsidian) 14%, transparent);
+    border-color: color-mix(in oklab, var(--paper-white) 22%, transparent);
+    box-shadow: none;
+  }
+
+  [data-stage-mode='webgl2'] .rm-shelf-item .rm-laptop {
+    opacity: 0;
+  }
+}
+
+[data-stage-mode='webgl2'] .rm-result-card,
+[data-stage-mode='webgl2'] .rm-glossary,
+[data-stage-mode='webgl2'] .rm-ff-table {
+  background: color-mix(in oklab, var(--studio-white) 92%, transparent);
 }

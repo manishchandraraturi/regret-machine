@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { attachCspGuard } from './csp';
+import { gotoLite } from './helpers';
 
 const VIEWPORTS = [
   { name: 'desktop', width: 1920, height: 1080 },
@@ -26,7 +27,7 @@ test.describe('P0 smoke', () => {
       });
 
       await page.setViewportSize({ width: vp.width, height: vp.height });
-      await page.goto('/');
+      await gotoLite(page, '/');
       await expect(page.getByText('The Regret Machine')).toBeVisible();
       await expect(page.getByRole('button', { name: 'Pick your laptop' })).toBeVisible();
       await page.screenshot({ path: `evidence/P0/title-${vp.width}x${vp.height}.png` });

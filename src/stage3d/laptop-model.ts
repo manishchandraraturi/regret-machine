@@ -26,7 +26,8 @@ function createRoundedSlab(width: number, depth: number, thickness: number, radi
   const geom = new THREE.ExtrudeGeometry(shape, {
     depth: thickness,
     bevelEnabled: true,
-    bevelSegments: 2,
+    bevelSegments: 1,
+    curveSegments: 4,
     steps: 1,
     bevelSize: 0.015,
     bevelThickness: 0.012,
@@ -35,10 +36,43 @@ function createRoundedSlab(width: number, depth: number, thickness: number, radi
   return geom;
 }
 
-function buildInstancedKeys(keyMat: THREE.Material): THREE.InstancedMesh {
+interface SharedLaptopGeos {
+  baseGeo: THREE.ExtrudeGeometry;
+  keyGeo: THREE.BoxGeometry;
+  trackpadGeo: THREE.BoxGeometry;
+  hingeGeo: THREE.CylinderGeometry;
+  lidBackGeo: THREE.ExtrudeGeometry;
+  bezelGeo: THREE.PlaneGeometry;
+  screenGeo: THREE.PlaneGeometry;
+  rimGeo: THREE.RingGeometry;
+}
+
+let cachedGeos: SharedLaptopGeos | null = null;
+
+function getSharedGeos(): SharedLaptopGeos {
+  if (cachedGeos) return cachedGeos;
+  const lidBackGeo = createRoundedSlab(2.05, 1.32, 0.032, 0.08);
+  lidBackGeo.rotateX(Math.PI / 2);
+  const hingeGeo = new THREE.CylinderGeometry(0.032, 0.032, 1.48, 12);
+  hingeGeo.rotateZ(Math.PI / 2);
+  const rimGeo = new THREE.RingGeometry(0.95, 1.28, 24);
+  rimGeo.rotateX(-Math.PI / 2);
+  cachedGeos = {
+    baseGeo: createRoundedSlab(2.05, 1.38, 0.075, 0.08),
+    keyGeo: new THREE.BoxGeometry(0.11, 0.02, 0.09),
+    trackpadGeo: new THREE.BoxGeometry(0.62, 0.008, 0.36),
+    hingeGeo,
+    lidBackGeo,
+    bezelGeo: new THREE.PlaneGeometry(1.94, 1.2),
+    screenGeo: new THREE.PlaneGeometry(1.82, 1.1),
+    rimGeo,
+  };
+  return cachedGeos;
+}
+
+function buildInstancedKeys(keyGeo: THREE.BoxGeometry, keyMat: THREE.Material): THREE.InstancedMesh {
   const cols = 13;
   const rows = 4;
-  const keyGeo = new THREE.BoxGeometry(0.11, 0.02, 0.09);
   const mesh = new THREE.InstancedMesh(keyGeo, keyMat, cols * rows);
   const dummy = new THREE.Object3D();
   let idx = 0;
@@ -55,80 +89,112 @@ function buildInstancedKeys(keyMat: THREE.Material): THREE.InstancedMesh {
   return mesh;
 }
 
-export function buildLaptopRig(bodyHex: string, textures: ShowroomTextures): LaptopRig {
+interface LaptopMaterials {
+  chassisMat: THREE.MeshStandardMaterial | THREE.MeshPhongMaterial;
+  bezelMat: THREE.MeshStandardMaterial | THREE.MeshLambertMaterial;
+  keyMat: THREE.MeshStandardMaterial | THREE.MeshLambertMaterial;
+  trackpadMat: THREE.MeshStandardMaterial | THREE.MeshLambertMaterial;
+  screenMat: THREE.MeshStandardMaterial | THREE.MeshBasicMaterial;
+}
+
+function createLaptopMaterials(
+  baseColor: THREE.Color,
+  textures: ShowroomTextures,
+  lowCost: boolean,
+): LaptopMaterials {
+  if (lowCost) {
+    return {
+      chassisMat: new THREE.MeshPhongMaterial({
+        color: baseColor.clone(),
+        specular: 0x555b66,
+        shininess: 46,
+      }),
+      bezelMat: new THREE.MeshLambertMaterial({ color: 0x0b0c0e }),
+      keyMat: new THREE.MeshLambertMaterial({ color: 0x17191d }),
+      trackpadMat: new THREE.MeshLambertMaterial({
+        color: baseColor.clone().lerp(new THREE.Color('#ffffff'), 0.14),
+      }),
+      screenMat: new THREE.MeshBasicMaterial({ color: 0xffffff }),
+    };
+  }
+  return {
+    chassisMat: new THREE.MeshStandardMaterial({
+      color: baseColor.clone(),
+      metalness: 0.78,
+      roughness: 0.28,
+      normalMap: textures.metalNormal,
+      normalScale: new THREE.Vector2(0.25, 0.25),
+      roughnessMap: textures.metalRoughness,
+    }),
+    bezelMat: new THREE.MeshStandardMaterial({ color: 0x0b0c0e, roughness: 0.35, metalness: 0.2 }),
+    keyMat: new THREE.MeshStandardMaterial({ color: 0x17191d, roughness: 0.6, metalness: 0.1 }),
+    trackpadMat: new THREE.MeshStandardMaterial({
+      color: baseColor.clone().lerp(new THREE.Color('#ffffff'), 0.14),
+      metalness: 0.45,
+      roughness: 0.22,
+    }),
+    screenMat: new THREE.MeshStandardMaterial({
+      emissive: new THREE.Color('#ffffff'),
+      emissiveIntensity: 0.72,
+      roughness: 0.18,
+      metalness: 0.05,
+    }),
+  };
+}
+
+export function buildLaptopRig(
+  bodyHex: string,
+  textures: ShowroomTextures,
+  lowCost = false,
+): LaptopRig {
   const root = new THREE.Group();
   const baseColor = new THREE.Color(bodyHex);
   const dustColor = new THREE.Color('#7E8A83');
+  const { chassisMat, bezelMat, keyMat, trackpadMat, screenMat } = createLaptopMaterials(
+    baseColor,
+    textures,
+    lowCost,
+  );
 
-  const chassisMat = new THREE.MeshStandardMaterial({
-    color: baseColor.clone(),
-    metalness: 0.78,
-    roughness: 0.28,
-    normalMap: textures.metalNormal,
-    normalScale: new THREE.Vector2(0.25, 0.25),
-    roughnessMap: textures.metalRoughness,
-  });
-
-  const bezelMat = new THREE.MeshStandardMaterial({ color: 0x0b0c0e, roughness: 0.35, metalness: 0.2 });
-  const keyMat = new THREE.MeshStandardMaterial({ color: 0x17191d, roughness: 0.6, metalness: 0.1 });
-  const trackpadMat = new THREE.MeshStandardMaterial({
-    color: baseColor.clone().lerp(new THREE.Color('#ffffff'), 0.14),
-    metalness: 0.45,
-    roughness: 0.22,
-  });
-
-  const baseGeo = createRoundedSlab(2.05, 1.38, 0.075, 0.08);
-  const baseMesh = new THREE.Mesh(baseGeo, chassisMat);
+  const geos = getSharedGeos();
+  const baseMesh = new THREE.Mesh(geos.baseGeo, chassisMat);
   baseMesh.position.y = 0.05;
   baseMesh.castShadow = true;
   baseMesh.receiveShadow = true;
 
-  const keys = buildInstancedKeys(keyMat);
-  const trackpadGeo = new THREE.BoxGeometry(0.62, 0.008, 0.36);
-  const trackpad = new THREE.Mesh(trackpadGeo, trackpadMat);
+  const keys = buildInstancedKeys(geos.keyGeo, keyMat);
+  const trackpad = new THREE.Mesh(geos.trackpadGeo, trackpadMat);
   trackpad.position.set(0, 0.062, 0.36);
 
-  const hingeGeo = new THREE.CylinderGeometry(0.032, 0.032, 1.48, 16);
-  hingeGeo.rotateZ(Math.PI / 2);
-  const hinge = new THREE.Mesh(hingeGeo, bezelMat);
+  const hinge = new THREE.Mesh(geos.hingeGeo, bezelMat);
   hinge.position.set(0, 0.068, -0.66);
 
   const lidPivot = new THREE.Group();
   lidPivot.position.set(0, 0.068, -0.66);
   lidPivot.rotation.x = -0.26;
 
-  const lidBackGeo = createRoundedSlab(2.05, 1.32, 0.032, 0.08);
-  lidBackGeo.rotateX(Math.PI / 2);
-  const lidBack = new THREE.Mesh(lidBackGeo, chassisMat);
+  const lidBack = new THREE.Mesh(geos.lidBackGeo, chassisMat);
   lidBack.position.set(0, 0.68, -0.02);
   lidBack.castShadow = true;
 
-  const bezelGeo = new THREE.PlaneGeometry(1.94, 1.2);
-  const bezel = new THREE.Mesh(bezelGeo, bezelMat);
+  const bezel = new THREE.Mesh(geos.bezelGeo, bezelMat);
   bezel.position.set(0, 0.68, 0.004);
 
   const screenSurface = createScreenSurface(bodyHex);
-  const screenMat = new THREE.MeshStandardMaterial({
-    map: screenSurface.texture,
-    emissiveMap: screenSurface.texture,
-    emissive: new THREE.Color('#ffffff'),
-    emissiveIntensity: 0.72,
-    roughness: 0.18,
-    metalness: 0.05,
-  });
-  const screenGeo = new THREE.PlaneGeometry(1.82, 1.1);
-  const screenMesh = new THREE.Mesh(screenGeo, screenMat);
+  screenMat.map = screenSurface.texture;
+  if ('emissiveMap' in screenMat) {
+    screenMat.emissiveMap = screenSurface.texture;
+  }
+  const screenMesh = new THREE.Mesh(geos.screenGeo, screenMat);
   screenMesh.position.set(0, 0.68, 0.008);
 
-  const rimGeo = new THREE.RingGeometry(0.95, 1.28, 32);
-  rimGeo.rotateX(-Math.PI / 2);
   const rimMat = new THREE.MeshBasicMaterial({
     color: 0x0b63f6,
     transparent: true,
     opacity: 0,
     side: THREE.DoubleSide,
   });
-  const rimMesh = new THREE.Mesh(rimGeo, rimMat);
+  const rimMesh = new THREE.Mesh(geos.rimGeo, rimMat);
   rimMesh.position.set(0, -0.01, 0);
 
   lidPivot.add(lidBack, bezel, screenMesh);
@@ -139,9 +205,15 @@ export function buildLaptopRig(bodyHex: string, textures: ShowroomTextures): Lap
   const setDecay = (decay: number): void => {
     const d = Math.max(0, Math.min(1, decay));
     chassisMat.color.copy(baseColor).lerp(dustColor, d * 0.65);
-    chassisMat.roughness = 0.28 + d * 0.56;
-    chassisMat.normalScale.set(0.25 + d * 0.85, 0.25 + d * 0.85);
-    screenMat.emissiveIntensity = Math.max(0.15, 0.72 - d * 0.48);
+    if ('roughness' in chassisMat) {
+      chassisMat.roughness = 0.28 + d * 0.56;
+      chassisMat.normalScale.set(0.25 + d * 0.85, 0.25 + d * 0.85);
+    } else {
+      chassisMat.shininess = Math.max(6, 46 - d * 36);
+    }
+    if ('emissiveIntensity' in screenMat) {
+      screenMat.emissiveIntensity = Math.max(0.15, 0.72 - d * 0.48);
+    }
     screenSurface.redraw(currentMode, d);
   };
 
@@ -157,14 +229,6 @@ export function buildLaptopRig(bodyHex: string, textures: ShowroomTextures): Lap
       rimMat.color.setHex(selected ? 0x0b63f6 : 0xfff3e0);
     },
     dispose(): void {
-      baseGeo.dispose();
-      keys.geometry.dispose();
-      trackpadGeo.dispose();
-      hingeGeo.dispose();
-      lidBackGeo.dispose();
-      bezelGeo.dispose();
-      screenGeo.dispose();
-      rimGeo.dispose();
       chassisMat.dispose();
       bezelMat.dispose();
       keyMat.dispose();

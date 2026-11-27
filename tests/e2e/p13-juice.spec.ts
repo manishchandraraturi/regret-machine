@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { attachCspGuard } from './csp';
+import { gotoLite } from './helpers';
 
 const VIEWPORTS = [
   { width: 1920, height: 1080 },
@@ -28,7 +29,7 @@ test.describe('P13 Neo-Brutalist overhaul, juice & Clear-skin fix', () => {
       await expect(page.locator('[data-cracked="true"]').first()).toBeVisible();
       await page.screenshot({ path: `evidence/P13/gallery-${vp.width}x${vp.height}.png` });
 
-      await page.goto('/');
+      await gotoLite(page, '/');
       await expect(page.locator('[data-screen="attract"]')).toBeVisible();
       const pattern = await page.locator('.rm-shell').evaluate((el) => getComputedStyle(el).backgroundImage);
       expect(pattern).toContain('radial-gradient');
@@ -60,10 +61,11 @@ test.describe('P13 Neo-Brutalist overhaul, juice & Clear-skin fix', () => {
 
       const clearStyles = await page.locator('.rm-shell').evaluate((el) => {
         const cs = getComputedStyle(el);
+        const bodyCs = getComputedStyle(document.body);
         return {
           sat: cs.getPropertyValue('--sat').trim(),
           dim: cs.getPropertyValue('--dim').trim(),
-          bgColor: cs.backgroundColor,
+          bgColor: bodyCs.backgroundColor,
           filter: cs.filter,
           hasClear: el.classList.contains('skin-clear'),
         };

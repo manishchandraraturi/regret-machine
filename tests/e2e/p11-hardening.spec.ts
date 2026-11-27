@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { attachCspGuard } from './csp';
+import { gotoLite } from './helpers';
 
 async function tabToAndPress(page: Page, targetText: string | RegExp): Promise<void> {
   for (let i = 0; i < 30; i++) {
@@ -27,7 +28,7 @@ test.describe('P11 Hardening: timing, keyboard-only, 390x844 screenshots, axe', 
 
     await page.clock.install({ time: 0 });
     await page.setViewportSize({ width: 1920, height: 1080 });
-    await page.goto('/');
+    await gotoLite(page, '/');
     const startMs = await page.evaluate(() => Date.now());
 
     await page.clock.runFor(8_000);
@@ -85,7 +86,7 @@ test.describe('P11 Hardening: timing, keyboard-only, 390x844 screenshots, axe', 
     const csp = await attachCspGuard(page);
     await page.clock.install();
     await page.setViewportSize({ width: 1920, height: 1080 });
-    await page.goto('/');
+    await gotoLite(page, '/');
 
     // Attract -> Shelf via Enter
     await page.keyboard.press('Enter');
@@ -131,7 +132,7 @@ test.describe('P11 Hardening: timing, keyboard-only, 390x844 screenshots, axe', 
     ] as const;
 
     for (const p of personas) {
-      await page.goto('/');
+      await gotoLite(page, '/');
       if (p.id === 'study') {
         await page.screenshot({ path: 'evidence/P11/attract-390x844.png' });
       }

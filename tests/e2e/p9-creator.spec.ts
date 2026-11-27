@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { attachCspGuard } from './csp';
+import { gotoLite, runClockUntilVisible } from './helpers';
 
 const VIEWPORTS = [
   { name: 'desktop', width: 1920, height: 1080 },
@@ -21,7 +22,7 @@ test.describe('P9 Creator night (performance) = CUT LINE 3', () => {
 
       await page.clock.install();
       await page.setViewportSize({ width: vp.width, height: vp.height });
-      await page.goto('/');
+      await gotoLite(page, '/');
 
       await page.getByRole('button', { name: 'Pick your laptop' }).click();
       await page.getByRole('button', { name: /Zesta Glow/ }).click();
@@ -48,11 +49,11 @@ test.describe('P9 Creator night (performance) = CUT LINE 3', () => {
       );
       expect(axePlay.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')).toEqual([]);
 
-      await page.clock.runFor(5_500);
+      await runClockUntilVisible(page, '[data-testid="creator-stutter"]', 10_000);
       await expect(page.getByTestId('creator-stutter')).toBeVisible();
       await page.screenshot({ path: `evidence/P9/stutter-${vp.width}x${vp.height}.png` });
 
-      await page.clock.runFor(8_000);
+      await runClockUntilVisible(page, '[data-phase="REVEAL"]', 12_000);
       await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
       await expect(page.getByTestId('creator-baseline')).toContainText(
         'vs earlier-generation Intel chip, Intel-measured',
@@ -84,7 +85,7 @@ test.describe('P9 Creator night (performance) = CUT LINE 3', () => {
       await expect(tape).toContainText('Private files had to be uploaded');
 
       // Hindi reveal screenshot
-      await page.goto('/?lang=hi');
+      await gotoLite(page, '/?lang=hi');
       await page.getByRole('button', { name: 'अपना लैपटॉप चुनो' }).click();
       await page.getByRole('button', { name: /Zesta Glow/ }).click();
       await page.getByRole('button', { name: 'क्रिएट करना', exact: true }).click();

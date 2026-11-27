@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { attachCspGuard } from './csp';
+import { gotoLite } from './helpers';
 
 const PERSONAS = [
   { id: 'study', label: 'Study', card: 'The Topper' },
@@ -47,7 +48,7 @@ test.describe('P5 CUT LINE 1 end-to-end', () => {
 
     await page.clock.install();
     await page.setViewportSize({ width: 1920, height: 1080 });
-    await page.goto('/');
+    await gotoLite(page, '/');
 
     const seenCards: string[] = [];
     for (const p of PERSONAS) {
@@ -111,7 +112,7 @@ test.describe('P5 CUT LINE 1 end-to-end', () => {
     await page.clock.install();
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto('/');
+    await gotoLite(page, '/');
 
     const assertNoSeriousAxe = async (screenName: string): Promise<void> => {
       const results = await new AxeBuilder({ page }).analyze();

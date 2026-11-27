@@ -38,6 +38,7 @@ export function createShelfScreen(audio: Audio): Screen {
         onClick: () => {
           if (!selectedLaptop || !selectedPersona) return;
           audio.register();
+          ctx.setStageHint?.({ buyFlash: true });
           ctx.go('flip1');
         },
       });
@@ -58,12 +59,17 @@ export function createShelfScreen(audio: Audio): Screen {
         for (const [lid, handle] of tagHandles) {
           handle.setSelected(lid === id);
         }
+        ctx.setStageHint?.({ hoveredLaptopId: null });
         syncBuyState();
       };
 
       for (const lap of laptops) {
         const item = document.createElement('div');
         item.className = 'rm-shelf-item';
+        item.addEventListener('pointerenter', () => ctx.setStageHint?.({ hoveredLaptopId: lap.id }));
+        item.addEventListener('pointerleave', () => ctx.setStageHint?.({ hoveredLaptopId: null }));
+        item.addEventListener('focusin', () => ctx.setStageHint?.({ hoveredLaptopId: lap.id }));
+        item.addEventListener('focusout', () => ctx.setStageHint?.({ hoveredLaptopId: null }));
 
         const stickers = document.createElement('div');
         stickers.className = 'rm-shelf-stickers';

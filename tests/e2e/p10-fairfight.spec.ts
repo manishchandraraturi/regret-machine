@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { attachCspGuard } from './csp';
+import { gotoLite } from './helpers';
 
 const VIEWPORTS = [
   { name: 'desktop', width: 1920, height: 1080 },
@@ -21,7 +22,7 @@ test.describe('P10 Fair Fight & Hindi 390px pass', () => {
 
       await page.clock.install();
       await page.setViewportSize({ width: vp.width, height: vp.height });
-      await page.goto('/');
+      await gotoLite(page, '/');
 
       await page.getByRole('button', { name: 'Pick your laptop' }).click();
       await page.getByRole('button', { name: /Zesta Glow/ }).click();

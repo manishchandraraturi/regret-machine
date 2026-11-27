@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { attachCspGuard } from './csp';
+import { gotoLite } from './helpers';
 
 const R1_VIEWPORTS = [
   { width: 2560, height: 1300 },
@@ -37,7 +38,7 @@ test.describe('V2 R1 palette, layout fit & screen screenshots', () => {
 
       await page.clock.install();
       await page.setViewportSize({ width: vp.width, height: vp.height });
-      await page.goto('/');
+      await gotoLite(page, '/');
 
       await expect(page.locator('[data-screen="attract"]')).toBeVisible();
       await expect(page.locator('.rm-laptop-hinge').first()).toBeVisible();

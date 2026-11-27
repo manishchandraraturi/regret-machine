@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { attachCspGuard } from './csp';
+import { gotoLite } from './helpers';
 
 const VIEWPORTS = [
   { name: 'desktop', width: 1920, height: 1080 },
@@ -21,7 +22,7 @@ test.describe('P7 Lecture hall (on-device AI) = CUT LINE 2', () => {
 
       await page.clock.install();
       await page.setViewportSize({ width: vp.width, height: vp.height });
-      await page.goto('/');
+      await gotoLite(page, '/');
 
       await page.getByRole('button', { name: 'Pick your laptop' }).click();
       await page.getByRole('button', { name: /Zesta Glow/ }).click();
@@ -64,7 +65,7 @@ test.describe('P7 Lecture hall (on-device AI) = CUT LINE 2', () => {
       await expect(page.locator('[data-screen="flip"]')).toBeVisible();
 
       // Hindi reveal screenshot
-      await page.goto('/?lang=hi');
+      await gotoLite(page, '/?lang=hi');
       await page.getByRole('button', { name: 'अपना लैपटॉप चुनो' }).click();
       await page.getByRole('button', { name: /Zesta Glow/ }).click();
       await page.getByRole('button', { name: 'पढ़ाई', exact: true }).click();

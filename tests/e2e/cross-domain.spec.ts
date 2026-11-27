@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { attachCspGuard } from './csp';
+import { gotoLite } from './helpers';
 
 async function tabToAndPress(page: Page, targetText: string | RegExp): Promise<void> {
   for (let i = 0; i < 35; i++) {
@@ -31,13 +32,13 @@ test.describe('Cross-domain verification', () => {
       if (new URL(req.url()).origin !== 'http://127.0.0.1:4173') thirdParty.push(req.url());
     });
 
-    await page.goto('/?lang=xx&facilitator=0');
+    await gotoLite(page, '/?lang=xx&facilitator=0');
     await expect(page.locator('[data-screen="attract"]')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.lang)).toBe('en');
     await expect(page.getByRole('button', { name: 'Pick your laptop' })).toBeVisible();
     await expect(page.locator('[data-testid="facilitator-bar"]')).toHaveCount(0);
 
-    await page.goto('/?lang=%3Cscript%3Ealert(1)%3C%2Fscript%3E&facilitator=0');
+    await gotoLite(page, '/?lang=%3Cscript%3Ealert(1)%3C%2Fscript%3E&facilitator=0');
     expect(await page.evaluate(() => document.documentElement.lang)).toBe('en');
     await expect(page.locator('[data-testid="facilitator-bar"]')).toHaveCount(0);
 
@@ -79,7 +80,7 @@ test.describe('Cross-domain verification', () => {
     await page.goto('/gallery.html');
     await assertNoHorizontalOverflow(page, 'gallery');
 
-    await page.goto('/');
+    await gotoLite(page, '/');
     await expect(page.locator('[data-screen="attract"]')).toBeVisible();
     await assertNoHorizontalOverflow(page, 'attract');
 
@@ -139,7 +140,7 @@ test.describe('Cross-domain verification', () => {
 
     await page.clock.install();
     await page.setViewportSize({ width: 1920, height: 1080 });
-    await page.goto('/');
+    await gotoLite(page, '/');
 
     await page.keyboard.press('Enter');
     await expect(page.locator('[data-screen="shelf"]')).toBeVisible();
@@ -159,7 +160,7 @@ test.describe('Cross-domain verification', () => {
     await expect(page.locator('[data-screen="staff"]')).toBeVisible();
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/');
+    await gotoLite(page, '/');
     await page.getByRole('button', { name: 'Pick your laptop' }).click();
     await page.getByRole('button', { name: /Zesta Glow/ }).click();
     await page.getByRole('button', { name: 'Create', exact: true }).click();
