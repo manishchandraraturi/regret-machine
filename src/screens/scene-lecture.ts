@@ -82,6 +82,7 @@ export function createLectureScene(audio?: Audio): SceneFactory {
         banner.dataset.testid = 'wifi-drop-banner';
         banner.textContent = ctx.t('scene.lecture.fail');
         wifiSlot.replaceChildren(banner);
+        ctx.setStageHint?.({ scenePhase: 'FAIL', sceneAlert: true });
       };
 
       const enterReveal = (): void => {
@@ -90,6 +91,7 @@ export function createLectureScene(audio?: Audio): SceneFactory {
         wrap.dataset.phase = 'FAIL';
         phase = 'REVEAL';
         wrap.dataset.phase = 'REVEAL';
+        ctx.setStageHint?.({ scenePhase: 'REVEAL', sceneAlert: true });
 
         const state = ctx.store.getState();
         const c02 = ctx.claim('C-02');

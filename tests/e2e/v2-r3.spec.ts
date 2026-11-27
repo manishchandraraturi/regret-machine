@@ -39,12 +39,19 @@ test.describe('V2 R3 Three.js showroom & fallback', () => {
 
       await page.getByRole('button', { name: 'Buy it' }).click();
       await page.getByRole('button', { name: 'Next' }).click();
-      await page.clock.runFor(22_200);
+      await page.clock.runFor(16_500);
+      await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
+      await page.clock.runFor(450);
+      await page.screenshot({ path: `evidence/V2-r4/lecture-reveal-${vp.width}x${vp.height}.png` });
+      await page.clock.runFor(6_000);
       await page.getByRole('button', { name: 'Next' }).click();
       await page.clock.runFor(22_200);
       await page.clock.runFor(22_200);
       await page.getByRole('button', { name: 'Next' }).click();
       await page.clock.runFor(22_200);
+      await expect(page.locator('[data-screen="receipt"]')).toBeVisible();
+      await page.clock.runFor(1_500);
+      await page.screenshot({ path: `evidence/V2-r4/receipt-${vp.width}x${vp.height}.png` });
 
       await page.getByRole('button', { name: 'See the fair fight' }).click();
       await page.getByRole('button', { name: 'Next' }).click();

@@ -31,6 +31,7 @@ export function createBatteryScene(audio?: Audio): SceneFactory {
 
       let tasksSpawned = 0;
       let tasksDone = 0;
+      let lowAlerted = false;
       let phase: 'PLAY' | 'FAIL' | 'REVEAL' = 'PLAY';
       let finished = false;
 
@@ -112,6 +113,7 @@ export function createBatteryScene(audio?: Audio): SceneFactory {
 
         phase = 'REVEAL';
         wrap.dataset.phase = 'REVEAL';
+        ctx.setStageHint?.({ scenePhase: 'REVEAL', sceneAlert: true });
 
         const state = ctx.store.getState();
         const split = createSplitReveal({
@@ -150,7 +152,13 @@ export function createBatteryScene(audio?: Audio): SceneFactory {
         if (phase === 'PLAY') {
           const pct = Math.max(0, Math.round((1 - tMs / playMs) * 100));
           fill.style.setProperty('width', `${pct}%`);
-          if (pct <= 30) fill.classList.add('rm-battery-fill--low');
+          if (pct <= 30) {
+            fill.classList.add('rm-battery-fill--low');
+            if (!lowAlerted) {
+              lowAlerted = true;
+              ctx.setStageHint?.({ scenePhase: 'FAIL', sceneAlert: true });
+            }
+          }
 
           const targetSpawned = Math.min(totalTasks, Math.floor(tMs / 1600) + 1);
           while (tasksSpawned < targetSpawned) {

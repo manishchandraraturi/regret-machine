@@ -102,6 +102,7 @@ export function createCreatorScene(audio?: Audio): SceneFactory {
         audio?.buzz();
         phase = 'REVEAL';
         wrap.dataset.phase = 'REVEAL';
+        ctx.setStageHint?.({ scenePhase: 'REVEAL', sceneAlert: true });
 
         const state = ctx.store.getState();
         const c03 = ctx.claim('C-03');
@@ -152,6 +153,7 @@ export function createCreatorScene(audio?: Audio): SceneFactory {
           if (tMs >= 8000 && !stuttered) {
             stuttered = true;
             audio?.buzz();
+            ctx.setStageHint?.({ scenePhase: 'FAIL', sceneAlert: true });
             const msg = document.createElement('p');
             msg.className = 'rm-wifi-banner type-body';
             msg.dataset.testid = 'creator-stutter';

@@ -89,6 +89,9 @@ export function createPrivateScene(audio?: Audio): SceneFactory {
           audio?.chime();
         } else {
           audio?.buzz();
+          if (file.sensitive && choice === 'allow') {
+            ctx.setStageHint?.({ scenePhase: 'FAIL', sceneAlert: true });
+          }
         }
         statusEl.textContent = `${answered.size} / ${files.length}`;
 
@@ -115,6 +118,7 @@ export function createPrivateScene(audio?: Audio): SceneFactory {
         audio?.buzz();
         phase = 'REVEAL';
         wrap.dataset.phase = 'REVEAL';
+        ctx.setStageHint?.({ scenePhase: 'REVEAL', sceneAlert: true });
 
         const state = ctx.store.getState();
         const split = createSplitReveal({
