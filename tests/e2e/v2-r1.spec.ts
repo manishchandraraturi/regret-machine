@@ -58,18 +58,18 @@ test.describe('V2 R1 palette, layout fit & screen screenshots', () => {
       await assertScreenFit(page, 'flip1', vp.width);
       await page.screenshot({ path: `evidence/V2-r1/flip1-${vp.width}x${vp.height}.png` });
 
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       await expect(page.locator('[data-screen="lecture"]')).toBeVisible();
       await assertScreenFit(page, 'lecture-play', vp.width);
       await page.screenshot({ path: `evidence/V2-r1/lecture-play-${vp.width}x${vp.height}.png` });
 
       await page.clock.runFor(16_500);
-      await expect(page.locator('.rm-split')).toBeVisible();
+      await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
       await assertScreenFit(page, 'lecture-reveal', vp.width);
       await page.screenshot({ path: `evidence/V2-r1/lecture-reveal-${vp.width}x${vp.height}.png` });
 
       await page.clock.runFor(6_000);
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       await expect(page.locator('[data-screen="battery"]')).toBeVisible();
       await assertScreenFit(page, 'battery-play', vp.width);
       await page.screenshot({ path: `evidence/V2-r1/battery-play-${vp.width}x${vp.height}.png` });
@@ -80,7 +80,7 @@ test.describe('V2 R1 palette, layout fit & screen screenshots', () => {
       await page.screenshot({ path: `evidence/V2-r1/creator-play-${vp.width}x${vp.height}.png` });
       await page.clock.runFor(22_200);
 
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       await expect(page.locator('[data-screen="private"]')).toBeVisible();
       await assertScreenFit(page, 'private-play', vp.width);
       await page.screenshot({ path: `evidence/V2-r1/private-play-${vp.width}x${vp.height}.png` });

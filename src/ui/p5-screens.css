@@ -201,27 +201,11 @@
 }
 
 @media (min-width: 700px) {
-  .rm-receipt-wrap {
+  .rm-receipt-wrap.rm-receipt-u5 {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: start;
-    gap: clamp(10px, 1.6dvh, 20px) var(--s6);
-  }
-
-  .rm-receipt-wrap > h1 {
-    grid-column: 1 / -1;
-  }
-
-  .rm-receipt-wrap > .rm-tape {
-    grid-column: 1;
-    grid-row: 2 / span 3;
-    min-width: 260px;
-  }
-
-  .rm-receipt-wrap > p,
-  .rm-receipt-wrap > button {
-    grid-column: 2;
-    justify-self: start;
+    grid-template-columns: 1fr auto minmax(160px, 0.75fr);
+    align-items: center;
+    gap: var(--s4);
   }
 }
 

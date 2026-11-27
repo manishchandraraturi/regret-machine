@@ -3,6 +3,7 @@ import { computeRecommendation } from '../core/result';
 import type { Ctx, Screen } from '../core/types';
 import { shareOrDownloadCard } from '../engines/sharecard';
 import { createButton } from '../ui/components/button';
+import { ICON_PATHS, makeSvgIcon } from './scene-icons';
 
 export function createResultScreen(onReset: () => void): Screen {
   return {
@@ -13,7 +14,7 @@ export function createResultScreen(onReset: () => void): Screen {
       const rec = computeRecommendation(persona, state.results, getLadder(), getScenesConfig());
 
       const wrap = document.createElement('section');
-      wrap.className = 'rm-shelf skin-clear';
+      wrap.className = 'rm-shelf skin-clear rm-result-u5';
       wrap.dataset.screen = 'result';
 
       const heading = document.createElement('h1');
@@ -27,7 +28,7 @@ export function createResultScreen(onReset: () => void): Screen {
       card.className = 'rm-result-card';
 
       const cardTitle = document.createElement('h2');
-      cardTitle.className = 'type-title';
+      cardTitle.className = 'rm-result-name';
       cardTitle.textContent = rec.card[lang];
 
       const tier = document.createElement('p');
@@ -35,36 +36,48 @@ export function createResultScreen(onReset: () => void): Screen {
       tier.textContent = rec.tier[lang];
 
       const regret = document.createElement('p');
-      regret.className = 'type-body';
-      regret.textContent = `${ctx.t('receipt.total')}: ${rec.regret} / 100 (${ctx.t(
-        rec.labelKey,
-      )})`;
+      regret.className = 'type-title';
+      regret.textContent = `${rec.regret} / 100 · ${ctx.t(rec.labelKey)}`;
 
-      const why = document.createElement('p');
-      why.className = 'type-small';
-      why.textContent = `${ctx.t('result.why')} ${ctx.t(rec.whyKey)}`;
-
-      card.append(cardTitle, tier, regret, why);
+      card.append(cardTitle, tier, regret);
 
       const rightCol = document.createElement('div');
       rightCol.className = 'rm-shelf';
 
       const asksList = document.createElement('ul');
-      asksList.className = 'rm-ask-list';
+      asksList.className = 'rm-ask-list rm-ask-icons';
       for (const askKey of rec.asks) {
         const li = document.createElement('li');
-        li.textContent = ctx.t(askKey);
+        li.className = 'rm-ask-row';
+        li.append(makeSvgIcon(ICON_PATHS.check, 'rm-ff-icon'), document.createTextNode(ctx.t(askKey)));
         asksList.appendChild(li);
       }
 
-      const glossary = document.createElement('div');
-      glossary.className = 'rm-glossary';
+      const infoBtn = document.createElement('button');
+      infoBtn.type = 'button';
+      infoBtn.className = 'rm-info-btn';
+      infoBtn.setAttribute('aria-label', ctx.t('reveal.details'));
+      infoBtn.textContent = 'i';
+
+      const dialog = document.createElement('dialog');
+      dialog.className = 'rm-claim-sheet';
+      const why = document.createElement('p');
+      why.className = 'type-body';
+      why.textContent = `${ctx.t('result.why')} ${ctx.t(rec.whyKey)}`;
+      dialog.appendChild(why);
       for (const gk of ['glossary.npu', 'glossary.tops', 'glossary.gpu']) {
         const gp = document.createElement('p');
         gp.className = 'type-small';
         gp.textContent = ctx.t(gk);
-        glossary.appendChild(gp);
+        dialog.appendChild(gp);
       }
+      dialog.appendChild(
+        createButton({ label: ctx.t('btn.close'), variant: 'secondary', onClick: () => dialog.close() }),
+      );
+      infoBtn.addEventListener('click', () => {
+        if (typeof dialog.showModal === 'function') dialog.showModal();
+        else dialog.setAttribute('open', 'true');
+      });
 
       const actions = document.createElement('div');
       actions.className = 'rm-controls';
@@ -77,23 +90,16 @@ export function createResultScreen(onReset: () => void): Screen {
               regretScore: rec.regret,
               regretLabel: ctx.t(rec.labelKey),
               tierLine: rec.tier[lang],
-              footerLine: ctx.t('footer.unofficial'),
+              footerLine: ctx.t('receipt.small'),
             });
           },
         }),
-        createButton({
-          label: ctx.t('btn.staff'),
-          variant: 'secondary',
-          onClick: () => ctx.go('staff'),
-        }),
-        createButton({
-          label: ctx.t('btn.again'),
-          variant: 'secondary',
-          onClick: onReset,
-        }),
+        createButton({ label: ctx.t('btn.staff'), variant: 'secondary', onClick: () => ctx.go('staff') }),
+        createButton({ label: ctx.t('btn.again'), variant: 'secondary', onClick: onReset }),
+        infoBtn,
       );
 
-      rightCol.append(asksList, glossary, actions);
+      rightCol.append(asksList, actions, dialog);
       grid.append(card, rightCol);
 
       const footer = document.createElement('footer');

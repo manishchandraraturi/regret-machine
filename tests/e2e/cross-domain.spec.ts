@@ -91,12 +91,12 @@ test.describe('Cross-domain verification', () => {
     await page.getByRole('button', { name: /Zesta Glow/ }).click();
     await page.getByRole('button', { name: 'Study', exact: true }).click();
     await page.getByRole('button', { name: 'Buy it' }).click();
-    await page.getByRole('button', { name: 'Next' }).click();
+    await page.keyboard.press('Space');
 
     await expect(page.locator('[data-screen="lecture"]')).toBeVisible();
     await assertNoHorizontalOverflow(page, 'lecture');
     await page.clock.runFor(22_200);
-    await page.getByRole('button', { name: 'Next' }).click();
+    await page.keyboard.press('Space');
 
     await expect(page.locator('[data-screen="battery"]')).toBeVisible();
     await assertNoHorizontalOverflow(page, 'battery');
@@ -105,7 +105,7 @@ test.describe('Cross-domain verification', () => {
     await expect(page.locator('[data-screen="creator"]')).toBeVisible();
     await assertNoHorizontalOverflow(page, 'creator');
     await page.clock.runFor(22_200);
-    await page.getByRole('button', { name: 'Next' }).click();
+    await page.keyboard.press('Space');
 
     await expect(page.locator('[data-screen="private"]')).toBeVisible();
     await assertNoHorizontalOverflow(page, 'private');
@@ -147,12 +147,12 @@ test.describe('Cross-domain verification', () => {
     await page.keyboard.press('1');
     await tabToAndPress(page, 'Study');
     await tabToAndPress(page, 'Buy it');
-    await tabToAndPress(page, 'Next');
+    await page.keyboard.press('Space');
     await page.clock.runFor(22_200);
-    await tabToAndPress(page, 'Next');
+    await page.keyboard.press('Space');
     await page.clock.runFor(22_200);
     await page.clock.runFor(22_200);
-    await tabToAndPress(page, 'Next');
+    await page.keyboard.press('Space');
     await page.clock.runFor(22_200);
     await tabToAndPress(page, 'See the fair fight');
     await tabToAndPress(page, 'Next');
@@ -165,12 +165,12 @@ test.describe('Cross-domain verification', () => {
     await page.getByRole('button', { name: /Zesta Glow/ }).click();
     await page.getByRole('button', { name: 'Create', exact: true }).click();
     await page.getByRole('button', { name: 'Buy it' }).click();
-    await page.getByRole('button', { name: 'Next' }).click();
+    await page.keyboard.press('Space');
     await page.clock.runFor(22_200);
-    await page.getByRole('button', { name: 'Next' }).click();
+    await page.keyboard.press('Space');
     await page.clock.runFor(22_200);
     await page.clock.runFor(22_200);
-    await page.getByRole('button', { name: 'Next' }).click();
+    await page.keyboard.press('Space');
     await page.clock.runFor(22_200);
     await page.getByRole('button', { name: 'See the fair fight' }).click();
     await page.getByRole('button', { name: 'Next' }).click();

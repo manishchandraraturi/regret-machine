@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { attachCspGuard } from './csp';
-import { gotoLite } from './helpers';
+import { gotoLite, runClockUntilVisible } from './helpers';
 
 const VIEWPORTS = [
   { name: 'desktop', width: 1920, height: 1080 },
@@ -28,7 +28,7 @@ test.describe('P7 Lecture hall (on-device AI) = CUT LINE 2', () => {
       await page.getByRole('button', { name: /Zesta Glow/ }).click();
       await page.getByRole('button', { name: 'Study', exact: true }).click();
       await page.getByRole('button', { name: 'Buy it' }).click();
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
 
       await expect(page.locator('[data-screen="lecture"]')).toBeVisible();
       await page.clock.runFor(2_000);
@@ -48,9 +48,11 @@ test.describe('P7 Lecture hall (on-device AI) = CUT LINE 2', () => {
 
       await page.clock.runFor(7_000);
       await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
-      await expect(page.getByTestId('npu-gloss')).toBeVisible();
       await expect(page.locator('[data-phase="REVEAL"]')).toContainText('Illustration');
       await expect(page.locator('[data-phase="REVEAL"]')).toContainText('Intel-claimed, up to');
+      await page.getByRole('button', { name: 'Details' }).click();
+      await expect(page.locator('.rm-claim-sheet')).toContainText('NPU:');
+      await page.getByRole('button', { name: 'Close' }).click();
       await page.screenshot({ path: `evidence/P7/reveal-${vp.width}x${vp.height}.png` });
 
       const axeReveal = await new AxeBuilder({ page }).analyze();
@@ -60,8 +62,8 @@ test.describe('P7 Lecture hall (on-device AI) = CUT LINE 2', () => {
       );
       expect(axeReveal.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')).toEqual([]);
 
-      // Auto-completes at 22s total -> moves to flip2
-      await page.clock.runFor(6_000);
+      // Auto-completes at 22s total -> moves to flip2 (which auto-advances in 1.6s)
+      await runClockUntilVisible(page, '[data-screen="flip"]', 8_000, 250);
       await expect(page.locator('[data-screen="flip"]')).toBeVisible();
 
       // Hindi reveal screenshot
@@ -70,7 +72,7 @@ test.describe('P7 Lecture hall (on-device AI) = CUT LINE 2', () => {
       await page.getByRole('button', { name: /Zesta Glow/ }).click();
       await page.getByRole('button', { name: 'पढ़ाई', exact: true }).click();
       await page.getByRole('button', { name: 'खरीद लो' }).click();
-      await page.getByRole('button', { name: 'आगे' }).click();
+      await page.keyboard.press('Space');
       await page.clock.runFor(16_500);
       await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
       await page.screenshot({ path: `evidence/P7/reveal-hi-${vp.width}x${vp.height}.png` });

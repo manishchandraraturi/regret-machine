@@ -28,35 +28,30 @@ export function createReceiptScreen(audio: Audio): Screen {
       }
 
       const wrap = document.createElement('section');
-      wrap.className = 'rm-receipt-wrap';
+      wrap.className = 'rm-receipt-wrap rm-receipt-u5';
       wrap.dataset.screen = 'receipt';
+
+      const leftCol = document.createElement('div');
+      leftCol.className = 'rm-receipt-left';
 
       const heading = document.createElement('h1');
       heading.className = 'type-title';
       heading.textContent = ctx.t('receipt.title');
 
-      const tape = createTape(ctx.t('receipt.title'));
-      const timers: number[] = [];
+      const scoreNum = document.createElement('p');
+      scoreNum.className = 'rm-receipt-big-score';
+      scoreNum.textContent = `${prefersReducedMotion() ? breakdown.regret : 0} / 100`;
 
-      if (prefersReducedMotion()) {
-        for (const pl of printLines) {
-          tape.addLine(pl);
-        }
-      } else {
-        printLines.forEach((pl, idx) => {
-          const id = window.setTimeout(() => {
-            audio.tick();
-            tape.addLine(pl);
-          }, idx * 350);
-          timers.push(id);
-        });
-      }
+      const meter = document.createElement('div');
+      meter.className = 'rm-receipt-meter';
+      const meterFill = document.createElement('div');
+      meterFill.className = 'rm-receipt-meter-fill';
+      meterFill.style.setProperty('transform', `scaleX(${(breakdown.regret / 100).toFixed(2)})`);
+      meter.appendChild(meterFill);
 
-      const scoreEl = document.createElement('p');
-      scoreEl.className = 'type-title';
-      scoreEl.textContent = `${ctx.t('receipt.total')}: ${breakdown.regret} / 100 — ${ctx.t(
-        breakdown.labelKey,
-      )}`;
+      const labelEl = document.createElement('p');
+      labelEl.className = 'type-title rm-receipt-label';
+      labelEl.textContent = ctx.t(breakdown.labelKey);
 
       const small = document.createElement('p');
       small.className = 'type-small';
@@ -67,17 +62,43 @@ export function createReceiptScreen(audio: Audio): Screen {
         onClick: () => ctx.go('fairfight'),
       });
 
+      leftCol.append(heading, scoreNum, meter, labelEl, small, cta);
+
+      const tape = createTape(ctx.t('receipt.title'));
+      const timers: number[] = [];
+      let rafId = 0;
+
+      if (prefersReducedMotion()) {
+        for (const pl of printLines) tape.addLine(pl);
+      } else {
+        const start = performance.now();
+        const countStep = (now: number): void => {
+          const p = Math.min(1, (now - start) / 900);
+          scoreNum.textContent = `${Math.round(breakdown.regret * p)} / 100`;
+          if (p < 1) rafId = window.requestAnimationFrame(countStep);
+        };
+        rafId = window.requestAnimationFrame(countStep);
+
+        printLines.forEach((pl, idx) => {
+          timers.push(
+            window.setTimeout(() => {
+              audio.tick();
+              tape.addLine(pl);
+            }, idx * 350),
+          );
+        });
+      }
+
       const stageWin = document.createElement('div');
       stageWin.className = 'stage-window';
       stageWin.setAttribute('aria-hidden', 'true');
 
-      wrap.append(heading, tape.element, scoreEl, small, cta, stageWin);
+      wrap.append(leftCol, tape.element, stageWin);
       root.replaceChildren(wrap);
 
       return () => {
-        for (const id of timers) {
-          window.clearTimeout(id);
-        }
+        window.cancelAnimationFrame(rafId);
+        for (const id of timers) window.clearTimeout(id);
       };
     },
   };

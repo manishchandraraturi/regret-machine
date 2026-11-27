@@ -31,8 +31,6 @@ test.describe('P13 Neo-Brutalist overhaul, juice & Clear-skin fix', () => {
 
       await gotoLite(page, '/');
       await expect(page.locator('[data-screen="attract"]')).toBeVisible();
-      const pattern = await page.locator('.rm-shell').evaluate((el) => getComputedStyle(el).backgroundImage);
-      expect(pattern).toContain('radial-gradient');
       await page.screenshot({ path: `evidence/P13/attract-${vp.width}x${vp.height}.png` });
 
       await page.getByRole('button', { name: 'Pick your laptop' }).click();
@@ -46,12 +44,12 @@ test.describe('P13 Neo-Brutalist overhaul, juice & Clear-skin fix', () => {
       await page.screenshot({ path: `evidence/P13/shelf-${vp.width}x${vp.height}.png` });
 
       await page.locator('.rm-btn--buy').click();
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       await page.clock.runFor(22_200);
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       await page.clock.runFor(22_200);
       await page.clock.runFor(22_200);
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       await page.clock.runFor(22_200);
 
       await page.getByRole('button', { name: 'See the fair fight' }).click();

@@ -76,12 +76,16 @@ test.describe('V2 R3 Three.js showroom & fallback', () => {
       await runClockUntilVisible(page, '[data-screen="receipt"]', 26_000);
       await expect(page.locator('[data-screen="receipt"]')).toBeVisible();
       await page.clock.runFor(1_500);
+      await page.screenshot({ path: `evidence/U6/receipt-${vp.width}x${vp.height}.png` });
 
       await page.getByRole('button', { name: 'See the fair fight' }).click();
+      await expect(page.locator('[data-screen="fairfight"]')).toBeVisible();
+      await page.clock.runFor(450);
+      await page.screenshot({ path: `evidence/U6/fairfight-${vp.width}x${vp.height}.png` });
       await page.getByRole('button', { name: 'Next' }).click();
       await expect(page.locator('[data-screen="result"]')).toBeVisible();
       await page.clock.runFor(450);
-      await page.screenshot({ path: `evidence/V2-r3/result-${vp.width}x${vp.height}.png` });
+      await page.screenshot({ path: `evidence/U6/result-${vp.width}x${vp.height}.png` });
 
       if (vp.width === 1920) {
         const axeRes = await new AxeBuilder({ page }).analyze();

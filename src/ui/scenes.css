@@ -67,3 +67,17 @@
 .rm-info-btn { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--clear-blue); background: var(--studio-white); color: var(--clear-blue); font-weight: 900; cursor: pointer; }
 .rm-reveal-foot { display: flex; align-items: center; gap: var(--s3); }
 .rm-split-illustration-pill { padding: 2px var(--s2); border-radius: var(--s1); background: var(--paper-white); color: var(--ink-black); font-size: 13px; font-weight: 700; }
+
+/* U5 Receipt, Fair Fight, Result */
+.rm-receipt-u5 { display: grid; grid-template-columns: 1fr auto minmax(160px, 0.75fr); gap: var(--s4); align-items: center; }
+@media (max-width: 699px) { .rm-receipt-u5 { grid-template-columns: 1fr; } }
+.rm-receipt-left { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s3); }
+.rm-receipt-big-score { margin: 0; font-family: var(--font-display); font-size: clamp(40px, 6vw, 84px); font-weight: 900; line-height: 1; }
+.rm-receipt-meter { width: min(340px, 100%); height: 14px; border-radius: var(--r-btn); background: color-mix(in oklab, var(--paper-white) 18%, transparent); overflow: hidden; }
+.rm-receipt-meter-fill { width: 100%; height: 100%; background: linear-gradient(90deg, var(--spot-warm), var(--stock-red)); transform-origin: left center; transition: transform 800ms var(--ease); }
+.rm-ff-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); }
+.rm-ff-cell { display: inline-flex; align-items: center; gap: var(--s2); font-weight: 600; }
+.rm-ff-icon { width: 20px; height: 20px; color: var(--clear-blue); flex-shrink: 0; }
+.rm-result-name { margin: 0; font-family: var(--font-display); font-size: clamp(32px, 4.4vw, 62px); font-weight: 900; line-height: 1.02; background: linear-gradient(125deg, var(--clear-blue), var(--grad-cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.rm-ask-icons { list-style: none; padding-left: 0; display: flex; flex-direction: column; gap: var(--s2); }
+.rm-ask-row { display: flex; align-items: center; gap: var(--s2); padding: var(--s2) var(--s3); border-radius: var(--s2); background: var(--studio-white); border: 1px solid color-mix(in oklab, var(--clear-blue) 22%, transparent); }

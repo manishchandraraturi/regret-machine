@@ -43,16 +43,16 @@ test.describe('P11 Hardening: timing, keyboard-only, 390x844 screenshots, axe', 
     await page.getByRole('button', { name: 'Buy it' }).click();
 
     await page.clock.runFor(1_200);
-    await page.getByRole('button', { name: 'Next' }).click();
+    await page.keyboard.press('Space');
     await page.clock.runFor(22_200);
 
     await page.clock.runFor(1_200);
-    await page.getByRole('button', { name: 'Next' }).click();
+    await page.keyboard.press('Space');
     await page.clock.runFor(22_200);
     await page.clock.runFor(22_200);
 
     await page.clock.runFor(1_200);
-    await page.getByRole('button', { name: 'Next' }).click();
+    await page.keyboard.press('Space');
     await page.clock.runFor(22_200);
 
     await expect(page.locator('[data-screen="receipt"]')).toBeVisible();
@@ -98,12 +98,15 @@ test.describe('P11 Hardening: timing, keyboard-only, 390x844 screenshots, axe', 
     await tabToAndPress(page, 'Buy it');
 
     // Flip1 -> Lecture -> Flip2 -> Battery -> Creator -> Flip3 -> Private -> Receipt
-    await tabToAndPress(page, 'Next');
+    await expect(page.locator('[data-screen="flip"]')).toBeVisible();
+    await page.keyboard.press('Space');
     await page.clock.runFor(22_200);
-    await tabToAndPress(page, 'Next');
+    await expect(page.locator('[data-screen="flip"]')).toBeVisible();
+    await page.keyboard.press('Space');
     await page.clock.runFor(22_200);
     await page.clock.runFor(22_200);
-    await tabToAndPress(page, 'Next');
+    await expect(page.locator('[data-screen="flip"]')).toBeVisible();
+    await page.keyboard.press('Space');
     await page.clock.runFor(22_200);
 
     await expect(page.locator('[data-screen="receipt"]')).toBeVisible();
@@ -143,16 +146,16 @@ test.describe('P11 Hardening: timing, keyboard-only, 390x844 screenshots, axe', 
       await page.getByRole('button', { name: /Zesta Glow/ }).click();
       await page.getByRole('button', { name: p.label, exact: true }).click();
       await page.getByRole('button', { name: 'Buy it' }).click();
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
 
       if (p.id === 'study') await page.screenshot({ path: 'evidence/P11/lecture-390x844.png' });
       await page.clock.runFor(22_200);
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       if (p.id === 'study') await page.screenshot({ path: 'evidence/P11/battery-390x844.png' });
       await page.clock.runFor(22_200);
       if (p.id === 'study') await page.screenshot({ path: 'evidence/P11/creator-390x844.png' });
       await page.clock.runFor(22_200);
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       if (p.id === 'study') await page.screenshot({ path: 'evidence/P11/private-390x844.png' });
       await page.clock.runFor(22_200);
 

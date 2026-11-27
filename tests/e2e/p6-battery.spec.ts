@@ -29,11 +29,11 @@ test.describe('P6 Long day (battery)', () => {
       await page.getByRole('button', { name: 'Study', exact: true }).click();
       await page.getByRole('button', { name: 'Buy it' }).click();
 
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       await expect(page.locator('[data-screen="lecture"]')).toBeVisible();
       await page.clock.runFor(16_500);
-      await page.getByRole('button', { name: 'Next' }).click();
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
+      await page.keyboard.press('Space');
 
       await expect(page.locator('[data-screen="battery"]')).toBeVisible();
       await page.clock.runFor(3_500);
@@ -49,9 +49,6 @@ test.describe('P6 Long day (battery)', () => {
 
       await runClockUntilVisible(page, '[data-phase="REVEAL"]', 16_000);
       await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
-      await page.locator('.rm-fail-banner').screenshot({
-        path: `evidence/P6/fail-${vp.width}x${vp.height}.png`,
-      });
       await expect(page.locator('[data-phase="REVEAL"]')).toContainText('Illustration');
       await expect(page.locator('[data-phase="REVEAL"]')).toContainText('Intel-claimed, up to');
       await page.screenshot({ path: `evidence/P6/reveal-${vp.width}x${vp.height}.png` });
@@ -70,11 +67,11 @@ test.describe('P6 Long day (battery)', () => {
       // Finish remaining scenes to Receipt and verify 2 battery lines
       await expect(page.locator('[data-screen="creator"]')).toBeVisible();
       await page.clock.runFor(16_500);
-      await page.getByRole('button', { name: 'Next' }).click();
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
+      await page.keyboard.press('Space');
       await expect(page.locator('[data-screen="private"]')).toBeVisible();
       await page.clock.runFor(16_500);
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       await expect(page.locator('[data-screen="receipt"]')).toBeVisible();
       await page.clock.runFor(2_500);
       await expect(page.locator('.rm-tape')).toContainText('Dead battery at 2:30 pm');
@@ -86,10 +83,10 @@ test.describe('P6 Long day (battery)', () => {
       await page.getByRole('button', { name: /Zesta Glow/ }).click();
       await page.getByRole('button', { name: 'पढ़ाई', exact: true }).click();
       await page.getByRole('button', { name: 'खरीद लो' }).click();
-      await page.getByRole('button', { name: 'आगे' }).click();
+      await page.keyboard.press('Space');
       await page.clock.runFor(16_500);
-      await page.getByRole('button', { name: 'आगे' }).click();
-      await page.getByRole('button', { name: 'आगे' }).click();
+      await page.keyboard.press('Space');
+      await page.keyboard.press('Space');
       await page.clock.runFor(16_500);
       await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
       await page.screenshot({ path: `evidence/P6/reveal-hi-${vp.width}x${vp.height}.png` });

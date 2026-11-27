@@ -32,6 +32,7 @@ export function createLectureScene(audio?: Audio): SceneFactory {
 
       const dotsWrap = document.createElement('div');
       dotsWrap.className = 'rm-dots';
+      dotsWrap.setAttribute('role', 'status');
       dotsWrap.setAttribute('aria-label', `0 / ${notesTotal}`);
       const dots: HTMLElement[] = [];
       for (let i = 0; i < notesTotal; i += 1) {

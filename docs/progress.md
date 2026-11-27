@@ -34,6 +34,7 @@
 | R3 | DONE | v2-r3 | Lazy 3D wiring into Attract, Shelf, Result + software-GL fallback optimization + `?lite=1` e2e helper + `v2-r3` e2e (46/46 green) |
 | R4 | DONE | v2-r4 | Wired `ctx.setStageHint` in all 4 scenes (`lecture`, `battery`, `creator`, `private`) for 3D fail/alert/stutter/reveal dual-laptop showcase + `evidence/V2-r4/` |
 | R5 | DONE | v2-r5 | Added README Demo build section (`npm run build; npm run preview`, `?lite=1` fallback), final full gate green on `redesign-v2` |
+| U1-U6 | DONE | v3-u1, v3-u3, v3-u6 | Bundle U UX + Visual Rebuild: removed DOM crack/filter, `.stage-window` + `setViewOffset`, `?perf=1` + DPR cap + 30fps static + hidden pause, 4 one-tap visual scenes, 1-word Reveal + `"i"` sheet, simplified Receipt/Fair Fight/Result, `@fontsource-variable/unbounded` (Latin; Hindi keys marked for native review) |
 
 ## SPEC GAP log
 - `SPEC GAP: SRC-23 - human WhatsApp/registration not evidenced in repo - agent cannot perform it`

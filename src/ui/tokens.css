@@ -15,6 +15,8 @@
   --studio-white: #ffffff;
   --clear-blue: #0b63f6;
   --clear-ink: #0a1530;
+  --grad-coral: #ff7a59;
+  --grad-cyan: #00c2ff;
 
   /* semantic & compatibility aliases (zero hex in components) */
   --sale-yellow: var(--spot-warm);
@@ -72,7 +74,7 @@
   --stage-h: 1080;
 
   /* typography */
-  --font-display: 'Archivo Variable', 'Archivo', sans-serif;
+  --font-display: 'Unbounded Variable', 'Archivo Variable', 'Archivo', sans-serif;
   --font-body: 'Mukta', sans-serif;
   --font-receipt: 'DM Mono', monospace;
 

@@ -30,12 +30,12 @@ test.describe('P9 Creator night (performance) = CUT LINE 3', () => {
       await page.getByRole('button', { name: 'Buy it' }).click();
 
       // flip1 -> lecture -> flip2 -> battery -> creator
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       await page.clock.runFor(16_500);
-      await page.getByRole('button', { name: 'Next' }).click();
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
+      await page.keyboard.press('Space');
       await page.clock.runFor(16_500);
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
 
       await expect(page.locator('[data-screen="creator"]')).toBeVisible();
       await page.getByTestId('creator-hold-btn').dispatchEvent('pointerdown');
@@ -55,11 +55,13 @@ test.describe('P9 Creator night (performance) = CUT LINE 3', () => {
 
       await runClockUntilVisible(page, '[data-phase="REVEAL"]', 12_000);
       await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
+      await expect(page.locator('[data-phase="REVEAL"]')).toContainText('Illustration');
+      await expect(page.locator('[data-phase="REVEAL"]')).toContainText('Intel-claimed, up to');
+      await page.getByRole('button', { name: 'Details' }).click();
       await expect(page.getByTestId('creator-baseline')).toContainText(
         'vs earlier-generation Intel chip, Intel-measured',
       );
-      await expect(page.locator('[data-phase="REVEAL"]')).toContainText('Illustration');
-      await expect(page.locator('[data-phase="REVEAL"]')).toContainText('Intel-claimed, up to');
+      await page.getByRole('button', { name: 'Close' }).click();
       await page.screenshot({ path: `evidence/P9/reveal-${vp.width}x${vp.height}.png` });
 
       const axeReveal = await new AxeBuilder({ page }).analyze();
@@ -72,9 +74,9 @@ test.describe('P9 Creator night (performance) = CUT LINE 3', () => {
       // Auto-completes at 22s -> flip3 -> private -> receipt
       await page.clock.runFor(6_000);
       await expect(page.locator('[data-screen="flip"]')).toBeVisible();
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       await page.clock.runFor(16_500);
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       await expect(page.locator('[data-screen="receipt"]')).toBeVisible();
       await page.clock.runFor(3_000);
 
@@ -90,12 +92,12 @@ test.describe('P9 Creator night (performance) = CUT LINE 3', () => {
       await page.getByRole('button', { name: /Zesta Glow/ }).click();
       await page.getByRole('button', { name: 'क्रिएट करना', exact: true }).click();
       await page.getByRole('button', { name: 'खरीद लो' }).click();
-      await page.getByRole('button', { name: 'आगे' }).click();
+      await page.keyboard.press('Space');
       await page.clock.runFor(16_500);
-      await page.getByRole('button', { name: 'आगे' }).click();
-      await page.getByRole('button', { name: 'आगे' }).click();
+      await page.keyboard.press('Space');
+      await page.keyboard.press('Space');
       await page.clock.runFor(16_500);
-      await page.getByRole('button', { name: 'आगे' }).click();
+      await page.keyboard.press('Space');
       await page.clock.runFor(16_500);
       await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
       await page.screenshot({ path: `evidence/P9/reveal-hi-${vp.width}x${vp.height}.png` });

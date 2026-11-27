@@ -77,19 +77,19 @@ test.describe('F1 Layout polish: centered stage, marquee fade, Attract hero', ()
       await page.screenshot({ path: `evidence/F1/shelf-${vp.width}x${vp.height}.png` });
 
       await page.getByRole('button', { name: 'Buy it' }).click();
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       await expect(page.locator('[data-screen="lecture"]')).toBeVisible();
       await page.screenshot({ path: `evidence/F1/lecture-play-${vp.width}x${vp.height}.png` });
 
       await page.clock.runFor(16_500);
-      await expect(page.locator('.rm-split')).toBeVisible();
+      await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
       await page.screenshot({ path: `evidence/F1/lecture-reveal-${vp.width}x${vp.height}.png` });
 
       await page.clock.runFor(6_000);
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       await page.clock.runFor(22_200);
       await page.clock.runFor(22_200);
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       await page.clock.runFor(22_200);
 
       await expect(page.locator('[data-screen="receipt"]')).toBeVisible();

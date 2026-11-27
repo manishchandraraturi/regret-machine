@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { attachCspGuard } from './csp';
-import { gotoLite } from './helpers';
+import { gotoLite, runClockUntilVisible } from './helpers';
 
 const VIEWPORTS = [
   { name: 'desktop', width: 1920, height: 1080 },
@@ -30,24 +30,21 @@ test.describe('P8 Private files (privacy)', () => {
       await page.getByRole('button', { name: 'Buy it' }).click();
 
       // Skip through flip1 -> lecture -> flip2 -> battery -> creator -> flip3 -> private
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       await page.clock.runFor(16_500);
-      await page.getByRole('button', { name: 'Next' }).click();
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
+      await page.keyboard.press('Space');
       await page.clock.runFor(16_500);
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
       await expect(page.locator('[data-screen="creator"]')).toBeVisible();
       await page.clock.runFor(16_500);
-      await page.getByRole('button', { name: 'Next' }).click();
-      await page.getByRole('button', { name: 'Next' }).click();
+      await page.keyboard.press('Space');
+      await page.keyboard.press('Space');
 
       await expect(page.locator('[data-screen="private"]')).toBeVisible();
-      await expect(page.getByTestId('upload-banner')).toBeVisible();
+      await expect(page.locator('[data-file-id="report"]')).toBeVisible();
       await page.getByRole('button', { name: 'Keep private' }).click();
       await page.screenshot({ path: `evidence/P8/play-${vp.width}x${vp.height}.png` });
-      await page.getByTestId('upload-banner').screenshot({
-        path: `evidence/P8/upload-banner-${vp.width}x${vp.height}.png`,
-      });
 
       const axePlay = await new AxeBuilder({ page }).analyze();
       console.log(
@@ -56,10 +53,12 @@ test.describe('P8 Private files (privacy)', () => {
       );
       expect(axePlay.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')).toEqual([]);
 
-      await page.clock.runFor(16_500);
+      await runClockUntilVisible(page, '[data-phase="REVEAL"]', 16_500);
       await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
-      await expect(page.locator('[data-phase="REVEAL"]')).toContainText('can run on your laptop');
       await expect(page.locator('[data-phase="REVEAL"]')).toContainText('Illustration');
+      await page.getByRole('button', { name: 'Details' }).click();
+      await expect(page.locator('.rm-claim-sheet')).toContainText('can run on your laptop');
+      await page.getByRole('button', { name: 'Close' }).click();
       await page.screenshot({ path: `evidence/P8/reveal-${vp.width}x${vp.height}.png` });
 
       const axeReveal = await new AxeBuilder({ page }).analyze();
@@ -81,17 +80,17 @@ test.describe('P8 Private files (privacy)', () => {
       await page.getByRole('button', { name: /Zesta Glow/ }).click();
       await page.getByRole('button', { name: 'काम और साइड हसल', exact: true }).click();
       await page.getByRole('button', { name: 'खरीद लो' }).click();
-      await page.getByRole('button', { name: 'आगे' }).click();
+      await page.keyboard.press('Space');
       await page.clock.runFor(16_500);
-      await page.getByRole('button', { name: 'आगे' }).click();
-      await page.getByRole('button', { name: 'आगे' }).click();
+      await page.keyboard.press('Space');
+      await page.keyboard.press('Space');
       await page.clock.runFor(16_500);
-      await page.getByRole('button', { name: 'आगे' }).click();
+      await page.keyboard.press('Space');
       await expect(page.locator('[data-screen="creator"]')).toBeVisible();
       await page.clock.runFor(16_500);
-      await page.getByRole('button', { name: 'आगे' }).click();
-      await page.getByRole('button', { name: 'आगे' }).click();
-      await page.clock.runFor(16_500);
+      await page.keyboard.press('Space');
+      await page.keyboard.press('Space');
+      await runClockUntilVisible(page, '[data-phase="REVEAL"]', 16_500);
       await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
       await page.screenshot({ path: `evidence/P8/reveal-hi-${vp.width}x${vp.height}.png` });
 

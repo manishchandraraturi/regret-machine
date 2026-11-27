@@ -44,13 +44,16 @@ export function createRevealView(props: RevealViewProps): { element: HTMLElement
   rightVal.append(makeSvgIcon(ICON_PATHS[props.rightIcon], 'rm-reveal-icon'), document.createTextNode(props.rightWord));
   right.append(rightLabel, rightVal);
 
-  if (claim) {
+  if (claim || props.extraNote) {
     const pillRow = document.createElement('div');
     pillRow.className = 'rm-pill-row';
-    const pill = document.createElement('span');
-    pill.className = 'rm-claim-pill';
-    const unconf = claim.status === 'UNVERIFIED' ? ` (${ctx.t('reveal.unconfirmed')})` : '';
-    pill.textContent = `${ctx.t(`tag.${claim.tag}`)}${unconf}`;
+    if (claim) {
+      const pill = document.createElement('span');
+      pill.className = 'rm-claim-pill';
+      const unconf = claim.status === 'UNVERIFIED' ? ` (${ctx.t('reveal.unconfirmed')})` : '';
+      pill.textContent = `${ctx.t(`tag.${claim.tag}`)}${unconf}`;
+      pillRow.appendChild(pill);
+    }
 
     const infoBtn = document.createElement('button');
     infoBtn.type = 'button';
@@ -60,12 +63,22 @@ export function createRevealView(props: RevealViewProps): { element: HTMLElement
 
     const dialog = document.createElement('dialog');
     dialog.className = 'rm-claim-sheet';
-    const body = document.createElement('p');
-    body.className = 'type-body';
-    body.textContent = `${claim.text[lang]} (${ctx.t(`tag.${claim.tag}`)})`;
-    const base = document.createElement('p');
-    base.className = 'type-small';
-    base.textContent = `${claim.baseline} · ${claim.source_name}`;
+    if (claim) {
+      const body = document.createElement('p');
+      body.className = 'type-body';
+      body.textContent = `${claim.text[lang]} (${ctx.t(`tag.${claim.tag}`)})`;
+      const base = document.createElement('p');
+      base.className = 'type-small';
+      base.textContent = `${claim.baseline} · ${claim.source_name}`;
+      dialog.append(body, base);
+    }
+    if (props.extraNote) {
+      const extra = document.createElement('p');
+      extra.className = 'type-small';
+      extra.dataset.testid = 'creator-baseline';
+      extra.textContent = props.extraNote;
+      dialog.appendChild(extra);
+    }
     const gloss = document.createElement('p');
     gloss.className = 'type-small';
     gloss.textContent = ctx.t('glossary.npu');
@@ -74,21 +87,14 @@ export function createRevealView(props: RevealViewProps): { element: HTMLElement
       variant: 'secondary',
       onClick: () => dialog.close(),
     });
-    dialog.append(body, base, gloss, closeBtn);
-    if (props.extraNote) {
-      const extra = document.createElement('p');
-      extra.className = 'type-small';
-      extra.dataset.testid = 'creator-baseline';
-      extra.textContent = props.extraNote;
-      dialog.insertBefore(extra, gloss);
-    }
+    dialog.append(gloss, closeBtn);
 
     infoBtn.addEventListener('click', () => {
       if (typeof dialog.showModal === 'function') dialog.showModal();
       else dialog.setAttribute('open', 'true');
     });
 
-    pillRow.append(pill, infoBtn, dialog);
+    pillRow.append(infoBtn, dialog);
     right.appendChild(pillRow);
   }
 
