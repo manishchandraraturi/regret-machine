@@ -2,10 +2,7 @@ import { getScenesConfig } from '../core/data';
 import { scoreCreator } from '../core/scoring';
 import type { Audio, Ctx, SceneResult } from '../core/types';
 import { createLoop } from '../engines/loop';
-import { createButton } from '../ui/components/button';
-import { createClaimChip } from '../ui/components/claimchip';
-import { createSplitReveal } from '../ui/components/splitreveal';
-import { createRevealControls } from './reveal-controls';
+import { createRevealView } from './reveal-view';
 import type { SceneFactory } from './scenes';
 
 export function stepCreatorFill(
@@ -41,31 +38,29 @@ export function createCreatorScene(audio?: Audio): SceneFactory {
       wrap.className = 'rm-scene-play';
       wrap.dataset.phase = 'PLAY';
 
-      const hud = document.createElement('div');
-      hud.className = 'rm-scene-hud';
+      const center = document.createElement('div');
+      center.className = 'rm-export-wrap';
+
+      const holdBtn = document.createElement('button');
+      holdBtn.type = 'button';
+      holdBtn.className = 'rm-export-btn';
+      holdBtn.dataset.testid = 'creator-hold-btn';
 
       const pctEl = document.createElement('span');
-      pctEl.className = 'type-body';
+      pctEl.className = 'rm-export-pct';
       pctEl.dataset.testid = 'creator-fill';
       pctEl.textContent = '0%';
-      hud.appendChild(pctEl);
 
-      const bar = document.createElement('div');
-      bar.className = 'rm-battery-bar';
-      const fill = document.createElement('div');
-      fill.className = 'rm-battery-fill';
-      fill.style.setProperty('width', '0%');
-      bar.appendChild(fill);
+      const labelEl = document.createElement('span');
+      labelEl.className = 'rm-export-label';
+      labelEl.textContent = ctx.t('scene.creator.export');
 
-      const stutterSlot = document.createElement('div');
-      const holdBtn = createButton({
-        label: ctx.t('scene.creator.hint'),
-        onClick: () => {},
-      });
-      holdBtn.dataset.testid = 'creator-hold-btn';
+      holdBtn.append(pctEl, labelEl);
+      center.appendChild(holdBtn);
 
       const setHeld = (val: boolean): void => {
         held = val;
+        holdBtn.classList.toggle('rm-export-btn--held', val);
       };
       holdBtn.addEventListener('pointerdown', () => setHeld(true));
       holdBtn.addEventListener('pointerup', () => setHeld(false));
@@ -81,7 +76,7 @@ export function createCreatorScene(audio?: Audio): SceneFactory {
       window.addEventListener('keyup', onKeyUp);
 
       const revealHost = document.createElement('div');
-      wrap.append(hud, bar, stutterSlot, holdBtn, revealHost);
+      wrap.append(center, revealHost);
       playArea.replaceChildren(wrap);
 
       const completeScene = (): void => {
@@ -100,51 +95,24 @@ export function createCreatorScene(audio?: Audio): SceneFactory {
 
       const enterReveal = (): void => {
         if (phase === 'REVEAL') return;
-        phase = 'FAIL';
-        wrap.dataset.phase = 'FAIL';
-        audio?.buzz();
         phase = 'REVEAL';
         wrap.dataset.phase = 'REVEAL';
+        audio?.buzz();
         ctx.setStageHint?.({ scenePhase: 'REVEAL', sceneAlert: true });
 
-        const state = ctx.store.getState();
-        const c03 = ctx.claim('C-03');
-        const split = createSplitReveal({
-          decay: state.decay,
-          leftTitle: ctx.t('reveal.left'),
-          leftBody: ctx.t('scene.creator.fail'),
-          rightTitle: ctx.t('reveal.right'),
-          rightBody: ctx.t('scene.creator.win'),
-          claimText: `${c03.text[state.lang]} (${ctx.t(`tag.${c03.tag}`)})`,
+        const rv = createRevealView({
+          ctx,
+          leftWord: ctx.t('reveal.creator.left'),
+          rightWord: ctx.t('reveal.creator.right'),
+          leftIcon: 'cross',
+          rightIcon: 'check',
+          claim: ctx.claim('C-03'),
+          extraNote: ctx.t('scene.creator.baseline'),
+          onComplete: completeScene,
         });
-
-        const baselineEl = document.createElement('p');
-        baselineEl.className = 'type-small';
-        baselineEl.dataset.testid = 'creator-baseline';
-        baselineEl.textContent = ctx.t('scene.creator.baseline');
-
-        const claimsRow = document.createElement('div');
-        claimsRow.className = 'rm-claims-row';
-        const seenClaims = new Set<string>();
-        for (const cid of ['C-03', 'C-04']) {
-          if (seenClaims.has(cid)) continue;
-          seenClaims.add(cid);
-          const c = ctx.claim(cid);
-          claimsRow.appendChild(
-            createClaimChip({
-              claim: c,
-              tagLabel: ctx.t(`tag.${c.tag}`),
-              closeLabel: ctx.t('btn.close'),
-            }),
-          );
-        }
-
-        const revealCtrl = createRevealControls(ctx, completeScene);
-        cleanupReveal = revealCtrl.cleanup;
-
-        stutterSlot.replaceChildren();
-        holdBtn.remove();
-        revealHost.replaceChildren(split, baselineEl, claimsRow, revealCtrl.element);
+        cleanupReveal = rv.cleanup;
+        center.replaceChildren();
+        revealHost.replaceChildren(rv.element);
       };
 
       const loop = createLoop();
@@ -153,22 +121,16 @@ export function createCreatorScene(audio?: Audio): SceneFactory {
           fillPct = stepCreatorFill(fillPct, held, tMs, dtMs);
           const rounded = Math.round(fillPct);
           pctEl.textContent = `${rounded}%`;
-          fill.style.setProperty('width', `${rounded}%`);
+          holdBtn.style.setProperty('--ring-deg', `${Math.round(rounded * 3.6)}deg`);
 
           if (tMs >= 8000 && !stuttered) {
             stuttered = true;
             audio?.buzz();
             ctx.setStageHint?.({ scenePhase: 'FAIL', sceneAlert: true });
-            const msg = document.createElement('p');
-            msg.className = 'rm-wifi-banner type-body';
-            msg.dataset.testid = 'creator-stutter';
-            msg.textContent = ctx.t('scene.creator.fail');
-            stutterSlot.replaceChildren(msg);
+            holdBtn.classList.add('rm-export-btn--stutter');
+            holdBtn.dataset.testid = 'creator-stutter';
           }
-
-          if (tMs >= playMs) {
-            enterReveal();
-          }
+          if (tMs >= playMs) enterReveal();
         } else if (tMs >= totalMs) {
           completeScene();
         }

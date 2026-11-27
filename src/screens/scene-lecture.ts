@@ -3,10 +3,8 @@ import { scoreLecture } from '../core/scoring';
 import type { Audio, Ctx, SceneResult } from '../core/types';
 import { attachInput } from '../engines/input';
 import { createLoop } from '../engines/loop';
-import { createButton } from '../ui/components/button';
-import { createClaimChip } from '../ui/components/claimchip';
-import { createSplitReveal } from '../ui/components/splitreveal';
-import { createRevealControls } from './reveal-controls';
+import { createRevealView } from './reveal-view';
+import { ICON_PATHS, makeSvgIcon } from './scene-icons';
 import type { SceneFactory } from './scenes';
 
 export function createLectureScene(audio?: Audio): SceneFactory {
@@ -32,19 +30,32 @@ export function createLectureScene(audio?: Audio): SceneFactory {
       const hud = document.createElement('div');
       hud.className = 'rm-scene-hud';
 
-      const caughtEl = document.createElement('span');
-      caughtEl.className = 'type-body';
-      caughtEl.dataset.testid = 'lecture-caught';
-      caughtEl.textContent = `0 / ${notesTotal}`;
+      const dotsWrap = document.createElement('div');
+      dotsWrap.className = 'rm-dots';
+      dotsWrap.setAttribute('aria-label', `0 / ${notesTotal}`);
+      const dots: HTMLElement[] = [];
+      for (let i = 0; i < notesTotal; i += 1) {
+        const d = document.createElement('span');
+        d.className = 'rm-dot';
+        dots.push(d);
+        dotsWrap.appendChild(d);
+      }
 
-      hud.appendChild(caughtEl);
+      const wifiPill = document.createElement('div');
+      wifiPill.className = 'rm-wifi-pill';
+      wifiPill.append(makeSvgIcon(ICON_PATHS.wifi, 'rm-wifi-icon'));
 
-      const wifiSlot = document.createElement('div');
+      const summaryCard = document.createElement('div');
+      summaryCard.className = 'rm-summary-card';
+      summaryCard.textContent = ctx.t('scene.lecture.summary');
+
+      hud.append(dotsWrap, summaryCard, wifiPill);
+
       const arena = document.createElement('div');
-      arena.className = 'rm-notes-arena';
-      const revealHost = document.createElement('div');
+      arena.className = 'rm-lecture-lanes';
 
-      wrap.append(hud, wifiSlot, arena, revealHost);
+      const revealHost = document.createElement('div');
+      wrap.append(hud, arena, revealHost);
       playArea.replaceChildren(wrap);
 
       const completeScene = (): void => {
@@ -60,19 +71,25 @@ export function createLectureScene(audio?: Audio): SceneFactory {
         });
       };
 
-      const spawnNote = (idx: number): void => {
-        const btn = createButton({
-          label: `#${idx + 1}`,
-          variant: 'secondary',
-          onClick: () => {
-            if (phase !== 'PLAY' || btn.getAttribute('aria-disabled') === 'true') return;
-            btn.setAttribute('aria-disabled', 'true');
-            caught += 1;
-            caughtEl.textContent = `${caught} / ${notesTotal}`;
-            audio?.chime();
-          },
+      const spawnNote = (index: number): void => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'rm-sticky-note';
+        btn.dataset.noteIndex = String(index);
+        btn.style.gridColumn = String((index % 3) + 1);
+        btn.setAttribute('aria-label', `#${index + 1}`);
+        btn.append(makeSvgIcon(ICON_PATHS.note, 'rm-note-icon'));
+
+        btn.addEventListener('click', () => {
+          if (phase !== 'PLAY' || btn.getAttribute('aria-disabled') === 'true') return;
+          btn.setAttribute('aria-disabled', 'true');
+          btn.classList.add('rm-sticky-note--caught');
+          if (dots[caught]) dots[caught].classList.add('rm-dot--filled');
+          caught += 1;
+          dotsWrap.setAttribute('aria-label', `${caught} / ${notesTotal}`);
+          summaryCard.dataset.progress = String(caught);
+          audio?.chime();
         });
-        btn.dataset.noteIndex = String(idx);
         arena.appendChild(btn);
       };
 
@@ -80,49 +97,32 @@ export function createLectureScene(audio?: Audio): SceneFactory {
         if (wifiDropped) return;
         wifiDropped = true;
         audio?.buzz();
-        const banner = document.createElement('p');
-        banner.className = 'rm-wifi-banner type-body';
-        banner.dataset.testid = 'wifi-drop-banner';
-        banner.textContent = ctx.t('scene.lecture.fail');
-        wifiSlot.replaceChildren(banner);
         ctx.setStageHint?.({ scenePhase: 'FAIL', sceneAlert: true });
+        wifiPill.classList.add('rm-wifi-pill--dropped');
+        wifiPill.dataset.testid = 'wifi-drop-banner';
+        summaryCard.classList.add('rm-summary-card--glitch');
+        summaryCard.textContent = ctx.t('scene.lecture.nowifi');
       };
 
       const enterReveal = (): void => {
         if (phase === 'REVEAL') return;
-        phase = 'FAIL';
-        wrap.dataset.phase = 'FAIL';
         phase = 'REVEAL';
         wrap.dataset.phase = 'REVEAL';
         ctx.setStageHint?.({ scenePhase: 'REVEAL', sceneAlert: true });
 
-        const state = ctx.store.getState();
-        const c02 = ctx.claim('C-02');
-        const split = createSplitReveal({
-          decay: state.decay,
-          leftTitle: ctx.t('reveal.left'),
-          leftBody: ctx.t('scene.lecture.fail.detail'),
-          rightTitle: ctx.t('reveal.right'),
-          rightBody: ctx.t('scene.lecture.win'),
-          claimText: `${c02.text[state.lang]} (${ctx.t(`tag.${c02.tag}`)})`,
+        const rv = createRevealView({
+          ctx,
+          leftWord: ctx.t('reveal.lecture.left'),
+          rightWord: ctx.t('reveal.lecture.right'),
+          leftIcon: 'cross',
+          rightIcon: 'check',
+          claim: ctx.claim('C-02'),
+          onComplete: completeScene,
         });
-
-        const gloss = document.createElement('p');
-        gloss.className = 'rm-glossary type-small';
-        gloss.dataset.testid = 'npu-gloss';
-        gloss.textContent = ctx.t('glossary.npu');
-
-        const chip = createClaimChip({
-          claim: c02,
-          tagLabel: ctx.t(`tag.${c02.tag}`),
-          closeLabel: ctx.t('btn.close'),
-        });
-
-        const revealCtrl = createRevealControls(ctx, completeScene);
-        cleanupReveal = revealCtrl.cleanup;
-
+        cleanupReveal = rv.cleanup;
         arena.replaceChildren();
-        revealHost.replaceChildren(split, gloss, chip, revealCtrl.element);
+        hud.replaceChildren();
+        revealHost.replaceChildren(rv.element);
       };
 
       const loop = createLoop();
@@ -133,12 +133,8 @@ export function createLectureScene(audio?: Audio): SceneFactory {
             spawnNote(spawned);
             spawned += 1;
           }
-          if (tMs >= wifiDropAtMs) {
-            triggerWifiDrop();
-          }
-          if (tMs >= playMs) {
-            enterReveal();
-          }
+          if (tMs >= wifiDropAtMs) triggerWifiDrop();
+          if (tMs >= playMs) enterReveal();
         } else if (tMs >= totalMs) {
           completeScene();
         }
@@ -146,9 +142,7 @@ export function createLectureScene(audio?: Audio): SceneFactory {
 
       const detachInput = attachInput(window, (ev) => {
         if (phase !== 'PLAY') return;
-        const buttons = arena.querySelectorAll<HTMLButtonElement>(
-          'button:not([aria-disabled="true"])',
-        );
+        const buttons = arena.querySelectorAll<HTMLButtonElement>('button:not([aria-disabled="true"])');
         if (ev.kind === 'select' && buttons[ev.index]) {
           buttons[ev.index].click();
         } else if (ev.kind === 'confirm' && buttons[0]) {

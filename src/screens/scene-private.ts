@@ -4,8 +4,8 @@ import type { Audio, Ctx, SceneResult } from '../core/types';
 import { attachInput } from '../engines/input';
 import { createLoop } from '../engines/loop';
 import { createButton } from '../ui/components/button';
-import { createSplitReveal } from '../ui/components/splitreveal';
-import { createRevealControls } from './reveal-controls';
+import { createRevealView } from './reveal-view';
+import { ICON_PATHS, makeSvgIcon } from './scene-icons';
 import type { SceneFactory } from './scenes';
 
 export function createPrivateScene(audio?: Audio): SceneFactory {
@@ -15,10 +15,12 @@ export function createPrivateScene(audio?: Audio): SceneFactory {
       const files = meta.files ?? [];
       const playMs = meta.playMs;
       const totalMs = meta.durationMs;
+      const perCardMs = 2600;
 
       let activeIdx = 0;
-      const answered = new Set<string>();
+      let cardStartMs = 0;
       let correct = 0;
+      const answered = new Set<string>();
       let phase: 'PLAY' | 'FAIL' | 'REVEAL' = 'PLAY';
       let finished = false;
       let cleanupReveal: (() => void) | null = null;
@@ -27,29 +29,36 @@ export function createPrivateScene(audio?: Audio): SceneFactory {
       wrap.className = 'rm-scene-play';
       wrap.dataset.phase = 'PLAY';
 
-      const hud = document.createElement('div');
-      hud.className = 'rm-scene-hud';
+      const cardSlot = document.createElement('div');
+      cardSlot.className = 'rm-private-stage';
 
-      const statusEl = document.createElement('span');
-      statusEl.className = 'type-body';
-      statusEl.dataset.testid = 'private-count';
-      statusEl.textContent = `0 / ${files.length}`;
-      hud.appendChild(statusEl);
-
-      const uploadBanner = document.createElement('p');
-      uploadBanner.className = 'rm-wifi-banner type-body';
-      uploadBanner.dataset.testid = 'upload-banner';
-      uploadBanner.textContent = ctx.t('scene.private.upload');
-
-      const cardsRow = document.createElement('div');
-      cardsRow.className = 'rm-task-grid';
+      const uploadBar = document.createElement('div');
+      uploadBar.className = 'rm-upload-bar';
+      const uploadFill = document.createElement('div');
+      uploadFill.className = 'rm-upload-fill';
+      uploadBar.appendChild(uploadFill);
+      uploadBar.hidden = true;
 
       const decisionRow = document.createElement('div');
-      decisionRow.className = 'rm-controls';
+      decisionRow.className = 'rm-private-actions';
 
-      const revealHost = document.createElement('div');
-      wrap.append(hud, uploadBanner, cardsRow, decisionRow, revealHost);
-      playArea.replaceChildren(wrap);
+      const renderCard = (): void => {
+        const f = files[activeIdx];
+        if (!f) return;
+        const card = document.createElement('div');
+        card.className = 'rm-file-hero';
+        card.dataset.fileId = f.id;
+        card.append(makeSvgIcon(ICON_PATHS.file, 'rm-file-hero-icon'));
+        if (f.sensitive) {
+          const lock = makeSvgIcon(ICON_PATHS.lock, 'rm-file-lock');
+          card.append(lock);
+        }
+        const label = document.createElement('p');
+        label.className = 'type-title';
+        label.textContent = ctx.t(`file.${f.id}`);
+        card.append(label);
+        cardSlot.replaceChildren(card);
+      };
 
       const completeScene = (): void => {
         if (finished) return;
@@ -64,99 +73,88 @@ export function createPrivateScene(audio?: Audio): SceneFactory {
         });
       };
 
-      const cardButtons = files.map((file, idx) => {
-        const btn = createButton({
-          label: ctx.t(`file.${file.id}`),
-          variant: 'secondary',
-          onClick: () => {
-            if (phase !== 'PLAY' || answered.has(file.id)) return;
-            activeIdx = idx;
-          },
-        });
-        btn.dataset.fileId = file.id;
-        cardsRow.appendChild(btn);
-        return btn;
-      });
-
-      const handleDecision = (choice: 'allow' | 'keep'): void => {
+      const advanceCard = (choice: 'allow' | 'keep', nowMs: number): void => {
         if (phase !== 'PLAY') return;
         const file = files[activeIdx];
         if (!file || answered.has(file.id)) return;
-
         answered.add(file.id);
-        cardButtons[activeIdx]?.setAttribute('aria-disabled', 'true');
-        const isCorrect =
-          (file.sensitive && choice === 'keep') || (!file.sensitive && choice === 'allow');
+        const isCorrect = (file.sensitive && choice === 'keep') || (!file.sensitive && choice === 'allow');
         if (isCorrect) {
           correct += 1;
           audio?.chime();
         } else {
           audio?.buzz();
           if (file.sensitive && choice === 'allow') {
+            uploadBar.hidden = false;
             ctx.setStageHint?.({ scenePhase: 'FAIL', sceneAlert: true });
           }
         }
-        statusEl.textContent = `${answered.size} / ${files.length}`;
-
-        const nextPending = files.findIndex((f) => !answered.has(f.id));
-        if (nextPending >= 0) activeIdx = nextPending;
+        const nextIdx = files.findIndex((f) => !answered.has(f.id));
+        if (nextIdx >= 0) {
+          activeIdx = nextIdx;
+          cardStartMs = nowMs;
+          renderCard();
+        }
       };
 
+      let lastTMs = 0;
       decisionRow.append(
         createButton({
-          label: ctx.t('scene.private.allow'),
+          label: ctx.t('scene.private.share'),
           variant: 'secondary',
-          onClick: () => handleDecision('allow'),
+          onClick: () => advanceCard('allow', lastTMs),
         }),
         createButton({
           label: ctx.t('scene.private.keep'),
-          onClick: () => handleDecision('keep'),
+          onClick: () => advanceCard('keep', lastTMs),
         }),
       );
 
+      const revealHost = document.createElement('div');
+      wrap.append(cardSlot, uploadBar, decisionRow, revealHost);
+      playArea.replaceChildren(wrap);
+      renderCard();
+
       const enterReveal = (): void => {
         if (phase === 'REVEAL') return;
-        phase = 'FAIL';
-        wrap.dataset.phase = 'FAIL';
-        audio?.buzz();
         phase = 'REVEAL';
         wrap.dataset.phase = 'REVEAL';
+        audio?.buzz();
         ctx.setStageHint?.({ scenePhase: 'REVEAL', sceneAlert: true });
 
-        const state = ctx.store.getState();
-        const split = createSplitReveal({
-          decay: state.decay,
-          leftTitle: ctx.t('reveal.left'),
-          leftBody: ctx.t('scene.private.fail'),
-          rightTitle: ctx.t('reveal.right'),
-          rightBody: ctx.t('scene.private.win'),
-          claimText: `${ctx.t('scene.private.note')} (${ctx.t('tag.our-advice')})`,
+        const rv = createRevealView({
+          ctx,
+          leftWord: ctx.t('reveal.private.left'),
+          rightWord: ctx.t('reveal.private.right'),
+          leftIcon: 'cloud',
+          rightIcon: 'shield',
+          extraNote: ctx.t('scene.private.note'),
+          onComplete: completeScene,
         });
-
-        const revealCtrl = createRevealControls(ctx, completeScene);
-        cleanupReveal = revealCtrl.cleanup;
-
-        cardsRow.replaceChildren();
+        cleanupReveal = rv.cleanup;
+        cardSlot.replaceChildren();
         decisionRow.replaceChildren();
-        revealHost.replaceChildren(split, revealCtrl.element);
+        uploadBar.hidden = true;
+        revealHost.replaceChildren(rv.element);
       };
 
       const loop = createLoop();
       loop.start((_dt, tMs) => {
-        if (phase === 'PLAY' && tMs >= playMs) {
-          enterReveal();
-        } else if (phase === 'REVEAL' && tMs >= totalMs) {
+        lastTMs = tMs;
+        if (phase === 'PLAY') {
+          if (tMs - cardStartMs >= perCardMs && answered.size < files.length) {
+            advanceCard('keep', tMs);
+          }
+          if (tMs >= playMs) enterReveal();
+        } else if (tMs >= totalMs) {
           completeScene();
         }
       });
 
       const detachInput = attachInput(window, (ev) => {
         if (phase !== 'PLAY') return;
-        if (ev.kind === 'select' && files[ev.index]) {
-          activeIdx = ev.index;
-        } else if (ev.kind === 'confirm') {
-          handleDecision('keep');
-        }
+        if (ev.kind === 'select' && ev.index === 0) advanceCard('allow', lastTMs);
+        else if (ev.kind === 'confirm' || (ev.kind === 'select' && ev.index === 1)) advanceCard('keep', lastTMs);
       });
 
       return () => {

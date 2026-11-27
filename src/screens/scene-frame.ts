@@ -1,7 +1,5 @@
 import { getScenesConfig } from '../core/data';
-import { computeRegret } from '../core/scoring';
 import type { Audio, Ctx, SceneId, SceneResult, Screen, ScreenId } from '../core/types';
-import { createTape } from '../ui/components/tape';
 import { tweenDecay } from '../ui/decay';
 import { createSceneRegistry } from './scenes';
 
@@ -39,6 +37,10 @@ export function createSceneFrameScreen(
 
       head.append(yearChip, title, timer);
 
+      const hint = document.createElement('p');
+      hint.className = 'type-body rm-scene-hint rm-scrim';
+      hint.textContent = ctx.t(`scene.${sceneId}.hint`);
+
       const playArea = document.createElement('div');
       const stageWin = document.createElement('div');
       stageWin.className = 'stage-window';
@@ -48,23 +50,12 @@ export function createSceneFrameScreen(
       layout.className = 'rm-scene-layout';
       layout.append(playArea, stageWin);
 
-      const tape = createTape(ctx.t('receipt.title'));
-      const state = ctx.store.getState();
-      const persona = state.persona ?? 'study';
-      const currentBreakdown = computeRegret(persona, state.results, config);
-      for (const r of state.results) {
-        const pts = currentBreakdown.lines.find((l) => l.sceneId === r.sceneId)?.points ?? 0;
-        const evs = r.events.length > 0 ? r.events : [{ sceneId: r.sceneId, lineKey: `regret.${r.sceneId}`, points: pts }];
-        evs.forEach((ev, idx) => {
-          tape.addLine({ label: ctx.t(ev.lineKey), points: idx === 0 ? pts : 0 });
-        });
-      }
+      const fadeHint = (): void => {
+        hint.classList.add('rm-scene-hint--faded');
+      };
+      stage.addEventListener('pointerdown', fadeHint, { once: true });
 
-      const hint = document.createElement('p');
-      hint.className = 'type-body rm-scrim';
-      hint.textContent = ctx.t(`scene.${sceneId}.hint`);
-
-      stage.append(head, tape.element, layout, hint);
+      stage.append(head, hint, layout);
       root.replaceChildren(stage);
 
       const factory = registry[sceneId];
@@ -78,6 +69,7 @@ export function createSceneFrameScreen(
       });
 
       return () => {
+        stage.removeEventListener('pointerdown', fadeHint);
         cleanupScene();
       };
     },
