@@ -18,16 +18,51 @@ body {
 .decay-scope {
   --sat: calc(1 - 0.85 * var(--decay));
   --dim: calc(1 - 0.12 * var(--decay));
-  --grain-opacity: calc(0.05 + 0.22 * var(--decay));
+  --grain-opacity: calc(0.08 + 0.42 * var(--decay));
   position: relative;
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--print-black) 9%, transparent) 1.25px,
+    transparent 1.25px
+  );
+  background-size: 14px 14px;
   color: var(--fg);
   filter: saturate(var(--sat)) brightness(var(--dim));
   overflow: hidden;
 }
 
+.decay-scope[data-scratched='true']:not(.skin-clear) {
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.24);
+}
+
+.decay-scope[data-cracked='true']:not(.skin-clear) {
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.4);
+}
+
+.decay-scope.skin-clear {
+  --bg: var(--clear-white);
+  --fg: var(--clear-ink);
+  --accent: var(--clear-blue);
+  --sat: 1 !important;
+  --dim: 1 !important;
+  --grain-opacity: 0 !important;
+  --scratch-opacity: 0 !important;
+  --crack-opacity: 0 !important;
+  background-color: var(--clear-white);
+  background-image: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--clear-blue) 7%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 20px 20px;
+  filter: none;
+  box-shadow: none;
+}
+
 .decay-scope.skin-clear::before,
-.decay-scope.skin-clear::after {
+.decay-scope.skin-clear::after,
+.skin-clear .decay-crack {
   display: none;
 }
 
@@ -54,15 +89,14 @@ body {
   z-index: 4;
   mix-blend-mode: multiply;
   opacity: var(--grain-opacity);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
 }
 
 .decay-crack {
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 140px;
-  height: 140px;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
   z-index: 5;
   opacity: var(--crack-opacity);
@@ -70,22 +104,30 @@ body {
 
 .decay-crack path {
   fill: none;
-  stroke: var(--dust);
-  stroke-width: 2;
+  stroke: var(--print-black);
+  stroke-width: 2.5;
   stroke-linecap: round;
   stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.decay-crack-branch {
+  stroke: var(--dust);
+  stroke-width: 1.5;
+  opacity: 0.9;
 }
 
 /* Typography roles */
 .type-flyer {
   font-family: var(--font-display);
   font-stretch: 62%;
-  font-size: clamp(64px, 9vw, 168px);
+  font-size: clamp(64px, 10vw, 176px);
   font-weight: 900;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
-  line-height: 0.96;
+  line-height: 0.92;
   margin: 0;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
 }
 
 .type-title {

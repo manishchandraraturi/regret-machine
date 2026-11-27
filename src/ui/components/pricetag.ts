@@ -44,6 +44,9 @@ export function createPriceTag(props: PriceTagProps): PriceTagHandle {
   btn.className = 'rm-pricetag';
   btn.setAttribute('aria-pressed', props.selected ? 'true' : 'false');
 
+  const card = document.createElement('span');
+  card.className = 'rm-pricetag-card';
+
   const mrpEl = document.createElement('span');
   mrpEl.className = 'rm-pricetag-mrp';
   mrpEl.textContent = props.mrp;
@@ -56,12 +59,13 @@ export function createPriceTag(props: PriceTagProps): PriceTagHandle {
   labelEl.className = 'rm-pricetag-label';
   labelEl.textContent = props.label;
 
-  btn.append(createTagStringSvg(), mrpEl, priceEl, labelEl);
+  card.append(createTagStringSvg(), mrpEl, priceEl, labelEl);
+  btn.appendChild(card);
 
   const setSelected = (selected: boolean): void => {
     btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
-    if (selected && !prefersReducedMotion() && typeof btn.animate === 'function') {
-      btn.animate(
+    if (selected && !prefersReducedMotion() && typeof card.animate === 'function') {
+      card.animate(
         [
           { transform: 'rotate(0deg)' },
           { transform: 'rotate(-5deg)' },

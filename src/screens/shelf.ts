@@ -41,6 +41,7 @@ export function createShelfScreen(audio: Audio): Screen {
           ctx.go('flip1');
         },
       });
+      buyBtn.classList.add('rm-btn--buy');
 
       const syncBuyState = (): void => {
         const ready = Boolean(selectedLaptop && selectedPersona);

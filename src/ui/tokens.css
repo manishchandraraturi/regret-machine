@@ -34,7 +34,7 @@
   --decay: 0;
   --sat: calc(1 - 0.85 * var(--decay));
   --dim: calc(1 - 0.12 * var(--decay));
-  --grain-opacity: calc(0.05 + 0.22 * var(--decay));
+  --grain-opacity: calc(0.08 + 0.42 * var(--decay));
   --scratch-opacity: 0;
   --crack-opacity: 0;
 
@@ -65,15 +65,16 @@
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.skin-clear {
+.skin-clear,
+.decay-scope.skin-clear {
   --bg: var(--clear-white);
   --fg: var(--clear-ink);
   --accent: var(--clear-blue);
   --btn-primary-bg: var(--clear-blue);
   --btn-primary-fg: var(--white);
-  --sat: 1;
-  --dim: 1;
-  --grain-opacity: 0;
-  --scratch-opacity: 0;
-  --crack-opacity: 0;
+  --sat: 1 !important;
+  --dim: 1 !important;
+  --grain-opacity: 0 !important;
+  --scratch-opacity: 0 !important;
+  --crack-opacity: 0 !important;
 }

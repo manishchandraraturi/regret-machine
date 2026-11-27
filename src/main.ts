@@ -23,7 +23,7 @@ import { createFlipScreen } from './screens/scene-stub';
 import { createShelfScreen } from './screens/shelf';
 import { createStaffScreen } from './screens/staff';
 import { createButton } from './ui/components/button';
-import { setDecay } from './ui/decay';
+import { createCrackOverlay, setDecay } from './ui/decay';
 
 export function mountApp(root: HTMLElement, search = window.location.search): () => void {
   const env = getEnv();
@@ -37,6 +37,7 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
   shell.className = 'rm-shell decay-scope';
   shell.lang = initialLang;
   setDecay(shell, 0);
+  shell.appendChild(createCrackOverlay());
 
   const topbar = document.createElement('header');
   topbar.className = 'rm-topbar';
@@ -131,6 +132,15 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
     cleanupScreen?.();
     const isClear = screenId === 'result' || screenId === 'staff' || screenId === 'fairfight';
     shell.classList.toggle('skin-clear', isClear);
+    document.body.classList.toggle('skin-clear', isClear);
+    if (isClear) {
+      shell.style.setProperty('--sat', '1');
+      shell.style.setProperty('--dim', '1');
+    } else {
+      shell.style.removeProperty('--sat');
+      shell.style.removeProperty('--dim');
+      setDecay(shell, store.getState().decay);
+    }
     cleanupScreen = screenMap[screenId].mount(main, ctx);
   }
 
@@ -141,6 +151,7 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
   return () => {
     cleanupScreen?.();
     idle.stop();
+    document.body.classList.remove('skin-clear');
   };
 }
 

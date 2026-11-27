@@ -65,12 +65,25 @@ export function tweenDecay(
 export function createCrackOverlay(): SVGSVGElement {
   const ns = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(ns, 'svg');
-  svg.setAttribute('viewBox', '0 0 140 140');
+  svg.setAttribute('viewBox', '0 0 1000 1000');
+  svg.setAttribute('preserveAspectRatio', 'none');
   svg.setAttribute('aria-hidden', 'true');
   svg.classList.add('decay-crack');
 
-  const path = document.createElementNS(ns, 'path');
-  path.setAttribute('d', 'M 140 0 L 106 32 L 114 48 L 80 78 L 86 96 L 46 132');
-  svg.appendChild(path);
+  const spine = document.createElementNS(ns, 'path');
+  spine.setAttribute(
+    'd',
+    'M 780 0 L 718 112 L 746 168 L 642 292 L 682 358 L 548 508 L 584 574 L 418 738 L 456 816 L 288 1000',
+  );
+
+  const branchA = document.createElementNS(ns, 'path');
+  branchA.classList.add('decay-crack-branch');
+  branchA.setAttribute('d', 'M 642 292 L 508 340 L 452 402');
+
+  const branchB = document.createElementNS(ns, 'path');
+  branchB.classList.add('decay-crack-branch');
+  branchB.setAttribute('d', 'M 548 508 L 712 586 L 826 704');
+
+  svg.append(spine, branchA, branchB);
   return svg;
 }

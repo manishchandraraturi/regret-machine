@@ -20,21 +20,52 @@
 }
 
 .rm-laptop-lid {
-  width: 196px;
-  height: 126px;
+  width: 204px;
+  height: 134px;
   padding: var(--s2);
   background: var(--lap-fill);
   border: 3px solid var(--print-black);
   border-radius: var(--r-lap);
+  box-shadow: 4px 4px 0 var(--print-black);
   display: flex;
 }
 
-.rm-laptop-screen {
+.rm-laptop-bezel {
+  position: relative;
   flex: 1;
-  background: var(--clear-white);
+  background: color-mix(in oklab, var(--print-black) 80%, var(--dust));
+  border: 2px solid var(--print-black);
+  border-radius: calc(var(--r-lap) - 4px);
+  padding: 10px 7px 7px;
+  display: flex;
+}
+
+.rm-laptop-cam {
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--dust);
+}
+
+.rm-laptop-screen {
+  position: relative;
+  flex: 1;
+  background: linear-gradient(
+    155deg,
+    var(--clear-white) 0%,
+    color-mix(in oklab, var(--clear-blue) 14%, var(--clear-white)) 60%,
+    color-mix(in oklab, var(--lap-fill) 24%, var(--clear-white)) 100%
+  );
   color: var(--print-black);
   border: 2px solid var(--print-black);
   border-radius: var(--s1);
+  box-shadow:
+    inset 0 0 18px color-mix(in oklab, var(--clear-blue) 22%, transparent),
+    0 0 12px color-mix(in oklab, var(--clear-white) 55%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -42,9 +73,22 @@
   overflow: hidden;
 }
 
+.rm-laptop-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    color-mix(in oklab, var(--white) 55%, transparent) 38%,
+    transparent 52%
+  );
+  pointer-events: none;
+}
+
 .rm-laptop-base {
-  width: 220px;
-  height: 22px;
+  width: 232px;
+  height: 34px;
   display: block;
 }
 
@@ -53,6 +97,22 @@
   stroke: var(--print-black);
   stroke-width: 3;
   stroke-linejoin: round;
+}
+
+.rm-laptop-deck {
+  fill: color-mix(in oklab, var(--dust) 55%, var(--print-black));
+  stroke: var(--print-black);
+  stroke-width: 1.5;
+}
+
+.rm-laptop-key {
+  fill: color-mix(in oklab, var(--print-black) 78%, var(--dust));
+}
+
+.rm-laptop-trackpad {
+  fill: color-mix(in oklab, var(--dust) 70%, var(--clear-white));
+  stroke: var(--print-black);
+  stroke-width: 1.5;
 }
 
 /* Shared shell & corners */
@@ -77,6 +137,7 @@
   display: flex;
   gap: var(--s3);
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .rm-facilitator {
@@ -110,7 +171,7 @@
   display: flex;
   gap: var(--s5);
   overflow: hidden;
-  padding: var(--s4) 0;
+  padding: var(--s5) var(--s2);
 }
 
 .rm-marquee-track {
@@ -172,6 +233,57 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--s3);
+}
+
+@keyframes rm-float {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 0 -8px;
+  }
+}
+
+@keyframes rm-pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.015);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rm-marquee-track .rm-pricetag-card,
+  .rm-shelf-item .rm-pricetag-card {
+    animation: rm-float 4s ease-in-out infinite alternate;
+  }
+
+  .rm-marquee-track .rm-pricetag:nth-child(2) .rm-pricetag-card,
+  .rm-shelf-item:nth-child(2) .rm-pricetag-card {
+    animation-delay: -1.3s;
+  }
+
+  .rm-marquee-track .rm-pricetag:nth-child(3) .rm-pricetag-card,
+  .rm-shelf-item:nth-child(3) .rm-pricetag-card {
+    animation-delay: -2.6s;
+  }
+
+  .rm-marquee-track:hover .rm-pricetag-card,
+  .rm-shelf-item .rm-pricetag:hover .rm-pricetag-card,
+  .rm-shelf-item .rm-pricetag:focus-visible .rm-pricetag-card {
+    animation-play-state: paused;
+  }
+
+  .rm-shell > main > [data-screen] {
+    animation: rm-pop-in 320ms cubic-bezier(0.2, 1.35, 0.4, 1) both;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

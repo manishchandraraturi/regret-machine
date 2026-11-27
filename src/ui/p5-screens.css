@@ -211,8 +211,11 @@
 
 .type-title,
 .type-body,
-.type-flyer,
+.type-flyer {
+  overflow-wrap: anywhere;
+}
+
 .rm-btn,
 .rm-chip {
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }

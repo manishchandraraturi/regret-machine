@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { clampDecay, setDecay, tweenDecay } from '../../src/ui/decay';
+import { clampDecay, createCrackOverlay, setDecay, tweenDecay } from '../../src/ui/decay';
 
 describe('decay engine', () => {
   it('clamps values to [0, 1] and handles NaN', () => {
@@ -37,5 +37,12 @@ describe('decay engine', () => {
     expect(el.style.getPropertyValue('--decay')).toBe('0.750');
 
     window.matchMedia = origMatchMedia;
+  });
+
+  it('builds a full-screen jagged SVG crack overlay with branches', () => {
+    const svg = createCrackOverlay();
+    expect(svg.classList.contains('decay-crack')).toBe(true);
+    expect(svg.getAttribute('viewBox')).toBe('0 0 1000 1000');
+    expect(svg.querySelectorAll('path').length).toBeGreaterThanOrEqual(3);
   });
 });
