@@ -199,7 +199,7 @@ function positionSingleAndReveal(
 
   rigs.forEach((r, i) => {
     r.group.visible = !isStudioScreen && i === selectedIdx;
-    r.group.scale.setScalar(portrait ? 0.85 : 1.05);
+    r.group.scale.setScalar(portrait ? 0.72 : 1.05);
     r.setHighlight(false, false);
   });
 
@@ -210,8 +210,8 @@ function positionSingleAndReveal(
 
   activeRig.setDecay(state.decay);
   if (isReveal) {
-    const revScale = portrait ? 0.72 : 1.15;
-    const revX = portrait ? 0.92 : 1.55;
+    const revScale = portrait ? 0.68 : 1.18;
+    const revX = portrait ? 0.90 : 1.56;
     activeRig.group.scale.setScalar(revScale);
     activeRig.group.position.set(-revX, 0.02, 0.25);
     activeRig.group.rotation.y = 0.24;

@@ -19,18 +19,18 @@
   line-height: 1.1;
   cursor: pointer;
   transition:
-    transform var(--t-fast) var(--ease-spring),
-    box-shadow var(--t-fast) var(--ease),
-    border-color var(--t-fast) var(--ease);
+    transform var(--t-spring) var(--ease-spring),
+    box-shadow var(--t-spring) var(--ease),
+    border-color var(--t-spring) var(--ease);
 }
 
 .rm-btn--secondary {
   background: var(--glass-bg);
   color: var(--paper-white);
   border-color: var(--glass-border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 4px 16px color-mix(in oklab, var(--ink-black) 35%, transparent);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
 }
 
 .skin-clear .rm-btn--primary {
@@ -43,19 +43,19 @@
   background: var(--glass-clear-bg);
   color: var(--clear-ink);
   border-color: var(--glass-clear-border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 4px 14px color-mix(in oklab, var(--clear-ink) 10%, transparent);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-clear-shadow);
 }
 
 @media (hover: hover) {
   .rm-btn:not([aria-disabled='true']):hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 14px 30px color-mix(in oklab, var(--spot-warm) 30%, var(--ink-black));
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 14px 32px color-mix(in oklab, var(--spot-warm) 38%, var(--ink-black));
   }
 
   .skin-clear .rm-btn:not([aria-disabled='true']):hover {
-    box-shadow: 0 14px 28px color-mix(in oklab, var(--clear-blue) 28%, transparent);
+    box-shadow: 0 14px 32px color-mix(in oklab, var(--clear-blue) 36%, transparent);
   }
 }
 
@@ -107,18 +107,18 @@
   border: 1px solid var(--glass-border);
   background: var(--glass-bg);
   color: var(--paper-white);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 4px 14px color-mix(in oklab, var(--ink-black) 35%, transparent);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
   font-family: var(--font-body);
   font-size: clamp(17px, 1.3vw, 20px);
   font-weight: 600;
   cursor: pointer;
   transition:
-    transform var(--t-fast) var(--ease-spring),
+    transform var(--t-spring) var(--ease-spring),
     background-color 0s linear,
-    border-color var(--t-fast) var(--ease),
-    box-shadow var(--t-fast) var(--ease);
+    border-color var(--t-spring) var(--ease),
+    box-shadow var(--t-spring) var(--ease);
 }
 
 .skin-clear .rm-chip {
@@ -129,9 +129,9 @@
 
 @media (hover: hover) {
   .rm-chip:hover {
-    transform: translateY(-4px) scale(1.02);
+    transform: translateY(-3px) scale(1.05);
     border-color: var(--spot-warm);
-    box-shadow: 0 12px 24px color-mix(in oklab, var(--spot-warm) 20%, transparent);
+    box-shadow: 0 12px 28px color-mix(in oklab, var(--spot-warm) 28%, transparent);
   }
 }
 

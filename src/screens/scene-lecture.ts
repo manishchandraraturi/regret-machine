@@ -55,7 +55,7 @@ export function createLectureScene(audio?: Audio): SceneFactory {
       const cue = document.createElement('div');
       cue.className = 'rm-float-cue';
       cue.setAttribute('aria-hidden', 'true');
-      cue.textContent = ctx.t('scene.lecture.cue');
+      cue.textContent = `↓ ${ctx.t('scene.lecture.cue')}`;
 
       const arena = document.createElement('div');
       arena.className = 'rm-lecture-lanes';

@@ -52,7 +52,7 @@ export function updateCameraPose(
       : state.screen === 'fairfight'
         ? 0.36
         : isReveal
-          ? portrait ? 0.24 : 0.40
+          ? portrait ? 0.08 : 0.40
           : 0.45;
   camera.lookAt(0, lookY, 0);
 }

@@ -141,7 +141,8 @@ html.skin-clear {
   font-stretch: 100%;
   font-size: clamp(28px, 3vw, 56px);
   font-weight: 700;
-  line-height: 1.1;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
   margin: 0;
 }
 

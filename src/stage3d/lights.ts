@@ -24,15 +24,44 @@ const C_BG_DARK = new THREE.Color(0x0b0c0e);
 const C_DUST = new THREE.Color(0x7e8a83);
 const C_WARM = new THREE.Color(0xfff3e0);
 const C_NEON = new THREE.Color(0xff2b33);
+const C_RIM_DARK = new THREE.Color(0xff4d6d);
 const C_CLEAR_BG = new THREE.Color(0xeef3fa);
 const C_WORK = new THREE.Color();
 
+function createStudioEnvTexture(): THREE.CanvasTexture | null {
+  if (typeof document === 'undefined') return null;
+  const canvas = document.createElement('canvas');
+  canvas.width = 64;
+  canvas.height = 32;
+  const c = canvas.getContext('2d');
+  if (!c) return null;
+  const g = c.createLinearGradient(0, 0, 0, 32);
+  g.addColorStop(0, '#eef5ff');
+  g.addColorStop(0.45, '#5a6b8a');
+  g.addColorStop(0.55, '#1e2230');
+  g.addColorStop(1, '#0b0c0e');
+  c.fillStyle = g;
+  c.fillRect(0, 0, 64, 32);
+  c.fillStyle = 'rgba(255,255,255,0.85)';
+  c.fillRect(10, 4, 18, 5);
+  c.fillRect(38, 6, 16, 4);
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.mapping = THREE.EquirectangularReflectionMapping;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
 export function createShowroomLights(scene: THREE.Scene, softwareFallback = false): ShowroomLights {
-  const ambient = new THREE.AmbientLight(0xfff3e0, softwareFallback ? 0.9 : 0.35);
-  const hemi = new THREE.HemisphereLight(0xfff3e0, 0x17191d, softwareFallback ? 0.9 : 0.25);
+  const envFallbackTex = softwareFallback ? createStudioEnvTexture() : null;
+  if (envFallbackTex) {
+    scene.environment = envFallbackTex;
+  }
+
+  const ambient = new THREE.AmbientLight(0xfff3e0, softwareFallback ? 0.85 : 0.35);
+  const hemi = new THREE.HemisphereLight(0xfff3e0, 0x17191d, softwareFallback ? 0.85 : 0.28);
   const keySpot = softwareFallback
     ? new THREE.DirectionalLight(0xfff3e0, 1.45)
-    : new THREE.SpotLight(0xfff3e0, 26, 22, Math.PI / 4, 0.55, 1.4);
+    : new THREE.SpotLight(0xfff3e0, 28, 22, Math.PI / 4, 0.55, 1.4);
   keySpot.position.set(1.8, 5.4, 4.6);
   if (!softwareFallback) {
     keySpot.castShadow = true;
@@ -41,17 +70,17 @@ export function createShowroomLights(scene: THREE.Scene, softwareFallback = fals
   }
 
   const fillSpot = softwareFallback
-    ? new THREE.DirectionalLight(0xfff3e0, 0.75)
-    : new THREE.SpotLight(0xfff3e0, 14, 20, Math.PI / 3, 0.65, 1.5);
+    ? new THREE.DirectionalLight(0xbcd7ff, 0.62)
+    : new THREE.SpotLight(0xfff3e0, 16, 20, Math.PI / 3, 0.65, 1.5);
   fillSpot.position.set(-4.2, 4.1, 3.8);
 
-  const neonLight = new THREE.PointLight(0xe4262b, 8.5, 14, 1.4);
+  const neonLight = new THREE.PointLight(0xe4262b, 9.5, 14, 1.4);
   neonLight.position.set(0, 2.5, -3.2);
 
   const rimLight = softwareFallback
-    ? new THREE.DirectionalLight(0x0b63f6, 0.85)
-    : new THREE.SpotLight(0x0b63f6, 10, 16, Math.PI / 3, 0.5, 1.2);
-  rimLight.position.set(0, 2.8, -3.8);
+    ? new THREE.DirectionalLight(0xff4d6d, 1.25)
+    : new THREE.SpotLight(0xff4d6d, 18, 18, Math.PI / 2.6, 0.45, 1.1);
+  rimLight.position.set(0, 2.6, -4.1);
 
   const neonGeo = new THREE.BoxGeometry(8.6, 0.035, 0.05);
   const neonMat = new THREE.MeshBasicMaterial({
@@ -60,10 +89,7 @@ export function createShowroomLights(scene: THREE.Scene, softwareFallback = fals
   const neonTube = new THREE.Mesh(neonGeo, neonMat);
   neonTube.position.set(0, 0.01, -1.52);
 
-  scene.add(ambient, hemi, keySpot, neonLight, neonTube);
-  if (!softwareFallback) {
-    scene.add(fillSpot, rimLight);
-  }
+  scene.add(ambient, hemi, keySpot, fillSpot, rimLight, neonLight, neonTube);
 
   return {
     update({ tSec, decay, isClear, persona, isFlip, isPlinth }): void {
@@ -80,11 +106,11 @@ export function createShowroomLights(scene: THREE.Scene, softwareFallback = fals
         hemi.groundColor.setHex(0xd6e1f2);
         keySpot.color.setHex(0xffffff);
         keySpot.intensity = 30 * spotScale;
-        fillSpot.intensity = 18 * spotScale;
+        fillSpot.intensity = softwareFallback ? 0.72 : 18;
         neonLight.intensity = 0;
         neonTube.visible = false;
         rimLight.color.setHex(persona ? PERSONA_RIM[persona] : 0x0b63f6);
-        rimLight.intensity = 18 * spotScale;
+        rimLight.intensity = softwareFallback ? 1.15 : 22;
         return;
       }
 
@@ -108,15 +134,17 @@ export function createShowroomLights(scene: THREE.Scene, softwareFallback = fals
       ambient.intensity = (softwareFallback ? 0.75 : 0.35 + d * 0.15) * sweep;
       hemi.color.copy(C_WARM).lerp(C_DUST, d * 0.65);
       keySpot.color.copy(C_WARM).lerp(C_DUST, d * 0.6);
-      keySpot.intensity = 26 * spotScale * (1 - d * 0.58) * sweep;
-      fillSpot.intensity = 14 * spotScale * (1 - d * 0.5) * sweep;
-      neonLight.intensity = 8.5 * (1 - d * 0.75) * flicker;
+      keySpot.intensity = 28 * spotScale * (1 - d * 0.58) * sweep;
+      fillSpot.intensity = (softwareFallback ? 0.62 : 16) * (1 - d * 0.5) * sweep;
+      neonLight.intensity = 9.5 * (1 - d * 0.75) * flicker;
       neonMat.color.copy(C_NEON).lerp(C_DUST, d * 0.65);
-      rimLight.intensity = 4 * spotScale;
+      rimLight.color.copy(persona ? new THREE.Color(PERSONA_RIM[persona]) : C_RIM_DARK);
+      rimLight.intensity = (softwareFallback ? 1.25 : 16) * (1 - d * 0.45);
     },
     dispose(): void {
       neonGeo.dispose();
       neonMat.dispose();
+      envFallbackTex?.dispose();
     },
   };
 }

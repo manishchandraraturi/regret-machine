@@ -20,7 +20,7 @@ test.describe('P9 Creator night (performance) = CUT LINE 3', () => {
         if (url.origin !== 'http://127.0.0.1:4173') thirdParty.push(req.url());
       });
 
-      await page.clock.install();
+      await page.clock.install({ time: 0 });
       await page.setViewportSize({ width: vp.width, height: vp.height });
       await gotoLite(page, '/');
 

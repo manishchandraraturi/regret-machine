@@ -46,11 +46,11 @@
 
 @media (min-width: 700px) {
   [data-stage-mode='webgl2'] .rm-shelf-item {
-    background: color-mix(in oklab, var(--wall-obsidian) 28%, transparent);
+    background: var(--glass-bg);
     border-color: var(--glass-border);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 12px 28px color-mix(in oklab, var(--ink-black) 30%, transparent);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
   }
 
   [data-stage-mode='webgl2'] .rm-shelf-item .rm-laptop {
@@ -62,8 +62,9 @@
 [data-stage-mode='webgl2'] .rm-glossary,
 [data-stage-mode='webgl2'] .rm-ff-table {
   background: var(--glass-clear-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-clear-shadow);
 }
 
 .rm-perf-overlay {

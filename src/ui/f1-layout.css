@@ -175,16 +175,17 @@
   }
 
   .rm-attract .rm-pricetag-card {
-    padding: var(--s3) var(--s2) var(--s2);
+    padding: var(--s2) var(--s1);
+    overflow: hidden;
   }
 
   .rm-attract .rm-pricetag-price {
-    font-size: 20px;
+    font-size: clamp(15px, 4.1vw, 18px);
   }
 
   .rm-attract .rm-pricetag-mrp,
   .rm-attract .rm-pricetag-label {
-    font-size: 12px;
+    font-size: 11px;
   }
 }
 

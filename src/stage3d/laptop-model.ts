@@ -26,11 +26,11 @@ function createRoundedSlab(width: number, depth: number, thickness: number, radi
   const geom = new THREE.ExtrudeGeometry(shape, {
     depth: thickness,
     bevelEnabled: true,
-    bevelSegments: 1,
-    curveSegments: 4,
+    bevelSegments: 2,
+    curveSegments: 8,
     steps: 1,
-    bevelSize: 0.015,
-    bevelThickness: 0.012,
+    bevelSize: 0.016,
+    bevelThickness: 0.014,
   });
   geom.rotateX(Math.PI / 2);
   return geom;
@@ -93,7 +93,7 @@ interface LaptopMaterials {
   chassisMat: THREE.MeshStandardMaterial | THREE.MeshPhongMaterial;
   bezelMat: THREE.MeshStandardMaterial | THREE.MeshLambertMaterial;
   keyMat: THREE.MeshStandardMaterial | THREE.MeshLambertMaterial;
-  trackpadMat: THREE.MeshStandardMaterial | THREE.MeshLambertMaterial;
+  trackpadMat: THREE.MeshStandardMaterial | THREE.MeshPhongMaterial | THREE.MeshLambertMaterial;
   screenMat: THREE.MeshStandardMaterial | THREE.MeshBasicMaterial;
 }
 
@@ -106,13 +106,16 @@ function createLaptopMaterials(
     return {
       chassisMat: new THREE.MeshPhongMaterial({
         color: baseColor.clone(),
-        specular: 0x555b66,
-        shininess: 46,
+        specular: 0xdce6f5,
+        shininess: 86,
+        reflectivity: 0.34,
       }),
       bezelMat: new THREE.MeshLambertMaterial({ color: 0x0b0c0e }),
       keyMat: new THREE.MeshLambertMaterial({ color: 0x17191d }),
-      trackpadMat: new THREE.MeshLambertMaterial({
-        color: baseColor.clone().lerp(new THREE.Color('#ffffff'), 0.14),
+      trackpadMat: new THREE.MeshPhongMaterial({
+        color: baseColor.clone().lerp(new THREE.Color('#ffffff'), 0.16),
+        specular: 0xe2e8f0,
+        shininess: 72,
       }),
       screenMat: new THREE.MeshBasicMaterial({ color: 0xffffff }),
     };
@@ -120,24 +123,26 @@ function createLaptopMaterials(
   return {
     chassisMat: new THREE.MeshStandardMaterial({
       color: baseColor.clone(),
-      metalness: 0.78,
-      roughness: 0.28,
+      metalness: 0.88,
+      roughness: 0.20,
+      envMapIntensity: 1.5,
       normalMap: textures.metalNormal,
-      normalScale: new THREE.Vector2(0.25, 0.25),
+      normalScale: new THREE.Vector2(0.28, 0.28),
       roughnessMap: textures.metalRoughness,
     }),
-    bezelMat: new THREE.MeshStandardMaterial({ color: 0x0b0c0e, roughness: 0.35, metalness: 0.2 }),
-    keyMat: new THREE.MeshStandardMaterial({ color: 0x17191d, roughness: 0.6, metalness: 0.1 }),
+    bezelMat: new THREE.MeshStandardMaterial({ color: 0x0b0c0e, roughness: 0.28, metalness: 0.35, envMapIntensity: 1.2 }),
+    keyMat: new THREE.MeshStandardMaterial({ color: 0x17191d, roughness: 0.55, metalness: 0.15 }),
     trackpadMat: new THREE.MeshStandardMaterial({
-      color: baseColor.clone().lerp(new THREE.Color('#ffffff'), 0.14),
-      metalness: 0.45,
-      roughness: 0.22,
+      color: baseColor.clone().lerp(new THREE.Color('#ffffff'), 0.16),
+      metalness: 0.68,
+      roughness: 0.16,
+      envMapIntensity: 1.35,
     }),
     screenMat: new THREE.MeshStandardMaterial({
       emissive: new THREE.Color('#ffffff'),
-      emissiveIntensity: 0.72,
-      roughness: 0.18,
-      metalness: 0.05,
+      emissiveIntensity: 0.78,
+      roughness: 0.14,
+      metalness: 0.08,
     }),
   };
 }

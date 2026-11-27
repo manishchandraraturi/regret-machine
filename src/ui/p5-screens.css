@@ -28,10 +28,10 @@
   border-radius: var(--r-panel);
   background: var(--glass-clear-bg);
   color: var(--clear-ink);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   box-shadow: 0 20px 44px color-mix(in oklab, var(--ink-black) 45%, transparent);
-  padding: var(--s5);
+  padding: clamp(20px, 2.8dvh, 36px);
   max-width: 520px;
 }
 
@@ -68,11 +68,11 @@
   display: inline-block;
   padding: var(--s2) var(--s3);
   border-radius: var(--r-panel);
-  background: linear-gradient(
-    180deg,
-    color-mix(in oklab, var(--wall-obsidian) 78%, transparent),
-    color-mix(in oklab, var(--wall-obsidian) 62%, transparent)
-  );
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
 }
 
 .stage-window {
@@ -137,7 +137,7 @@ section:has([data-phase='REVEAL']) .rm-scene-hint { display: none; }
   z-index: 2;
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: clamp(64px, 12vw, 168px);
+  font-size: clamp(68px, 12.5vw, 176px);
   line-height: 0.94;
   letter-spacing: -0.04em;
   margin: 0;
@@ -146,13 +146,13 @@ section:has([data-phase='REVEAL']) .rm-scene-hint { display: none; }
   background-clip: text;
   color: var(--spot-warm);
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 12px 32px color-mix(in oklab, var(--stock-red) 35%, transparent));
-  animation: rm-year-slam-in 520ms var(--ease-spring) both;
+  filter: drop-shadow(0 16px 38px color-mix(in oklab, var(--stock-red) 42%, transparent));
+  animation: rm-year-slam-in 600ms var(--ease-spring) both;
 }
 
 @keyframes rm-year-slam-in {
-  from { opacity: 0; transform: scale(1.65) translateY(-28px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
+  0% { opacity: 0; transform: scale(1.85) translateY(-36px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 .rm-scene-play > div:empty {
@@ -203,13 +203,13 @@ section:has([data-phase='REVEAL']) .rm-scene-hint { display: none; }
 .rm-result-stage-window { min-height: clamp(140px, 24dvh, 260px); width: 100%; }
 
 .rm-result-card {
-  padding: clamp(16px, 2.2dvh, 28px);
+  padding: clamp(18px, 3dvh, 36px);
   border: 1px solid var(--glass-clear-border);
   border-radius: var(--r-panel);
   background: var(--glass-clear-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 14px 32px color-mix(in oklab, var(--clear-blue) 12%, transparent);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-clear-shadow);
   display: flex;
   flex-direction: column;
   gap: var(--s3);
@@ -268,7 +268,7 @@ section:has([data-phase='REVEAL']) .rm-scene-hint { display: none; }
 
 /* Fair Fight table & 390px Hindi wrap safety */
 .rm-ff-wrap { width: 100%; overflow-x: auto; }
-.rm-ff-table { width: 100%; border-collapse: collapse; background: var(--glass-clear-bg); color: var(--clear-ink); border-radius: var(--r-lap); overflow: hidden; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 10px 28px color-mix(in oklab, var(--clear-blue) 10%, transparent); }
+.rm-ff-table { width: 100%; border-collapse: collapse; background: var(--glass-clear-bg); color: var(--clear-ink); border-radius: var(--r-lap); overflow: hidden; backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); box-shadow: var(--glass-clear-shadow); }
 .rm-ff-table th, .rm-ff-table td { border: 1px solid color-mix(in oklab, var(--clear-ink) 18%, transparent); padding: clamp(6px, 1.1dvh, 12px) var(--s3); text-align: left; vertical-align: top; overflow-wrap: anywhere; }
 .rm-ff-table thead th { background: color-mix(in oklab, var(--clear-blue) 10%, var(--studio-ice)); color: var(--clear-ink); }
 .rm-ff-concession { border-left: 5px solid var(--clear-blue); background: var(--studio-ice); }
