@@ -6,6 +6,7 @@ import './ui/overlays-and-gallery.css';
 import './ui/screens.css';
 import './ui/p5-screens.css';
 import './ui/scenes.css';
+import './ui/f1-layout.css';
 import { claim, getScenesConfig } from './core/data';
 import { getEnv } from './core/env';
 import { parseLangParam, translate } from './core/i18n';
@@ -43,7 +44,7 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
   topbar.className = 'rm-topbar';
 
   const brand = document.createElement('span');
-  brand.className = 'type-small';
+  brand.className = 'rm-wordmark';
   brand.textContent = translate(initialLang, 'app.title');
 
   const controls = document.createElement('div');
@@ -133,6 +134,7 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
     const isClear = screenId === 'result' || screenId === 'staff' || screenId === 'fairfight';
     shell.classList.toggle('skin-clear', isClear);
     document.body.classList.toggle('skin-clear', isClear);
+    document.documentElement.classList.toggle('skin-clear', isClear);
     if (isClear) {
       shell.style.setProperty('--sat', '1');
       shell.style.setProperty('--dim', '1');
@@ -152,6 +154,7 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
     cleanupScreen?.();
     idle.stop();
     document.body.classList.remove('skin-clear');
+    document.documentElement.classList.remove('skin-clear');
   };
 }
 

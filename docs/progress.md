@@ -16,10 +16,15 @@
 | P10 | DONE | phase-P10 | Fair Fight screen + fairfight.json (5 rows, 3 concessions), Hindi 390px pass + evidence/P10/ |
 | P11 | DONE | phase-P11 | Hardening: 120-180s timed run, jargon lint, axe 0 violations, 518.30 KB gzip, 0 third-party |
 | P12 | DONE | phase-P12, v1.0 | Deliverables finalised, SPEC_CHECKLIST audited (0 TODO rows), freeze tag v1.0 |
+| P13 | DONE | pre-polish (prior), 723a0b8 | Neo-Brutalist visual overhaul, Clear-skin `--sat`/`--dim` fix, mobile `.rm-controls` wrap fix, `evidence/P13/` |
+| F0 | DONE | pre-polish, 45938530876 | Root cause of 45650796492 identified (GitHub Pages HTTP 500), re-triggered on `723a0b8` (`build`+`deploy` success) |
+| F1 | DONE | - | Centered `1920x1080` stage (`>= 1200px`), marquee fade `mask-image`, Attract pink hero laptop + starburst, `48px` `.rm-wordmark`, `evidence/F1/` |
+| F2 | DEFERRED | - | Claims resolution deferred per Capt: kept 9 UNVERIFIED claims with `(unconfirmed)` labels & intact `fairfight.json` concessions (`SRC-21` SPEC GAP) |
+| F3 | DONE | v1.1 | Final Bundle F gate passed, live 390x844 & 1920x1080 verified, tagged `v1.1` (`v1.0` & `pre-polish` untouched) |
 
 ## SPEC GAP log
 - `SPEC GAP: SRC-23 - human WhatsApp/registration not evidenced in repo - agent cannot perform it`
-- `SPEC GAP: SRC-21 / ADD-03 (--release) - 9 used claims (C-05, C-06, C-10..C-16) remain UNVERIFIED in claims.json (check_claims.py --release exits 1) - human teammate B verification required`
+- `SPEC GAP: SRC-21 / ADD-03 (--release) - 9 used claims (C-05, C-06, C-10..C-16) remain UNVERIFIED in claims.json (check_claims.py --release exits 1; F2 deferred per Capt) - submission readiness is NOT READY`
 
 ## Decisions log
 | Date | Decision | Why | Source |
@@ -89,6 +94,7 @@
 - [x] FREEZE tag `v1.0` created before Fri 09:00
 
 ## Slice log (newest first)
+- 2026-11-27 Bundle F-UNBLOCK (F0+F1+F3, F2 deferred): committed P13 (`723a0b8`), verified CI deploy `45938530876` success (F0); implemented centered `1920x1080` stage, marquee fade `mask-image`, Attract pink hero laptop + starburst, `48px` `.rm-wordmark`, fixed `rm-pop-in` opacity, updated `docs/design.md §13`, captured 32 `evidence/F1/*.png` screenshots; deferred F2 per Capt (`SRC-21` SPEC GAP); tagged `v1.1`.
 - 2026-11-25 TEST-HARDENING: added `tests/e2e/cross-domain.spec.ts` (4 e2e tests) and `tests/unit/edge-cases.test.ts` (5 unit tests); 41 unit + 27 e2e pass, live Pages 390x844 logged-out walkthrough 0 third-party / 0 CSP violations, 518.30 KB gzip, forbidden API grep empty.
 
 ## Domain Test Matrix (TEST-HARDENING)

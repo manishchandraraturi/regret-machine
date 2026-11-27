@@ -185,7 +185,8 @@ body {
 /* Stage & grid */
 .stage {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
+  flex: 1;
   display: grid;
   grid-template-columns: 1fr 240px;
   grid-template-rows: auto 1fr auto;
