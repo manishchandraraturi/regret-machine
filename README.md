@@ -18,6 +18,13 @@ npm run e2e       # Playwright e2e + axe-core
 python tools/check_claims.py
 ```
 
+## Demo build
+Build and serve the production bundle locally for kiosk or jury demos:
+```bash
+npm run build; npm run preview
+```
+If the demo machine has no WebGL2 or a slow software GPU, append `?lite=1` to the URL (for example `http://localhost:4173/?lite=1`) to use the shaded CSS/DOM fallback.
+
 ## Claims policy
 Every Intel number on screen comes from `src/data/claims.json` with a source and baseline, and is marked "Intel-claimed, up to" (plus `(unconfirmed)` for any `UNVERIFIED` claim). Scenes are illustrations, not measurements.
 

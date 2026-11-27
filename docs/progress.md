@@ -33,7 +33,7 @@
 | R2 | DONE | - | `three@0.187.0` + `@types/three@0.187.0`, ambientCG CC0 `Concrete015`/`Metal009` self-hosted `.webp` (`4.1`–`31.7 KB`), `src/stage3d/*` (`RoomEnvironment`, procedural PBR laptop w/ `InstancedMesh` keys, lights, dust particles, adaptive 60-frame quality, fallback decision), `tests/unit/stage3d.test.ts` (44 unit tests green) |
 | R3 | DONE | v2-r3 | Lazy 3D wiring into Attract, Shelf, Result + software-GL fallback optimization + `?lite=1` e2e helper + `v2-r3` e2e (46/46 green) |
 | R4 | DONE | v2-r4 | Wired `ctx.setStageHint` in all 4 scenes (`lecture`, `battery`, `creator`, `private`) for 3D fail/alert/stutter/reveal dual-laptop showcase + `evidence/V2-r4/` |
-| R5 | IN PROGRESS | - | README Demo build section, final full gate, bundle gzip check, branch push |
+| R5 | DONE | v2-r5 | Added README Demo build section (`npm run build; npm run preview`, `?lite=1` fallback), final full gate green on `redesign-v2` |
 
 ## SPEC GAP log
 - `SPEC GAP: SRC-23 - human WhatsApp/registration not evidenced in repo - agent cannot perform it`
