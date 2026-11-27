@@ -29,7 +29,7 @@
 | F3 | DONE | v1.1 | Final Bundle F gate passed, live 390x844 & 1920x1080 verified, tagged `v1.1` (`v1.0` & `pre-polish` untouched) |
 | Part 1 (v1.2) | DONE | pre-fix, v1.2, pre-redesign | Shelf no-scroll fit at `1280x640`/`1366x768`/`1536x730` + Attract on-screen tags; CI `45942826383` green; live `main-4aIyqvME.js` verified (`7b89b96`) |
 | R0 | DONE | pre-redesign (`redesign-v2`) | Safety tag `pre-redesign`, branch `redesign-v2`, `evidence/V2-before/` (26 PNGs), `AGENTS.md §5`, `architecture.md §2,4`, `design.md` V2, `ASSETS.md`, `requirements.py` + `gen_docs.py` |
-| R1 | IN PROGRESS | - | V2 Obsidian/Studio palette, full-bleed 100dvh fit, shaded CSS 3D laptop fallback |
+| R1 | DONE | v2-r1 | V2 Obsidian/Studio palette, full-bleed `100dvh` fit across all 6 viewports (`1280x640`..`2560x1300` & `390x844`), `clip-path` shaded CSS laptop fallback, split `controls.css`/`fit-layout.css` (`<= 281` lines/file), updated `sharecard.ts`, `evidence/V2-r1/` |
 
 ## SPEC GAP log
 - `SPEC GAP: SRC-23 - human WhatsApp/registration not evidenced in repo - agent cannot perform it`

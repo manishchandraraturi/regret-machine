@@ -1,27 +1,30 @@
-/* Sticker */
+/* Sticker: crimson retail badge with high-contrast cream ink */
 .rm-sticker {
   display: inline-block;
-  padding: var(--s2) var(--s4);
-  background: var(--stock-red);
-  color: var(--sale-yellow);
-  border: 4px solid var(--print-black);
+  padding: var(--s1) var(--s3);
+  background: var(--crimson-badge);
+  color: var(--studio-white);
+  border: 1px solid color-mix(in oklab, var(--spot-warm) 35%, transparent);
+  border-radius: var(--s1);
+  box-shadow: 0 4px 12px color-mix(in oklab, var(--ink-black) 45%, transparent);
   font-family: var(--font-display);
   font-stretch: 62%;
   font-weight: 900;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1.1;
-  transform: rotate(-4deg);
+  transform: rotate(-3deg);
 }
 
-/* Starburst */
+/* Starburst: crimson neon practical showroom sign */
 .rm-starburst {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 168px;
-  height: 168px;
+  width: 164px;
+  height: 164px;
   opacity: calc(1 - var(--decay));
+  filter: drop-shadow(0 0 22px color-mix(in oklab, var(--stock-red) 62%, transparent));
   transition: opacity var(--t-fast) var(--ease);
 }
 
@@ -37,36 +40,37 @@
 }
 
 .rm-starburst-poly {
-  fill: var(--stock-red);
-  stroke: var(--print-black);
-  stroke-width: 4;
+  fill: var(--crimson-badge);
+  stroke: var(--stock-red);
+  stroke-width: 3;
   stroke-linejoin: round;
 }
 
 .rm-starburst-text {
   position: relative;
   z-index: 1;
-  color: var(--sale-yellow);
+  color: var(--studio-white);
   font-family: var(--font-display);
   font-stretch: 62%;
   font-weight: 900;
-  font-size: 26px;
+  font-size: 25px;
   line-height: 1;
   text-align: center;
   transform: rotate(-8deg);
   padding: var(--s2);
+  text-shadow: 0 2px 10px color-mix(in oklab, var(--ink-black) 45%, transparent);
 }
 
-/* PriceTag */
+/* PriceTag: crisp showroom paper stock (#F4F1EA) with ink (#111111) */
 .rm-pricetag {
   position: relative;
   display: inline-flex;
-  min-width: 180px;
+  min-width: 172px;
   min-height: var(--tap);
   padding: var(--s3) 0 var(--s1);
   border: 0;
   background: transparent;
-  color: var(--print-black);
+  color: var(--ink-black);
   cursor: pointer;
   text-align: left;
 }
@@ -79,15 +83,18 @@
   gap: var(--s1);
   width: 100%;
   padding: var(--s5) var(--s5) var(--s4);
-  background: var(--white);
-  color: var(--print-black);
-  border: 3px solid var(--print-black);
+  background: var(--paper-white);
+  color: var(--ink-black);
+  border: 1px solid color-mix(in oklab, var(--ink-black) 16%, transparent);
   border-radius: var(--r-tag);
-  box-shadow: 6px 6px 0 var(--print-black);
+  box-shadow:
+    0 10px 24px color-mix(in oklab, var(--ink-black) 48%, transparent),
+    0 2px 6px color-mix(in oklab, var(--ink-black) 26%, transparent);
   transform-origin: 50% 12px;
   transition:
     transform var(--t-fast) var(--ease),
-    box-shadow var(--t-fast) var(--ease);
+    box-shadow var(--t-fast) var(--ease),
+    border-color var(--t-fast) var(--ease);
 }
 
 .rm-pricetag:focus-visible {
@@ -99,11 +106,13 @@
 .rm-pricetag[aria-pressed='true'] .rm-pricetag-card {
   outline: 4px solid var(--clear-blue);
   outline-offset: 2px;
+  box-shadow:
+    0 14px 28px color-mix(in oklab, var(--clear-blue) 32%, transparent),
+    0 2px 8px color-mix(in oklab, var(--ink-black) 35%, transparent);
 }
 
 .rm-pricetag:active .rm-pricetag-card {
-  transform: translate(3px, 3px);
-  box-shadow: 3px 3px 0 var(--print-black);
+  transform: translateY(2px);
 }
 
 .rm-pricetag-string {
@@ -113,7 +122,12 @@
   transform: translateX(-50%);
   width: 28px;
   height: 28px;
+  color: var(--spot-warm);
   pointer-events: none;
+}
+
+.skin-clear .rm-pricetag-string {
+  color: var(--clear-ink);
 }
 
 .rm-pricetag-mrp {
@@ -122,7 +136,7 @@
   font-family: var(--font-body);
   font-size: 16px;
   font-weight: 600;
-  color: var(--dust);
+  color: color-mix(in oklab, var(--ink-black) 68%, var(--dust));
   padding: 0 var(--s1);
 }
 
@@ -152,143 +166,4 @@
   font-family: var(--font-body);
   font-size: 16px;
   font-weight: 600;
-}
-
-/* Button */
-.rm-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: var(--tap);
-  min-width: var(--tap);
-  padding: var(--s3) var(--s6);
-  border-radius: var(--r-btn);
-  border: 3px solid var(--print-black);
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-fg);
-  box-shadow: 4px 4px 0 var(--print-black);
-  font-family: var(--font-body);
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 1.1;
-  cursor: pointer;
-  transition:
-    transform var(--t-fast) var(--ease),
-    box-shadow var(--t-fast) var(--ease);
-}
-
-@media (max-width: 699px) {
-  .rm-btn {
-    font-size: 20px;
-  }
-}
-
-.rm-btn--secondary {
-  background: var(--white);
-  color: var(--fg);
-  border-color: var(--print-black);
-}
-
-.skin-clear .rm-btn--primary {
-  background: var(--clear-blue);
-  color: var(--white);
-  border-color: var(--print-black);
-}
-
-@media (hover: hover) {
-  .rm-btn:not([aria-disabled='true']):hover {
-    transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0 var(--print-black);
-  }
-}
-
-.rm-btn:not([aria-disabled='true']):active {
-  transform: translate(3px, 3px);
-  box-shadow: 1px 1px 0 var(--print-black);
-}
-
-.rm-btn:focus-visible {
-  outline: 4px solid var(--clear-blue);
-  outline-offset: 3px;
-}
-
-.rm-btn[aria-disabled='true'] {
-  opacity: 0.45;
-  box-shadow: 2px 2px 0 var(--print-black);
-  cursor: not-allowed;
-}
-
-@keyframes rm-buy-pulse {
-  0%,
-  100% {
-    box-shadow:
-      4px 4px 0 var(--print-black),
-      0 0 0 0 color-mix(in oklab, var(--stock-red) 65%, transparent);
-  }
-  50% {
-    box-shadow:
-      4px 4px 0 var(--print-black),
-      0 0 0 8px color-mix(in oklab, var(--stock-red) 0%, transparent);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .rm-btn--buy:not([aria-disabled='true']) {
-    animation: rm-buy-pulse 1.8s ease-in-out infinite;
-  }
-
-  .rm-btn--buy:not([aria-disabled='true']):hover,
-  .rm-btn--buy:not([aria-disabled='true']):active {
-    animation: none;
-  }
-}
-
-/* Chip */
-.rm-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: var(--tap);
-  min-width: var(--tap);
-  padding: var(--s2) var(--s5);
-  border-radius: var(--r-btn);
-  border: 3px solid var(--print-black);
-  background: var(--white);
-  color: var(--fg);
-  box-shadow: 3px 3px 0 var(--print-black);
-  font-family: var(--font-body);
-  font-size: 20px;
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    transform var(--t-fast) var(--ease),
-    box-shadow var(--t-fast) var(--ease);
-}
-
-@media (hover: hover) {
-  .rm-chip:hover {
-    transform: scale(1.05);
-    box-shadow: 5px 5px 0 var(--print-black);
-  }
-}
-
-.rm-chip:active {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--print-black);
-}
-
-.rm-chip[aria-pressed='true'] {
-  background: var(--print-black);
-  color: var(--sale-yellow);
-}
-
-.skin-clear .rm-chip[aria-pressed='true'] {
-  background: var(--clear-blue);
-  border-color: var(--print-black);
-  color: var(--white);
-}
-
-.rm-chip:focus-visible {
-  outline: 4px solid var(--clear-blue);
-  outline-offset: 3px;
 }

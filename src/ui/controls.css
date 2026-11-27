@@ -1,0 +1,149 @@
+/* Button: spotlight warm in Act I, Clear Blue in Act III */
+.rm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
+  min-width: var(--tap);
+  padding: var(--s3) var(--s6);
+  border-radius: var(--r-btn);
+  border: 1px solid color-mix(in oklab, var(--spot-warm) 35%, transparent);
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-fg);
+  box-shadow:
+    0 8px 24px color-mix(in oklab, var(--ink-black) 42%, transparent),
+    inset 0 1px 0 color-mix(in oklab, var(--studio-white) 55%, transparent);
+  font-family: var(--font-body);
+  font-size: clamp(18px, 1.4vw, 22px);
+  font-weight: 700;
+  line-height: 1.1;
+  cursor: pointer;
+  transition:
+    transform var(--t-fast) var(--ease),
+    box-shadow var(--t-fast) var(--ease);
+}
+
+.rm-btn--secondary {
+  background: color-mix(in oklab, var(--floor-graphite) 88%, var(--wall-obsidian));
+  color: var(--paper-white);
+  border-color: color-mix(in oklab, var(--paper-white) 24%, transparent);
+  box-shadow: 0 4px 14px color-mix(in oklab, var(--ink-black) 35%, transparent);
+}
+
+.skin-clear .rm-btn--primary {
+  background: var(--clear-blue);
+  color: var(--studio-white);
+  border-color: color-mix(in oklab, var(--clear-blue) 80%, var(--clear-ink));
+}
+
+.skin-clear .rm-btn--secondary {
+  background: var(--studio-white);
+  color: var(--clear-ink);
+  border-color: color-mix(in oklab, var(--clear-ink) 22%, transparent);
+  box-shadow: 0 2px 10px color-mix(in oklab, var(--clear-ink) 10%, transparent);
+}
+
+@media (hover: hover) {
+  .rm-btn:not([aria-disabled='true']):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px color-mix(in oklab, var(--ink-black) 52%, transparent);
+  }
+}
+
+.rm-btn:not([aria-disabled='true']):active {
+  transform: translateY(2px);
+}
+
+.rm-btn:focus-visible {
+  outline: 4px solid var(--clear-blue);
+  outline-offset: 3px;
+}
+
+.rm-btn[aria-disabled='true'] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@keyframes rm-buy-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 8px 24px color-mix(in oklab, var(--ink-black) 42%, transparent),
+      0 0 0 0 color-mix(in oklab, var(--spot-warm) 55%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 8px 24px color-mix(in oklab, var(--ink-black) 42%, transparent),
+      0 0 0 10px color-mix(in oklab, var(--spot-warm) 0%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rm-btn--buy:not([aria-disabled='true']),
+  [data-screen='attract'] .rm-btn--primary {
+    animation: rm-buy-pulse 4s ease-in-out infinite;
+  }
+
+  .rm-btn--buy:not([aria-disabled='true']):hover,
+  [data-screen='attract'] .rm-btn--primary:hover {
+    animation: none;
+  }
+}
+
+/* Chip: matte graphite glass in Act I, studio pill in Act III */
+.rm-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
+  min-width: var(--tap);
+  padding: var(--s2) var(--s5);
+  border-radius: var(--r-btn);
+  border: 1px solid color-mix(in oklab, var(--paper-white) 24%, transparent);
+  background: color-mix(in oklab, var(--floor-graphite) 88%, var(--wall-obsidian));
+  color: var(--paper-white);
+  box-shadow: 0 4px 12px color-mix(in oklab, var(--ink-black) 35%, transparent);
+  font-family: var(--font-body);
+  font-size: clamp(17px, 1.3vw, 20px);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform var(--t-fast) var(--ease),
+    background-color 0s linear,
+    border-color var(--t-fast) var(--ease);
+}
+
+.skin-clear .rm-chip {
+  background: var(--studio-white);
+  color: var(--clear-ink);
+  border-color: color-mix(in oklab, var(--clear-ink) 22%, transparent);
+}
+
+@media (hover: hover) {
+  .rm-chip:hover {
+    transform: scale(1.03);
+    border-color: var(--spot-warm);
+  }
+}
+
+.rm-chip:active {
+  transform: translateY(1px);
+}
+
+.rm-chip[aria-pressed='true'] {
+  background: var(--spot-warm);
+  color: var(--ink-black);
+  border-color: var(--spot-warm);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--clear-blue) 45%, transparent);
+}
+
+.skin-clear .rm-chip[aria-pressed='true'] {
+  background: var(--clear-blue);
+  border-color: var(--clear-blue);
+  color: var(--studio-white);
+}
+
+.rm-chip:focus-visible {
+  outline: 4px solid var(--clear-blue);
+  outline-offset: 3px;
+}

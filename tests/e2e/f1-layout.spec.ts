@@ -98,7 +98,7 @@ test.describe('F1 Layout polish: centered stage, marquee fade, Attract hero', ()
       await page.getByRole('button', { name: 'See the fair fight' }).click();
       await expect(page.locator('[data-screen="fairfight"]')).toBeVisible();
       const bodyBg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
-      expect(bodyBg).toBe('rgb(247, 250, 255)');
+      expect(bodyBg).toBe('rgb(238, 243, 250)');
       await page.screenshot({ path: `evidence/F1/fairfight-${vp.width}x${vp.height}.png` });
 
       await page.getByRole('button', { name: 'Next' }).click();

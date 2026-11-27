@@ -1,12 +1,13 @@
-/* F1 Layout polish: centered 1920x1080 stage, marquee fade, Attract hero, wordmark */
+/* V2 Full-bleed viewport layout, centered <= 1920px safe grid, zero desktop scroll */
 .rm-wordmark {
   font-family: var(--font-display);
   font-stretch: 62%;
   font-weight: 900;
-  font-size: clamp(26px, 2.8vw, 48px);
+  font-size: clamp(24px, 2.6vw, 48px);
   line-height: 1.05;
   letter-spacing: -0.01em;
   margin: 0;
+  color: var(--fg);
 }
 
 :lang(hi) .rm-wordmark,
@@ -50,14 +51,12 @@
   margin: 0 auto;
 }
 
-/* Attract tags: always stay fully visible on screen, gentle in-place sway */
+/* Attract tags: always on screen with gentle in-place string sway */
 .rm-marquee {
   display: flex;
   width: 100%;
   overflow: visible;
-  padding: var(--s3) 0;
-  -webkit-mask-image: none;
-  mask-image: none;
+  padding: var(--s2) 0;
 }
 
 .rm-marquee-track {
@@ -65,7 +64,6 @@
   flex-wrap: nowrap;
   gap: clamp(10px, 1.4vw, 24px);
   width: 100%;
-  animation: none;
 }
 
 .rm-attract .rm-pricetag {
@@ -82,20 +80,28 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .rm-marquee-track .rm-pricetag-card {
+  .rm-marquee-track .rm-pricetag-card,
+  .rm-shelf-item .rm-pricetag-card {
     animation: rm-sway 4.5s ease-in-out infinite alternate;
   }
 
-  .rm-marquee-track .rm-pricetag:nth-child(2) .rm-pricetag-card {
+  .rm-marquee-track .rm-pricetag:nth-child(2) .rm-pricetag-card,
+  .rm-shelf-item:nth-child(2) .rm-pricetag-card {
     animation-delay: -1.5s;
   }
 
-  .rm-marquee-track .rm-pricetag:nth-child(3) .rm-pricetag-card {
+  .rm-marquee-track .rm-pricetag:nth-child(3) .rm-pricetag-card,
+  .rm-shelf-item:nth-child(3) .rm-pricetag-card {
     animation-delay: -3s;
+  }
+
+  .rm-shelf-item .rm-pricetag:hover .rm-pricetag-card,
+  .rm-shelf-item .rm-pricetag:focus-visible .rm-pricetag-card {
+    animation-play-state: paused;
   }
 }
 
-/* Attract two-column centered hero */
+/* Attract two-column centered showroom hero */
 .rm-attract {
   justify-content: center;
 }
@@ -112,12 +118,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  gap: clamp(10px, 2dvh, 24px);
+  gap: clamp(10px, 2dvh, 22px);
   min-width: 0;
 }
 
 .rm-attract-copy .type-flyer {
-  font-size: clamp(64px, min(6.6vw, 11dvh), 144px);
+  font-size: clamp(60px, min(6.6vw, 10.5dvh), 136px);
 }
 
 .rm-attract-visual {
@@ -135,75 +141,25 @@
   padding: clamp(12px, 2dvh, 24px) var(--s4);
 }
 
-/* Shelf viewport fit >= 1280x640 (and 700px+ landscape) */
-@media (min-width: 700px) {
-  .rm-shelf {
-    gap: clamp(6px, 1.6dvh, 20px);
-    justify-content: space-between;
-  }
-
-  .rm-shelf > .type-title {
-    font-size: clamp(26px, min(3vw, 4.8dvh), 52px);
-  }
-
-  .rm-shelf-grid {
-    gap: clamp(12px, 1.6vw, 24px);
-  }
-
-  .rm-shelf-item {
-    gap: clamp(4px, 0.8dvh, 12px);
-    padding: clamp(6px, 1dvh, 16px) var(--s3);
-  }
-
-  .rm-shelf-stickers {
-    gap: var(--s1);
-  }
-
-  .rm-shelf-stickers .rm-sticker {
-    font-size: clamp(13px, min(1.25vw, 2.4dvh), 20px);
-    padding: 2px var(--s2);
-    border-width: 2px;
-  }
-
-  .rm-shelf-item .rm-pricetag {
-    padding: var(--s1) 0 0;
-    min-width: clamp(150px, 14vw, 180px);
-  }
-
-  .rm-shelf-item .rm-pricetag-card {
-    padding: clamp(10px, 1.6dvh, 20px) var(--s4) clamp(6px, 1dvh, 14px);
-  }
-
-  .rm-shelf-item .rm-pricetag-price {
-    font-size: clamp(24px, 3.8dvh, 36px);
-  }
-
-  .rm-shelf-item .rm-laptop {
-    width: auto;
-  }
-
-  .rm-shelf-item .rm-laptop-lid {
-    width: clamp(118px, 18dvh, 204px);
-    height: auto;
-    aspect-ratio: 204 / 134;
-    padding: clamp(4px, 0.8dvh, 8px);
-  }
-
-  .rm-shelf-item .rm-laptop-base {
-    width: clamp(134px, 20.5dvh, 232px);
-    height: auto;
-  }
+.rm-attract-stage .rm-laptop {
+  width: 100%;
 }
 
-@media (max-height: 760px) and (min-width: 700px) {
-  .rm-btn,
-  .rm-chip {
-    min-height: 48px;
-  }
+.rm-attract-stage .rm-laptop-lid {
+  width: 90%;
+  height: auto;
+  aspect-ratio: 204 / 130;
+}
 
-  .rm-wordmark {
-    font-size: clamp(24px, 2.4vw, 38px);
-  }
+.rm-attract-stage .rm-laptop-deck {
+  width: 100%;
+}
+
+.rm-attract-starburst {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  z-index: 6;
 }
 
 @media (max-width: 699px) {
@@ -230,28 +186,6 @@
   .rm-attract .rm-pricetag-label {
     font-size: 12px;
   }
-}
-
-.rm-attract-stage .rm-laptop {
-  width: 100%;
-}
-
-.rm-attract-stage .rm-laptop-lid {
-  width: 92%;
-  height: auto;
-  aspect-ratio: 204 / 134;
-}
-
-.rm-attract-stage .rm-laptop-base {
-  width: 100%;
-  height: auto;
-}
-
-.rm-attract-starburst {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  z-index: 6;
 }
 
 @media (max-width: 959px) {

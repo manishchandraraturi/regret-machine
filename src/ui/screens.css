@@ -1,10 +1,27 @@
-/* Laptop illustration (tokens only) */
+/* V2 Shaded 3D-perspective Metallic Laptop Fallback (tokens only) */
 .rm-laptop {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 220px;
+  width: 224px;
   max-width: 100%;
+  padding-bottom: 10px;
+}
+
+.rm-laptop::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 86%;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in oklab, var(--ink-black) 65%, transparent),
+    transparent 72%
+  );
+  pointer-events: none;
 }
 
 .rm-laptop--pink {
@@ -21,21 +38,32 @@
 
 .rm-laptop-lid {
   width: 204px;
-  height: 134px;
-  padding: var(--s2);
-  background: var(--lap-fill);
-  border: 3px solid var(--print-black);
-  border-radius: var(--r-lap);
-  box-shadow: 4px 4px 0 var(--print-black);
+  height: 130px;
+  padding: 6px;
+  background: linear-gradient(
+    138deg var(--in-oklab),
+    color-mix(in oklab, var(--lap-fill) 86%, var(--studio-white)),
+    var(--lap-fill) 52%,
+    color-mix(in oklab, var(--lap-fill) 68%, var(--ink-black))
+  );
+  border: 1px solid color-mix(in oklab, var(--studio-white) 42%, var(--lap-fill));
+  border-radius: var(--r-lap) var(--r-lap) 6px 6px;
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--studio-white) 55%, transparent),
+    0 12px 24px color-mix(in oklab, var(--ink-black) 52%, transparent);
   display: flex;
 }
 
 .rm-laptop-bezel {
   position: relative;
   flex: 1;
-  background: color-mix(in oklab, var(--print-black) 80%, var(--dust));
-  border: 2px solid var(--print-black);
-  border-radius: calc(var(--r-lap) - 4px);
+  background: linear-gradient(
+    180deg var(--in-oklab),
+    var(--wall-obsidian),
+    var(--floor-graphite)
+  );
+  border: 1px solid color-mix(in oklab, var(--paper-white) 14%, transparent);
+  border-radius: calc(var(--r-lap) - 5px);
   padding: 10px 7px 7px;
   display: flex;
 }
@@ -48,28 +76,21 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--dust);
+  background: color-mix(in oklab, var(--clear-blue) 45%, var(--dust));
 }
 
 .rm-laptop-screen {
   position: relative;
   flex: 1;
   background: linear-gradient(
-    155deg,
-    var(--clear-white) 0%,
-    color-mix(in oklab, var(--clear-blue) 14%, var(--clear-white)) 60%,
-    color-mix(in oklab, var(--lap-fill) 24%, var(--clear-white)) 100%
+    155deg var(--in-oklab),
+    color-mix(in oklab, var(--clear-blue) 18%, var(--wall-obsidian)) 0%,
+    color-mix(in oklab, var(--lap-fill) 34%, var(--floor-graphite)) 65%,
+    color-mix(in oklab, var(--spot-warm) 16%, var(--floor-graphite)) 100%
   );
-  color: var(--print-black);
-  border: 2px solid var(--print-black);
+  color: var(--paper-white);
   border-radius: var(--s1);
-  box-shadow:
-    inset 0 0 18px color-mix(in oklab, var(--clear-blue) 22%, transparent),
-    0 0 12px color-mix(in oklab, var(--clear-white) 55%, transparent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--s2);
+  box-shadow: inset 0 0 18px color-mix(in oklab, var(--clear-blue) 28%, transparent);
   overflow: hidden;
 }
 
@@ -79,44 +100,68 @@
   inset: 0;
   background: linear-gradient(
     120deg,
-    transparent 20%,
-    color-mix(in oklab, var(--white) 55%, transparent) 38%,
+    transparent 16%,
+    color-mix(in oklab, var(--studio-white) 30%, transparent) 36%,
     transparent 52%
   );
   pointer-events: none;
 }
 
-.rm-laptop-base {
-  width: 232px;
-  height: 34px;
-  display: block;
-}
-
-.rm-laptop-trapezoid {
-  fill: var(--lap-fill);
-  stroke: var(--print-black);
-  stroke-width: 3;
-  stroke-linejoin: round;
+.rm-laptop-hinge {
+  width: 72%;
+  height: 5px;
+  background: linear-gradient(
+    180deg var(--in-oklab),
+    var(--ink-black),
+    color-mix(in oklab, var(--paper-white) 35%, var(--floor-graphite))
+  );
+  border-radius: 2px;
 }
 
 .rm-laptop-deck {
-  fill: color-mix(in oklab, var(--dust) 55%, var(--print-black));
-  stroke: var(--print-black);
-  stroke-width: 1.5;
+  width: 224px;
+  padding: 6px 14px 7px;
+  background: linear-gradient(
+    180deg var(--in-oklab),
+    color-mix(in oklab, var(--lap-fill) 80%, var(--studio-white)),
+    color-mix(in oklab, var(--lap-fill) 72%, var(--ink-black))
+  );
+  border-radius: 4px 4px 10px 10px;
+  border-bottom: 4px solid color-mix(in oklab, var(--lap-fill) 45%, var(--ink-black));
+  box-shadow: 0 8px 16px color-mix(in oklab, var(--ink-black) 48%, transparent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  clip-path: polygon(5% 0, 95% 0, 100% 100%, 0 100%);
 }
 
-.rm-laptop-key {
-  fill: color-mix(in oklab, var(--print-black) 78%, var(--dust));
+.rm-laptop-keys {
+  width: 100%;
+  height: 22px;
+  border-radius: 3px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      var(--wall-obsidian) 0 8px,
+      color-mix(in oklab, var(--lap-fill) 30%, var(--floor-graphite)) 8px 10px
+    ),
+    var(--floor-graphite);
+  border: 1px solid color-mix(in oklab, var(--ink-black) 55%, transparent);
 }
 
 .rm-laptop-trackpad {
-  fill: color-mix(in oklab, var(--dust) 70%, var(--clear-white));
-  stroke: var(--print-black);
-  stroke-width: 1.5;
+  width: 34%;
+  height: 11px;
+  border-radius: 3px;
+  background: color-mix(in oklab, var(--lap-fill) 55%, var(--studio-white));
+  border: 1px solid color-mix(in oklab, var(--ink-black) 28%, transparent);
 }
 
 /* Shared shell & corners */
 .rm-shell {
+  position: relative;
+  z-index: 2;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -145,8 +190,9 @@
   gap: var(--s2);
   align-items: center;
   padding: var(--s2) var(--s3);
-  background: var(--paper);
-  border: 2px solid var(--print-black);
+  background: color-mix(in oklab, var(--floor-graphite) 92%, var(--wall-obsidian));
+  border: 1px solid color-mix(in oklab, var(--paper-white) 24%, transparent);
+  border-radius: var(--r-lap);
   flex-wrap: wrap;
 }
 
@@ -156,41 +202,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: var(--s5);
+  gap: var(--s4);
   position: relative;
-}
-
-.rm-attract-hero {
-  display: flex;
-  align-items: center;
-  gap: var(--s6);
-  flex-wrap: wrap;
-}
-
-.rm-marquee {
-  display: flex;
-  gap: var(--s5);
-  overflow: hidden;
-  padding: var(--s5) var(--s2);
-}
-
-.rm-marquee-track {
-  display: flex;
-  gap: var(--s5);
-  animation: attract-drift 40s linear infinite;
-}
-
-.rm-attract:focus-within .rm-marquee-track {
-  animation-play-state: paused;
-}
-
-@keyframes attract-drift {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-35%);
-  }
 }
 
 /* Shelf */
@@ -198,13 +211,13 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--s5);
+  gap: clamp(8px, 1.6dvh, 20px);
 }
 
 .rm-shelf-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--s5);
+  gap: clamp(12px, 1.8vw, 24px);
   align-items: end;
 }
 
@@ -218,9 +231,17 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--s3);
-  padding: var(--s4);
-  border-bottom: 4px solid var(--print-black);
+  gap: clamp(6px, 1dvh, 14px);
+  padding: clamp(10px, 1.4dvh, 18px) var(--s4);
+  background: linear-gradient(
+    180deg var(--in-oklab),
+    color-mix(in oklab, var(--floor-graphite) 58%, transparent),
+    color-mix(in oklab, var(--floor-graphite) 92%, var(--wall-obsidian))
+  );
+  border: 1px solid color-mix(in oklab, var(--paper-white) 16%, transparent);
+  border-bottom: 3px solid color-mix(in oklab, var(--spot-warm) 35%, transparent);
+  border-radius: var(--r-panel);
+  box-shadow: 0 14px 28px color-mix(in oklab, var(--ink-black) 44%, transparent);
 }
 
 .rm-shelf-stickers {
@@ -235,56 +256,19 @@
   gap: var(--s3);
 }
 
-@keyframes rm-float {
+@keyframes rm-pop-in {
   from {
-    translate: 0 0;
+    opacity: 0.85;
+    transform: translateY(4px);
   }
   to {
-    translate: 0 -8px;
-  }
-}
-
-@keyframes rm-pop-in {
-  0% {
-    transform: scale(0.95);
-  }
-  70% {
-    transform: scale(1.015);
-  }
-  100% {
-    transform: scale(1);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .rm-marquee-track .rm-pricetag-card,
-  .rm-shelf-item .rm-pricetag-card {
-    animation: rm-float 4s ease-in-out infinite alternate;
-  }
-
-  .rm-marquee-track .rm-pricetag:nth-child(2) .rm-pricetag-card,
-  .rm-shelf-item:nth-child(2) .rm-pricetag-card {
-    animation-delay: -1.3s;
-  }
-
-  .rm-marquee-track .rm-pricetag:nth-child(3) .rm-pricetag-card,
-  .rm-shelf-item:nth-child(3) .rm-pricetag-card {
-    animation-delay: -2.6s;
-  }
-
-  .rm-marquee-track:hover .rm-pricetag-card,
-  .rm-shelf-item .rm-pricetag:hover .rm-pricetag-card,
-  .rm-shelf-item .rm-pricetag:focus-visible .rm-pricetag-card {
-    animation-play-state: paused;
-  }
-
   .rm-shell > main > [data-screen] {
-    animation: rm-pop-in 320ms cubic-bezier(0.2, 1.35, 0.4, 1) both;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .rm-marquee-track {
-    animation: none;
+    animation: rm-pop-in 220ms var(--ease) both;
   }
 }

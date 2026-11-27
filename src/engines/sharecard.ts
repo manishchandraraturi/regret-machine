@@ -18,7 +18,14 @@ export function drawShareCard(
   const ctx = canvas.getContext('2d');
   if (!ctx) return canvas;
 
-  ctx.fillStyle = '#F7FAFF';
+  if (typeof ctx.createLinearGradient === 'function') {
+    const grad = ctx.createLinearGradient(0, 0, SHARE_CARD_WIDTH, SHARE_CARD_HEIGHT);
+    grad.addColorStop(0, '#EEF3FA');
+    grad.addColorStop(1, '#FFFFFF');
+    ctx.fillStyle = grad;
+  } else {
+    ctx.fillStyle = '#EEF3FA';
+  }
   ctx.fillRect(0, 0, SHARE_CARD_WIDTH, SHARE_CARD_HEIGHT);
 
   ctx.fillStyle = '#0B63F6';
@@ -40,6 +47,9 @@ export function drawShareCard(
   ctx.font = '600 44px "Mukta", sans-serif';
   ctx.fillText(data.tierLine, 80, 840);
 
+  ctx.fillStyle = '#7E8A83';
+  ctx.fillRect(80, 1710, 920, 2);
+  ctx.fillStyle = '#0A1530';
   ctx.font = '400 32px "Mukta", sans-serif';
   ctx.fillText(data.footerLine, 80, 1780, 920);
   return canvas;

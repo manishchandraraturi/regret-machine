@@ -1,40 +1,51 @@
 :root {
-  /* colour roles, Act I flyer */
-  --sale-yellow: #ffd21f;
+  /* V2 Act I Obsidian Showroom & Paper tokens */
+  --wall-obsidian: #0b0c0e;
+  --floor-graphite: #17191d;
+  --spot-warm: #fff3e0;
   --stock-red: #e4262b;
-  --print-black: #000000;
+  --crimson-badge: #be1f24;
+  --paper-white: #f4f1ea;
+  --ink-black: #111111;
   --thermal: #ecebe6;
-  --dust: #7c8084;
-  --clear-blue: #0b63f6;
-  --clear-white: #f7faff;
-  --clear-ink: #0a1530;
-  --white: #ffffff;
+  --dust: #7e8a83;
 
-  /* laptop colourways (decoys) */
+  /* V2 Act III Bright Studio */
+  --studio-ice: #eef3fa;
+  --studio-white: #ffffff;
+  --clear-blue: #0b63f6;
+  --clear-ink: #0a1530;
+
+  /* semantic & compatibility aliases (zero hex in components) */
+  --sale-yellow: var(--spot-warm);
+  --print-black: var(--ink-black);
+  --clear-white: var(--studio-ice);
+  --white: var(--studio-white);
+
+  /* laptop metallic colourways (unbranded decoys) */
   --lap-pink: #ff6fa5;
   --lap-mint: #66e0be;
   --lap-lilac: #b9a7ff;
 
-  /* semantic */
-  --bg: var(--sale-yellow);
-  --fg: var(--print-black);
+  /* semantic Act I defaults */
+  --bg: var(--wall-obsidian);
+  --fg: var(--paper-white);
+  --surface: var(--floor-graphite);
+  --surface-card: var(--paper-white);
+  --surface-card-ink: var(--ink-black);
   --accent: var(--stock-red);
   --paper: var(--thermal);
   --danger: var(--stock-red);
   --ok: var(--clear-blue);
-  --btn-primary-bg: var(--print-black);
-  --btn-primary-fg: var(--sale-yellow);
+  --btn-primary-bg: var(--spot-warm);
+  --btn-primary-fg: var(--ink-black);
+  --in-oklab: ;
 
-  /* typography */
-  --font-display: 'Archivo Variable', 'Archivo', sans-serif;
-  --font-body: 'Mukta', sans-serif;
-  --font-receipt: 'DM Mono', monospace;
-
-  /* decay (set by decay.ts; 0..1) */
+  /* decay (driven by src/ui/decay.ts; 0..1) */
   --decay: 0;
   --sat: calc(1 - 0.85 * var(--decay));
-  --dim: calc(1 - 0.12 * var(--decay));
-  --grain-opacity: calc(0.08 + 0.42 * var(--decay));
+  --dim: calc(1 - 0.14 * var(--decay));
+  --grain-opacity: calc(0.06 + 0.34 * var(--decay));
   --scratch-opacity: 0;
   --crack-opacity: 0;
 
@@ -48,30 +59,43 @@
   --s7: 48px;
   --s8: 72px;
 
-  /* radii: different per element role */
+  /* radii */
   --r-tag: 6px 18px 6px 6px;
   --r-btn: 999px;
   --r-paper: 2px;
   --r-lap: 14px;
+  --r-panel: 16px;
 
   /* layout */
   --tap: 56px;
   --stage-w: 1920;
   --stage-h: 1080;
 
+  /* typography */
+  --font-display: 'Archivo Variable', 'Archivo', sans-serif;
+  --font-body: 'Mukta', sans-serif;
+  --font-receipt: 'DM Mono', monospace;
+
   /* motion */
-  --t-fast: 120ms;
+  --t-fast: 140ms;
   --t-flip: 1200ms;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
+@supports (background: linear-gradient(in oklab, white, black)) {
+  :root {
+    --in-oklab: in oklab;
+  }
+}
+
 .skin-clear,
 .decay-scope.skin-clear {
-  --bg: var(--clear-white);
+  --bg: var(--studio-ice);
   --fg: var(--clear-ink);
+  --surface: var(--studio-white);
   --accent: var(--clear-blue);
   --btn-primary-bg: var(--clear-blue);
-  --btn-primary-fg: var(--white);
+  --btn-primary-fg: var(--studio-white);
   --sat: 1 !important;
   --dim: 1 !important;
   --grain-opacity: 0 !important;

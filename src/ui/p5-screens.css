@@ -8,7 +8,7 @@
   align-items: center;
   min-height: var(--tap);
   padding: var(--s1) var(--s4);
-  background: var(--clear-white);
+  background: var(--studio-white);
   color: var(--clear-ink);
   border: 2px solid var(--clear-blue);
   border-radius: var(--r-btn);
@@ -24,10 +24,11 @@
 }
 
 .rm-claim-sheet {
-  border: 3px solid var(--print-black);
-  border-radius: var(--r-lap);
-  background: var(--clear-white);
+  border: 1px solid color-mix(in oklab, var(--clear-blue) 40%, var(--clear-ink));
+  border-radius: var(--r-panel);
+  background: var(--studio-white);
   color: var(--clear-ink);
+  box-shadow: 0 18px 40px color-mix(in oklab, var(--ink-black) 45%, transparent);
   padding: var(--s5);
   max-width: 520px;
 }
@@ -44,8 +45,8 @@
 .rm-scene-year {
   display: inline-block;
   padding: var(--s1) var(--s3);
-  background: var(--print-black);
-  color: var(--sale-yellow);
+  background: var(--spot-warm);
+  color: var(--ink-black);
   border-radius: var(--r-btn);
   font-family: var(--font-body);
   font-size: 18px;
@@ -55,41 +56,83 @@
 .rm-scene-play {
   display: flex;
   flex-direction: column;
-  gap: var(--s4);
-  padding: var(--s5);
-  border: 3px solid var(--print-black);
-  background: var(--bg);
+  gap: clamp(8px, 1.4dvh, 16px);
+  padding: clamp(12px, 2dvh, 24px);
+  border-radius: var(--r-panel);
+  border: 1px solid color-mix(in oklab, var(--paper-white) 20%, transparent);
+  background: color-mix(in oklab, var(--floor-graphite) 88%, var(--wall-obsidian));
+  color: var(--paper-white);
+  box-shadow: 0 16px 36px color-mix(in oklab, var(--ink-black) 52%, transparent);
+}
+
+.rm-scene-play > div:empty {
+  display: none;
 }
 
 .rm-timer-ring {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 64px;
-  min-height: 64px;
-  border: 4px solid var(--print-black);
+  min-width: 60px;
+  min-height: 60px;
+  padding: 0 var(--s2);
+  border: 3px solid color-mix(in oklab, var(--spot-warm) 70%, var(--stock-red));
+  background: var(--wall-obsidian);
+  color: var(--spot-warm);
   border-radius: var(--r-btn);
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 20px;
 }
 
-/* Receipt */
+/* Receipt over dark showroom desk */
 .rm-receipt-wrap {
-  background: var(--dust);
-  padding: var(--s6);
-  border: 3px solid var(--print-black);
+  background: linear-gradient(
+    165deg var(--in-oklab),
+    color-mix(in oklab, var(--floor-graphite) 92%, var(--wall-obsidian)),
+    var(--wall-obsidian)
+  );
+  color: var(--paper-white);
+  padding: clamp(14px, 2.5dvh, 32px);
+  border-radius: var(--r-panel);
+  border: 1px solid color-mix(in oklab, var(--paper-white) 18%, transparent);
+  box-shadow: 0 20px 44px color-mix(in oklab, var(--ink-black) 60%, transparent);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--s5);
+  gap: clamp(10px, 1.8dvh, 22px);
 }
 
-/* Result & Staff (Clear skin) */
+@media (min-width: 700px) {
+  .rm-receipt-wrap {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(10px, 1.6dvh, 20px) var(--s6);
+  }
+
+  .rm-receipt-wrap > h1 {
+    grid-column: 1 / -1;
+  }
+
+  .rm-receipt-wrap > .rm-tape {
+    grid-column: 1;
+    grid-row: 2 / span 3;
+    min-width: 260px;
+  }
+
+  .rm-receipt-wrap > p,
+  .rm-receipt-wrap > button {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+/* Result & Staff (Act III Bright Studio) */
 .rm-result-grid {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
-  gap: var(--s6);
+  gap: clamp(14px, 2dvh, 32px);
   align-items: start;
 }
 
@@ -100,10 +143,11 @@
 }
 
 .rm-result-card {
-  padding: var(--s5);
-  border: 3px solid var(--clear-blue);
-  border-radius: var(--r-lap);
-  background: var(--white);
+  padding: clamp(14px, 2dvh, 24px);
+  border: 2px solid var(--clear-blue);
+  border-radius: var(--r-panel);
+  background: var(--studio-white);
+  box-shadow: 0 12px 28px color-mix(in oklab, var(--clear-ink) 8%, transparent);
   display: flex;
   flex-direction: column;
   gap: var(--s3);
@@ -115,31 +159,34 @@
   display: flex;
   flex-direction: column;
   gap: var(--s2);
-  font-size: clamp(18px, 1.5vw, 24px);
+  font-size: clamp(16px, 1.4vw, 22px);
 }
 
 .rm-glossary {
   display: flex;
   flex-direction: column;
   gap: var(--s1);
-  padding: var(--s3);
+  padding: clamp(8px, 1.2dvh, 14px) var(--s3);
   border-left: 4px solid var(--clear-blue);
-  background: var(--white);
+  border-radius: 0 var(--s2) var(--s2) 0;
+  background: var(--studio-white);
+  color: var(--clear-ink);
 }
 
 .rm-footer {
   display: flex;
   flex-direction: column;
   gap: var(--s1);
-  padding-top: var(--s4);
-  border-top: 1px solid var(--dust);
+  padding-top: var(--s3);
+  border-top: 1px solid color-mix(in oklab, var(--clear-ink) 18%, transparent);
 }
 
 .rm-qr-box {
-  width: 220px;
-  height: 220px;
+  width: clamp(150px, 24dvh, 220px);
+  height: clamp(150px, 24dvh, 220px);
   border: 2px solid var(--clear-ink);
-  background: var(--white);
+  border-radius: var(--s2);
+  background: var(--studio-white);
   padding: var(--s2);
 }
 
@@ -152,7 +199,8 @@
 .rm-not-configured {
   padding: var(--s4);
   border: 2px dashed var(--stock-red);
-  background: var(--white);
+  border-radius: var(--r-lap);
+  background: var(--studio-white);
   color: var(--clear-ink);
 }
 
@@ -165,28 +213,36 @@
 .rm-ff-table {
   width: 100%;
   border-collapse: collapse;
-  background: var(--white);
+  background: var(--studio-white);
   color: var(--clear-ink);
+  border-radius: var(--r-lap);
+  overflow: hidden;
+  box-shadow: 0 8px 24px color-mix(in oklab, var(--clear-ink) 8%, transparent);
 }
 
 .rm-ff-table th,
 .rm-ff-table td {
-  border: 2px solid var(--clear-ink);
-  padding: var(--s3);
+  border: 1px solid color-mix(in oklab, var(--clear-ink) 22%, transparent);
+  padding: clamp(6px, 1.1dvh, 12px) var(--s3);
   text-align: left;
   vertical-align: top;
   overflow-wrap: anywhere;
 }
 
+.rm-ff-table thead th {
+  background: color-mix(in oklab, var(--clear-blue) 9%, var(--studio-ice));
+  color: var(--clear-ink);
+}
+
 .rm-ff-concession {
-  border-left: 6px solid var(--clear-blue);
-  background: var(--clear-white);
+  border-left: 5px solid var(--clear-blue);
+  background: var(--studio-ice);
 }
 
 .rm-ff-source {
   display: block;
   margin-top: var(--s1);
-  color: var(--clear-blue);
+  color: color-mix(in oklab, var(--clear-blue) 88%, var(--clear-ink));
   font-weight: 600;
 }
 

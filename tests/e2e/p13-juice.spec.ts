@@ -71,7 +71,7 @@ test.describe('P13 Neo-Brutalist overhaul, juice & Clear-skin fix', () => {
       expect(clearStyles.hasClear).toBe(true);
       expect(clearStyles.sat).toBe('1');
       expect(clearStyles.dim).toBe('1');
-      expect(clearStyles.bgColor).toBe('rgb(247, 250, 255)');
+      expect(clearStyles.bgColor).toBe('rgb(238, 243, 250)');
       expect(clearStyles.filter).toBe('none');
 
       const axeRes = await new AxeBuilder({ page }).analyze();
