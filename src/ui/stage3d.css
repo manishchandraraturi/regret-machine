@@ -1,0 +1,40 @@
+/* 3D canvas behind DOM UI + transparent/translucent showroom staging */
+.rm-stage3d {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 420ms var(--ease);
+}
+
+.rm-stage3d--ready {
+  opacity: 1;
+}
+
+/* When 3D WebGL stage is active, soften DOM shell backdrop so 3D showroom shines through */
+[data-stage-mode='webgl2'] .rm-shell.decay-scope:not(.skin-clear) {
+  background-color: transparent;
+  background-image: radial-gradient(
+    ellipse 72% 54% at 62% 52%,
+    transparent 24%,
+    color-mix(in oklab, var(--wall-obsidian) 76%, transparent) 100%
+  );
+}
+
+[data-stage-mode='webgl2'] .rm-shell.decay-scope.skin-clear {
+  background-color: transparent;
+  background-image: radial-gradient(
+    circle at 75% 24%,
+    color-mix(in oklab, var(--studio-white) 24%, transparent),
+    transparent 65%
+  );
+}
+
+/* In WebGL 3D mode, DOM Attract & Shelf laptop SVGs step aside transparently while preserving accessible DOM metrics/controls */
+[data-stage-mode='webgl2'] .rm-attract-stage .rm-laptop,
+[data-stage-mode='webgl2'] .rm-shelf-item .rm-laptop {
+  opacity: 0.04;
+}
