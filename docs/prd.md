@@ -88,17 +88,17 @@ Every row is generated from `tools/requirements.py`. Do not edit by hand.
 | ADD-08 | ADD | Store-staff screen: plain-words ask list + QR to NEXT_STEP_URL | P3,P5 | Screenshot; QR decodes to the URL |
 | ADD-09 | ADD | Fair Fight screen concedes where rivals lead (honesty builds trust with the jury) | P10 | Row text review against claims.json |
 | ADD-10 | ADD | No analytics, no cookies, no data collection, no accounts | P0,P11 | grep for storage/analytics APIs = empty |
-| ADD-11 | ADD | Performance budget: JS+CSS+fonts <= 600 KB gzip; interactive < 2.5 s on mid phone (throttled) | P11 | Build size report + Lighthouse run pasted |
+| ADD-11 | ADD | Performance budget: total gzip <= 1.2 MB, JS <= 450 KB gzip, 3D chunk lazy-loaded after first paint; interactive < 2.5 s | P11 | Node zlib.gzipSync build size report + Lighthouse/throttled run |
 | ADD-12 | ADD | Evidence: unit tests for scoring/result; Playwright e2e screenshots per screen | P11 | evidence/ folder + test names |
 | ADD-13 | ADD | Facilitator mode (?facilitator=1): skip scene, jump to result, reset. Demo-day lifesaver | P2,P4 | e2e |
 | ADD-14 | ADD | Layouts: kiosk landscape 16:9 and phone portrait 390x844, same code | P1,P11 | Screenshots both |
 | ADD-15 | ADD | Honest labelling: scenes are marked 'Illustration'; vendor numbers marked 'Intel-claimed, up to' | P2,P6-P10 | Visual check each scene |
-| DSN-01 | DSN | Sale Tag Decay identity: Indian electronics-flyer look in Act I | P1 | design.md section 12 checklist |
-| DSN-02 | DSN | Decay engine: --decay 0..1 drains colour, adds grain, scratches, crack | P1 | Visual test at 0, 0.5, 1 |
+| DSN-01 | DSN | Showroom to Dust identity: dark obsidian retail showroom (#0B0C0E wall, #17191D floor, neon #E4262B sign) in Act I, plus V2 DOM fallback | P1 | design.md section 12 checklist |
+| DSN-02 | DSN | Decay engine: --decay 0..1 dims lights, adds #7E8A83 cast, dust motes, lid scratches, screen yellowing/streaks, vignette & film grain | P1 | Visual test at 0, 0.5, 1 |
 | DSN-03 | DSN | Typography: Archivo (display), Mukta (body, Hindi), DM Mono (receipt only) | P1 | Fonts load from own origin, not a CDN |
-| DSN-04 | DSN | Receipt tape: running regret list that prints as events happen | P1,P5 | Component test |
-| DSN-05 | DSN | Motion: one orchestrated Year Flip; everything else answers user action | P1,P3 | Reduced-motion swap verified |
-| DSN-06 | DSN | Clear skin for the reveal: cool white + Clear Blue, no stickers | P1,P5 | Screenshot vs design.md |
+| DSN-04 | DSN | Receipt tape: DM Mono running regret list on paper panel over dark desk | P1,P5 | Component test |
+| DSN-05 | DSN | Motion: real-time 3D dolly/sway/hover/rotate, Year transition time-lapse, split reveal wipe; honours prefers-reduced-motion & ?lite=1 fallback | P1,P3 | Reduced-motion + ?lite=1 e2e verified |
+| DSN-06 | DSN | Bright studio reveal: clean #EEF3FA to #FFFFFF studio with Clear Blue (#0B63F6) in Reveal right side, Fair Fight, Result, Staff | P1,P5 | Screenshot vs design.md |
 | DEL-01 | DEL | Public URL live (GitHub Pages) | P12 | Open in private window on a phone |
 | DEL-02 | DEL | README: what it is, how to run, claims policy, credits | P12 | File exists, reviewed |
 | DEL-03 | DEL | One-page system design for the jury (docs/system-design.md) | P12 | File exists |

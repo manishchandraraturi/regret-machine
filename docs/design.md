@@ -1,159 +1,170 @@
-# Design: "Sale Tag Decay"
+# Design V2: "Showroom to Dust"
 
-No reference images exist. This is an original direction, written so a weak coding model can copy it without guessing.
+Concept stays: a retail showroom you fall for, a bargain laptop that ages, a clean studio reveal. Look upgrades to a cinematic, real-time 3D showroom behind crisp paper-and-glass DOM overlays.
 
 ## 1. Direction in one paragraph
-The game looks like an Indian electronics-store flyer: loud yellow, red slashes, hanging price tags, a "Mega sale" starburst. That is the shopper's own visual world, so it is instantly legible in a store. Then the interface ages as the player lives with the wrong laptop: colour drains, grain and scratches appear, a crack grows. The one memorable thing is the **decay engine**: a single number `--decay` (0 to 1) that visibly ruins the sale flyer scene by scene. The reveal flips to a calm "Clear skin" (cool white, one clean blue, no stickers) so the Intel side feels like relief. Everything else stays quiet and disciplined.
+Act I puts the shopper inside a moody, spotlight-lit electronics showroom: graphite reflective floor (`#17191D`), obsidian wall (`#0B0C0E`), warm halogen pools (`#FFF3E0`), a glowing crimson `"MEGA SALE"` neon sign (`#E4262B`), paper-white price tags (`#F4F1EA`) with crisp black ink (`#111111`), and red discount stickers. Three brushed-metal laptops (pink `#FF6FA5`, mint `#66E0BE`, lilac `#B9A7FF`) rest on the lit plinth. As Act II runs, `--decay` (`0` to `1`) turns the SAME showroom to dust: spotlights flicker and dim, saturation drains toward green-grey (`#7E8A83`), dust motes thicken, metallic lids pick up micro-scratches, screen panels yellow with dead-pixel streaks, and vignette/grain tighten. Act III steps into a bright studio (`#EEF3FA` to `#FFFFFF`) accented only by Clear Blue (`#0B63F6`), showing a pristine AI PC slowly rotating on a soft contact shadow.
 
-Anti-template decisions (checked against common AI-page tells): no cream-and-serif, no dark-mode acid accent, no identical rounded cards with soft shadows, no uppercase eyebrow labels, no middle-dot meta strings, no arrows on buttons, no single-word accent in headlines, no monospace small labels (mono only inside the receipt, where it is true to life), numbered markers only for Year 1/2/3 because that is a real sequence.
-
-## 2. What is product UI and what is mockup
-- Product UI: everything on screen.
-- Mockup only (do NOT build): device bezels around the laptops, drop-shadowed browser chrome, 3D tilt of the whole page, depth blur. Laptops are flat vector illustrations (section 7.4).
+## 2. What is product UI and what is 3D stage
+- **3D stage (`<canvas id="stage3d" aria-hidden="true">`)**: fixed full-bleed viewport background lazy-loaded after first paint (`Three.js`, procedural PBR laptops + `RoomEnvironment` + self-hosted CC0 textures + particles). Never owns game state or game logic; reads store state only.
+- **Product DOM UI**: headline, price tags, starbursts, persona chips, primary/secondary buttons, scene interactive controls, timer ring, receipt tape, Fair Fight table, Result card, Staff QR. Always remains the single source of truth for text, accessibility, focus, keyboard play, and tests.
+- **Fallback mode (`?lite=1`, `prefers-reduced-motion`, or no WebGL2)**: renders a CSS-shaded 3D-perspective DOM/SVG laptop + full-bleed V2 showroom palette cleanly so no device ever sees a blank screen.
 
 ## 3. Tokens (`src/ui/tokens.css`)
-Components use tokens only. No hex in components.
+Components use tokens only. Zero hex values inside `src/ui/components`, `src/screens`, or component CSS.
 ```css
 :root {
-  /* colour roles, Act I flyer */
-  --sale-yellow: #FFD21F;
-  --stock-red:   #E4262B;
-  --print-black: #000000;      /* pure black on purpose: it is a printed flyer */
-  --thermal:     #ECEBE6;      /* receipt paper, slightly cool */
-  --dust:        #7C8084;      /* what colour becomes when it ages */
-  --clear-blue:  #0B63F6;      /* our own blue, NOT Intel brand blue */
-  --clear-white: #F7FAFF;
-  /* laptop colourways (decoys) */
-  --lap-pink: #FF6FA5;  --lap-mint: #66E0BE;  --lap-lilac: #B9A7FF;
-  /* semantic */
-  --bg: var(--sale-yellow);  --fg: var(--print-black);
-  --accent: var(--stock-red); --paper: var(--thermal);
-  --danger: var(--stock-red); --ok: var(--clear-blue);
-  /* decay (set by decay.ts; 0..1) */
+  /* Act I showroom & paper tokens */
+  --wall-obsidian: #0b0c0e;
+  --floor-graphite: #17191d;
+  --spot-warm: #fff3e0;
+  --stock-red: #e4262b;
+  --paper-white: #f4f1ea;
+  --ink-black: #111111;
+  --thermal: #ecebe6;
+  --dust: #7e8a83;
+
+  /* Act III bright studio */
+  --studio-ice: #eef3fa;
+  --studio-white: #ffffff;
+  --clear-blue: #0b63f6;
+  --clear-ink: #0a1530;
+
+  /* legacy compatibility aliases (kept semantic for shared screens/components) */
+  --print-black: var(--ink-black);
+  --white: var(--studio-white);
+  --clear-white: var(--studio-ice);
+
+  /* laptop colourways (unbranded metallic decoys) */
+  --lap-pink: #ff6fa5;
+  --lap-mint: #66e0be;
+  --lap-lilac: #b9a7ff;
+
+  /* semantic Act I defaults */
+  --bg: var(--wall-obsidian);
+  --fg: var(--paper-white);
+  --surface: var(--floor-graphite);
+  --surface-card: var(--paper-white);
+  --surface-card-ink: var(--ink-black);
+  --accent: var(--stock-red);
+  --paper: var(--thermal);
+  --danger: var(--stock-red);
+  --ok: var(--clear-blue);
+  --btn-primary-bg: var(--spot-warm);
+  --btn-primary-fg: var(--ink-black);
+
+  /* decay (driven solely by src/ui/decay.ts, 0..1) */
   --decay: 0;
   --sat: calc(1 - 0.85 * var(--decay));
-  --dim: calc(1 - 0.12 * var(--decay));
-  --grain-opacity: calc(0.05 + 0.22 * var(--decay));
-  /* spacing, 4-pt base */
+  --dim: calc(1 - 0.14 * var(--decay));
+  --grain-opacity: calc(0.06 + 0.34 * var(--decay));
+  --scratch-opacity: 0;
+  --crack-opacity: 0;
+
+  /* typography, spacing, radii, layout, motion */
+  --font-display: 'Archivo Variable', 'Archivo', sans-serif;
+  --font-body: 'Mukta', sans-serif;
+  --font-receipt: 'DM Mono', monospace;
   --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 72px;
-  /* radii: different per element role, not one radius for everything */
-  --r-tag: 6px 18px 6px 6px;   /* price tag, one clipped corner */
-  --r-btn: 999px;              /* pill, only buttons */
-  --r-paper: 2px;              /* receipt */
-  --r-lap: 14px;               /* laptop body */
-  /* layout */
-  --tap: 56px;                 /* min touch target (>= 48) */
+  --r-tag: 6px 18px 6px 6px; --r-btn: 999px; --r-paper: 2px; --r-lap: 14px; --r-panel: 16px;
+  --tap: 56px;
   --stage-w: 1920; --stage-h: 1080;
-  /* motion */
-  --t-fast: 120ms; --t-flip: 1200ms; --ease: cubic-bezier(.2,.8,.2,1);
+  --t-fast: 140ms; --t-flip: 1200ms; --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.skin-clear {
-  --bg: var(--clear-white); --fg: #0A1530; --accent: var(--clear-blue);
-  --sat: 1; --dim: 1; --grain-opacity: 0;
+
+.skin-clear,
+.decay-scope.skin-clear {
+  --bg: var(--studio-ice);
+  --fg: var(--clear-ink);
+  --surface: var(--studio-white);
+  --accent: var(--clear-blue);
+  --btn-primary-bg: var(--clear-blue);
+  --btn-primary-fg: var(--studio-white);
+  --sat: 1 !important;
+  --dim: 1 !important;
+  --grain-opacity: 0 !important;
+  --scratch-opacity: 0 !important;
+  --crack-opacity: 0 !important;
 }
 ```
-The page wrapper `.decay-scope` applies `filter: saturate(var(--sat)) brightness(var(--dim))`. The split reveal uses two scopes: left `--decay` = current, right = 0 with `.skin-clear`.
+Notice `.decay-scope` keeps `filter` off `backdrop-filter` / fixed descendants clean so translucent HUD cards never clip `position: fixed`.
 
 ## 4. Typography
 | Role | Font | Size (kiosk 1920 / phone 390) | Weight / width | Where |
 |---|---|---|---|---|
-| Flyer headline | Archivo, `font-stretch: 62%` | clamp(64px, 9vw, 168px) | 900 | Attract, Shelf price, Year Flip |
-| Screen title | Archivo `font-stretch: 100%` | clamp(32px, 3.4vw, 64px) | 700 | Scene titles, Result |
-| Body | Mukta | clamp(18px, 1.5vw, 28px) / lh 1.4 | 400 / 600 | Instructions, copy |
-| Button | Mukta | 24px (phone 20px) | 700 | All buttons |
-| Receipt | DM Mono | 20px / lh 1.3 | 400 | Tape only |
+| Showroom headline | Archivo condensed | clamp(40px, 6.4vw, 118px) | 900 | Attract, Shelf price, Year transition |
+| Screen title | Archivo | clamp(28px, 3vw, 56px) | 700 | Scene titles, Receipt, Fair Fight, Result, Staff |
+| Body | Mukta | clamp(16px, 1.35vw, 24px) / lh 1.4 | 400 / 600 | Instructions, panels, cards |
+| Button | Mukta | clamp(18px, 1.4vw, 22px) | 700 | Primary & secondary pills |
+| Receipt | DM Mono | 18px-20px / lh 1.3 | 400 | Receipt tape only (`tabular-nums`) |
 | Small print | Mukta | 14px min | 400 | Illustration tags, claim footers |
-- Hindi: headings use Mukta 800 (Archivo has no Devanagari), `letter-spacing: 0`, line-height 1.25. Latin tracking only on Archivo condensed: `letter-spacing: -0.01em`.
-- Uppercase: only for flyer headlines of 64 px or more (it is how retail flyers talk). Never for labels or buttons. Sentence case everywhere else.
-- Line length under 70 characters. Numbers: Indian grouping for rupees (₹38,990), tabular figures on the receipt (`font-variant-numeric: tabular-nums`).
-- Font files from `@fontsource` packages copied into the build. No CDN. Font family is a single token each: `--font-display`, `--font-body`, `--font-receipt`. If a font cannot be matched, record `IDENTIFIED BY EYE` in progress.md and keep the token.
+Hindi uses Mukta 400/600/700/800 with `letter-spacing: 0` and line-height `1.3`. All font files load from `@fontsource/*` inside the origin bundle (zero CDN calls).
 
 ## 5. Material recipes
-- Flyer ink: flat fills, 4 px black outlines on stickers, hard offset shadow `6px 6px 0 var(--print-black)` on price tags only (a printed look, not a soft UI shadow).
-- Grain: inline SVG `feTurbulence` as data-URI background on `.decay-scope::after`, `mix-blend-mode: multiply`, opacity `var(--grain-opacity)`, `pointer-events: none`.
-- Scratches (decay >= 0.6): `.decay-scope::before`, three thin diagonal `linear-gradient` lines, opacity `(decay-0.5)*1.2`.
-- Crack (decay >= 0.9): one SVG path overlay anchored to the laptop screen corner, stroke 2 px `--dust`. One crack only.
-- Receipt: `--thermal` fill, zig-zag bottom edge via CSS mask, no shadow, 2 px radius.
-- Performance: no `backdrop-filter`, no animated filters over video-size areas. Decay filter is applied on a scope that changes only during the 1.2 s tween.
+- **Showroom walls & reflective floor**: `#0B0C0E` radial overhead halo over `#17191D` floor grid/concrete PBR roughness & normal maps (`ambientCG` CC0 textures self-hosted <= 150 KB each + Three.js `RoomEnvironment`).
+- **Act I/II DOM panels**: `#F4F1EA` crisp paper cards or translucent obsidian glass (`color-mix(in oklab, var(--wall-obsidian) 76%, transparent)`) with subtle highlight rim `1px` and soft layered shadow; never hard MS-Paint comic frames in V2.
+- **Neon accent**: `#E4262B` practical glow on the `"MEGA SALE"` starburst badge and 3D plinth neon tube.
+- **Decay overlays**: `.decay-scope` drives saturation/dim, SVG noise grain overlay, diagonal micro-scratch streaks at `decay >= 0.6`, and corner glass crack at `decay >= 0.9` in DOM; synced 1:1 with `Stage3D` shader uniforms (dimmed lights, green-grey cast `#7E8A83`, scratch roughness boost, screen dead-pixel streak overlay, dust motes).
+- **Act III Studio**: linear gradient `var(--studio-ice)` (`#EEF3FA`) to `var(--studio-white)` (`#FFFFFF`), `1px` hairline slate borders, Clear Blue (`#0B63F6`) primary pills, zero stickers.
 
-## 6. Layout grid (landscape 1920x1080 stage, scaled to fit, letterboxed with `--clear-white` bars only in Clear skin, `--sale-yellow` otherwise)
-```
-┌──────────────────────────────────────────────────────────────┬──────────┐
-│ [Year chip]  Scene title                     [EN|हि] [mute]  │  TAPE    │
-│                                                              │ (receipt │
-│                    PLAY AREA (1480 x 820)                    │  240 w)  │
-│                                                              │  prints  │
-│  hint line (body)                         [ring 22s timer]   │  lines   │
-└──────────────────────────────────────────────────────────────┴──────────┘
-```
-Phone portrait 390x844: header 64, play area fills, tape collapses to a 120 px strip at the bottom showing the latest 3 lines (tap to expand).
-Alignment: left-aligned text, play content centred. No justified text.
-
-Shelf (landscape):
-```
- Mega sale. ₹38,990.                         (flyer headline, left, 2 lines)
- ┌ tag ┐   ┌ tag ┐   ┌ tag ┐                 three laptops on a shelf line
- [laptop]  [laptop]  [laptop]
- chips: Study | Create | Game | Work and side hustle      [Buy it]
-```
-Result (Clear skin): left column card (persona name, regret score), right column asks list + 3 buttons. No stickers, generous whitespace.
+## 6. Layout grid
+- Full-bleed `100dvh` canvas (`#stage3d` fixed behind) + centered overlay stage (`max-width: 1920px`, safe viewport padding `clamp(10px, 2dvh, 24px)`). Zero page vertical scroll at `>= 1280x640` (`1280x640`, `1366x768`, `1536x730`, `1920x1080`, `2560x1300`) and zero horizontal scroll at `390x844`.
+- **Attract**: Left column shows paper `"The Regret Machine"` wordmark, condensed hero headline, body subhead, and primary `Pick your laptop` button; right/back shows 3D showroom laptops + glowing crimson starburst; bottom band holds 3 fully visible on-screen hanging paper price tags gently swaying on strings (no horizontal drift off-screen).
+- **Shelf**: Top condensed heading + price (`<= 2` lines), 3 spotlit laptop slots across center, persona chips row + primary `Buy it` button in a compact bottom bar — all visible without scroll from `1280x640` upwards and cleanly stacked on `390x844`.
+- **Scenes x4**: Compact HUD play panel (`1480px` zone) + `280px` thermal Receipt column on desktop (compact collapsible tape on `390x844`), sharing space cleanly with the live 3D laptop stage reaction beside/behind the play card.
+- **Reveal**: Split comparison over the dual-laptop 3D showcase (left aged shelf laptop at current `decay`, right pristine studio AI PC), with an animated vertical center wipe, DOM cards + ClaimChip + `"Illustration"` badge.
+- **Receipt**: Crisp thermal paper strip resting over a dark showroom desk view with the retired decoy laptop behind.
+- **Fair Fight / Result / Staff**: Bright studio backdrop (`#EEF3FA` -> `#FFFFFF`), generous editorial spacing, Clear Blue CTAs, spinning pristine studio laptop with persona rim light behind/beside cards.
 
 ## 7. Components
-### 7.1 Sticker / Starburst
-16-point SVG polygon, fill `--stock-red`, 4 px black stroke, text `--sale-yellow` Archivo 900 rotated -8deg. Decay: opacity `1 - decay`, at decay >= 0.5 one point corner curls (CSS clip-path change). States: static only.
-### 7.2 PriceTag
-Hanging tag with punched hole and string (SVG), `--r-tag`, hard shadow. Price in Archivo 900. MRP struck through with a red diagonal slash (CSS `linear-gradient` 45deg). Selected state: tag swings once (Web Animations, 400 ms) and gets a 4 px blue outline.
-### 7.3 Button
-Pill, 56 px min height, Mukta 700. Primary: fill `--print-black`, text `--sale-yellow` (Act I) / fill `--clear-blue`, text white (Clear skin). Focus-visible: 4 px outline offset 3 px in contrasting colour. Pressed: translateY(2px). Disabled: 40 % opacity + cursor not-allowed + `aria-disabled`. No arrows in labels.
-### 7.4 Laptop illustration (flat SVG, built in code)
-Lid rectangle `--r-lap`, colourway fill, screen inset rectangle, base trapezoid, no brand mark, no bezel mockup. Screen content slot is a `<foreignObject>` or overlay div that scenes fill. Three colourways only differ by fill.
-### 7.5 Chip (persona)
-Outlined pill, 2 px black, selected = filled black with yellow text. Min 56 px.
-### 7.6 Tape (receipt)
-DM Mono 20 px lines, right-aligned points, dotted leader. New line slides in from the top with a 120 ms tick (sound if unmuted). Header "Receipt" (sentence case), footer shows running regret.
-### 7.7 SplitReveal
-Left half "Your laptop" (current decay, flyer skin faded), right half "Intel AI PC" (decay 0, `.skin-clear`). A divider line wipes from centre outward in 500 ms, then both halves play a 4 s looped illustration of the same moment. Under each half one label and, on the right, one claim chip with its tag (e.g. "Up to 27 hours, Netflix streaming. Intel-claimed"). A small "Illustration" tag sits bottom-left of the whole split.
-### 7.8 YearFlip (the one orchestrated moment)
-Full-screen tear-off calendar sheet showing "Year 2" in Archivo 900. The old sheet peels up (rotateX with transform-origin top, 700 ms) while `--decay` tweens +0.25 over 1.2 s. Reduced motion: cross-fade 300 ms, decay jumps.
-### 7.9 Claim chip
-White (`--clear-white`) pill, 14-16 px text, tag as a small plain-words suffix ("Intel-claimed", "Independent review", "Our advice"). Never hidden. Tap opens a bottom sheet with baseline + source name (no live links on kiosk; text only, URL shown small for phones).
+- **7.1 Sticker / Starburst**: Crimson `#E4262B` SVG polygon + neon halo, white-warm or paper-white ink, curlers/fades with `decay`.
+- **7.2 PriceTag**: Paper `#F4F1EA` hanging tag with brass eyelet, string, crisp `#111111` Archivo price, red diagonal MRP strike, gentle harmonic sway on string (`prefers-reduced-motion` static), Clear Blue selection halo.
+- **7.3 Button**: Pill `min-height: 48px` (`--tap: 56px` where room permits), clean lift hover, `translateY(2px)` press, 4 px `focus-visible` outline. Warm spotlight fill `--spot-warm` with `#111111` ink in Act I; `--clear-blue` with `#FFFFFF` ink in Act III.
+- **7.4 Laptop (3D PBR + DOM fallback)**: Primary visual is procedural PBR in Three.js (`laptop-model.ts`: rounded-box chassis & lid, articulated hinge, instanced scissor keys, trackpad recess, glowing screen `CanvasTexture`, brushed metal roughness/normal maps, 3 colourways `--lap-pink`, `--lap-mint`, `--lap-lilac`, zero logos). Fallback DOM (`laptop.ts`) upgrades from flat SVG to layered CSS 3D shaded chassis (`perspective`, brushed sheen gradient, hinged recessed keyboard deck, soft contact shadow).
+- **7.5 Chip (persona)**: Ink/glass pill in Act I (`min-height: 48px`), Clear Blue selected accent.
+- **7.6 Tape (receipt)**: DM Mono `18px-20px` tabular lines on `--thermal`, zig-zag paper edge.
+- **7.7 SplitReveal**: Left aged + right clear `.skin-clear` panels synced with 3D dual-laptop wipe, mandatory `"Illustration"` tag and clickable `ClaimChip`.
+- **7.8 YearFlip**: Year transition time-lapse in 3D (lighting shifts day-to-night, dust builds, `--decay` tweens `+0.25` over `1.2 s`) paired with DOM tear-off/fade calendar overlay.
+- **7.9 ClaimChip**: Pure paper pill + plain-words source suffix (`"Intel-claimed"`, `"Independent review"`, `"Our advice"`, `"(unconfirmed)"` if `UNVERIFIED`), opening accessible baseline sheet.
 
 ## 8. Screens table
-| Screen | Skin | Main content |
-|---|---|---|
-| Attract | Flyer | Headline, starburst "Mega sale", drifting price tags, Pick your laptop |
-| Shelf | Flyer | Three laptops, same stickers, persona chips, Buy it |
-| YearFlip x3 | Flyer, decay rising | Calendar sheet |
-| Scene x4 | Flyer + decay | Play area, tape, timer ring, then SplitReveal |
-| Receipt | Thermal paper on dust background | Full tape, regret score |
-| Fair Fight | Clear | 5 rows x 3 columns, concessions highlighted |
-| Result | Clear | Card, asks, buttons |
-| Staff | Clear, large type | Plain-words ask, QR |
+| Screen | Skin | 3D Stage / Backdrop | DOM Layer |
+|---|---|---|---|
+| Attract | Act I Obsidian | 3-laptop pedestal dolly + mouse/gyro parallax + red neon flicker + dust motes | Wordmark, headline, subhead, CTA, 3 swaying tags, starburst |
+| Shelf | Act I Obsidian | 3 spotlit laptops (hover/focus lift & rim glow; select push forward) | Heading, 3 selectable price-tag cards, persona chips, `Buy it` |
+| YearFlip x3 | Act I -> II | Day-to-night light sweep + decay tween +0.25 (1.2s) | Calendar sheet overlay + `Next` button |
+| Scene x4 | Act II Aging | Shelf laptop reacts (low battery black-out, no-signal, stutter shake, upload progress bar) | Interactive challenge HUD, timer ring, live Receipt tape, SplitReveal |
+| Receipt | Act II Dark Desk | Top-down angled dark desk with retired dead laptop behind | Full printed thermal tape, regret total, `See the fair fight` |
+| Fair Fight | Act III Bright Studio | Bright `#EEF3FA`->`#FFFFFF` studio backdrop, slow-spinning pristine AI PC | 5x3 table with source tags and rival concessions |
+| Result | Act III Bright Studio | Pristine rotating AI PC with persona-tinted rim light & contact shadow | Recommendation card, Plain-words asks, Share PNG / Staff / Play again |
+| Staff | Act III Bright Studio | Clean studio ambient backdrop | Ask summary + high-contrast scannable QR |
 
 ## 9. States
-Hover (desktop only): button lifts 1 px. Active: translateY(2px). Focus-visible: 4 px outline. Loading: none needed (static), fonts use `font-display: swap`. Empty: not applicable. Error: calm banner "Something slipped. Skip this scene" with one button. Disabled: see Button. No dead buttons: every button does something or is hidden.
+- **Interactive / Focus / Press**: `focus-visible` 4px high-contrast outline on every button/chip/tag. Disabled buttons use `aria-disabled="true"` + 45% opacity.
+- **Loading / Lazy 3D**: DOM renders immediately on first paint (`< 2.5 s`); `#stage3d` chunk lazy-imports after first paint and fades opacity `0 -> 1` cleanly.
+- **Fallback (`?lite=1`, reduced motion, no WebGL2)**: immediately skips Three.js chunk or renderer init and shows full-bleed V2 CSS showroom + shaded CSS 3D laptop fallback (`zero blank screen`).
+- **Error**: scene error shows calm skip banner `"Something slipped. Skip this scene"` (`design.md §9` contract kept intact).
 
 ## 10. Responsive and accessibility
-- Breakpoints: >= 1200 kiosk landscape; 700-1199 tablet; < 700 phone portrait.
-- Contrast AA. Check specifically: black on yellow (fine), yellow on red starburst text (verify >= 4.5:1 for large text, else switch to black), `--dust` text only for non-essential decoration.
-- Keyboard: every scene playable with keys (1-6, arrows, space). Visible focus. `prefers-reduced-motion`: no swing, no tear-off, no shake, tape prints instantly.
-- Sound is never the only signal. Colour is never the only signal (failure also shows an icon and text).
+- Breakpoints: `>= 1200` kiosk landscape (`100dvh` locked, zero scroll); `700-1199` compact landscape (`>= 1280x640` fit rules apply to desktop height too); `< 700` (`390x844` mobile portrait, zero horizontal overflow).
+- Contrast AA >= 4.5:1 across paper `#F4F1EA` / ink `#111111`, spot-warm `#FFF3E0` / `#111111`, obsidian cards `#0B0C0E` / `#F4F1EA`, studio `#FFFFFF` / `#0A1530`, and `#0B63F6` / `#FFFFFF`.
+- Keyboard (`1-6`, arrows, `Space`, `Enter`) plays every screen and scene. Screen reader labels strictly live in DOM while `#stage3d` is `aria-hidden="true"`.
 
 ## 11. Motion rules
-One orchestrated moment: YearFlip. Everything else answers a user action (tap feedback, correct/incorrect pulse, scene result). No scroll-triggered fade-ups, no hover transitions on every card, no looping decoration except the Attract tag drift (slow, 40 s loop, paused when a button is focused).
+- `prefers-reduced-motion: reduce`: disables 3D dolly/sway/rotation, disables CTA pulse & tag sway, switches Year transition to crisp opacity cross-fade (`300 ms`) with instant `--decay` step, or uses lightweight static V2 DOM mode cleanly.
+- Adaptive quality in 3D: sample first 60 frame intervals; if mean frame time `> 24 ms`, cap `pixelRatio = 1`, disable post bloom/grain pass, and halve dust particle count.
 
-## 12. Design acceptance checklist (agent ticks with screenshots in evidence/P1 and per phase)
-- [ ] Gallery shows every component at decay 0, 0.5, 1 in Flyer and Clear skins.
-- [ ] No hex colour appears in `src/ui/components` (grep).
-- [ ] Fonts load from own origin; Network tab shows zero font CDN calls.
-- [ ] Attract at 1920x1080 and 390x844 matches section 6 layout.
-- [ ] Decay visibly different at 0.25, 0.5, 0.75, 1.0 (side-by-side screenshot strip).
-- [ ] Left/right of SplitReveal clearly differ at a glance (colour vs drained).
-- [ ] No uppercase labels, no eyebrows, no arrows in button text, no single accented word in headlines.
-- [ ] Hindi renders without clipping at 390 px.
-- [ ] Reduced-motion variant tested.
-- [ ] Touch targets >= 48 px measured.
+## 12. Design acceptance checklist (V2)
+- [ ] Attract shows obsidian showroom, glowing crimson neon, 3 laptops, paper headline, swaying on-screen tags, CTA pulse.
+- [ ] Shelf fits title, 3 laptops, persona chips, and `Buy it` inside viewport with zero vertical scroll at `2560x1300`, `1920x1080`, `1536x730`, `1366x768`, `1280x640`, and clean stack on `390x844`.
+- [ ] Gallery shows every V2 component at decay `0`, `0.5`, `1.0` in Act I Obsidian and Act III Bright Studio (`gallery.html`).
+- [ ] Zero hex values inside `src/ui/components` (tokens only) and zero inline `<style>` / `style=""`.
+- [ ] All fonts (`Archivo`, `Mukta`, `DM Mono`) and PBR textures load strictly from self-hosted origin (0 third-party calls).
+- [ ] `decay` (`0 -> 1`) visibly transforms both DOM and 3D stage (dimming, `#7E8A83` green-grey drain, scratches, dust, screen degradation).
+- [ ] SplitReveal shows degraded left laptop vs pristine Clear Blue studio right laptop at a glance with `Illustration` and claim tags.
+- [ ] ShareCard renders crisp V2 palette PNG at exact `1080x1920`.
+- [ ] Fallback mode (`?lite=1`, WebGL unavailable, `prefers-reduced-motion`) renders cleanly without blank canvas or uncaught errors.
+- [ ] Hindi (`?lang=hi`) renders without clipping or horizontal overflow at `390x844`, axe 0 serious/critical violations on every screen, touch targets >= 48 px.
 
-## 13. Declared deviations
-- **P13 Neo-Brutalist overhaul (Capt-authorized):** `.decay-scope` uses printed halftone `radial-gradient` dot-matrix texture + stronger grain + high-decay `inset 0 0 80px rgba(0, 0, 0, 0.4)` vignette + full-screen branching crack SVG (`decay >= 0.9`); `.rm-btn` and `.rm-chip` use 3 px `--print-black` borders, `4px 4px 0` / `3px 3px 0` hard offset shadows, press-down hover/active states, and chip `1.05` hover scale; laptops add dark charcoal screen bezels, glow, and keyboard decks (`laptop.ts`); `.rm-pricetag-card` floats via `4s` `@keyframes rm-float`, screens pop in via `@keyframes rm-pop-in`, enabled Buy button pulses via `box-shadow` `@keyframes rm-buy-pulse` (all disabled under `prefers-reduced-motion: reduce`); `.type-flyer` adds `2px 2px 0 rgba(0, 0, 0, 0.1)`. Revert: `git checkout pre-polish -- src/`.
-- **F1 Layout polish (Capt-authorized):** For `>= 1200px` viewports, `.rm-shell` centers a max `1920x1080` stage horizontally and vertically with `--bg` (`--sale-yellow` or `.skin-clear` `--clear-white`) letterbox bars; `.rm-marquee` adds horizontal edge-fade `mask-image`; Attract centers the copy column in a two-column hero with one pink `laptop.ts` illustration + overlapping starburst on the right; `"The Regret Machine"` wordmark renders in Archivo condensed up to `48px` (`.rm-wordmark`). Revert: remove `src/ui/f1-layout.css` import from `src/main.ts` and restore `src/screens/attract.ts`.
+## 13. Declared deviations & V1 -> V2 history
+- **V1 -> V2 Redesign ("Showroom to Dust", Capt-authorized)**: Replaced flat `#FFD21F` yellow flyer + neo-brutalist black borders/clown shadows + flat 2D SVG laptops with the V2 Obsidian Showroom (`#0B0C0E` / `#17191D` / `#FFF3E0` / `#F4F1EA` / `#E4262B`), Three.js PBR laptop showcase + particle/decay shaders (`#stage3d`), Bright Studio Act III (`#EEF3FA`..`#FFFFFF` + `#0B63F6`), and shaded CSS 3D fallback (`?lite=1` / no WebGL2 / reduced motion). Gameplay, scoring, timings (`22 s`), `claims.json`, copy keys, and claim tags remain unchanged. Rollback tag on `main`: `pre-redesign` (`v1.2`, commit `7b89b96`).

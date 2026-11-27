@@ -23,12 +23,13 @@ System of record: `src/data/*.json` (content) and in-memory `store` (session). N
 ## 2. Stack
 | Layer | Choice | Why |
 |---|---|---|
-| Build | Vite + TypeScript, vanilla (no UI framework) | Smallest bundle, fewest moving parts for a weak agent |
-| Styling | Plain CSS with custom properties (tokens.css) | Decay engine is just CSS variables |
+| Build | Vite + TypeScript, vanilla (no UI framework) | Smallest bundle, fewest moving parts, fast TTI (< 2.5 s) |
+| 3D Showroom | `three` (pinned `0.187.0`, `@types/three`), lazy-imported after first paint | Real-time PBR showroom, `RoomEnvironment`, dust/crack decay shaders; no Draco/KTX2/workers/wasm (CSP) |
+| Styling | Plain CSS with custom properties (`tokens.css`) + V2 glass/paper overlays | Single `--decay` source drives both 3D uniforms and CSS DOM fallback (`?lite=1`, reduced motion, no WebGL2) |
 | Tests | Vitest (unit), Playwright (e2e + screenshots), axe-core via Playwright | Evidence over claims |
-| Fonts | Self-hosted via `@fontsource` packages: Archivo, Mukta, DM Mono | No CDN, works offline (ADD-04). Package names UNVERIFIED: agent confirms on npm, records in progress.md |
-| QR | A small QR library (candidate `qrcode-generator`) UNVERIFIED | Agent verifies maintained + license, else writes minimal encoder |
-| Hosting | GitHub Pages from Actions | VERIFIED 25 Nov 2026: free for public repos; site <= 1 GB; soft 100 GB/month bandwidth; deploy must finish < 10 min (docs.github.com Pages limits) |
+| Fonts | Self-hosted via `@fontsource` packages: Archivo, Mukta, DM Mono | No CDN, works offline (ADD-04) |
+| QR | Self-authored pure-TS Reed-Solomon matrix encoder (`src/engines/qr.ts`) | Zero third-party network calls, decoded by jsQR in unit/e2e tests |
+| Hosting | GitHub Pages from Actions | VERIFIED 25 Nov 2026: free for public repos; site <= 1 GB; soft 100 GB/month bandwidth; deploy must finish < 10 min |
 | Fallback host | Vercel or Netlify static | UNVERIFIED. Use only if Pages fails |
 
 ## 3. Decisions and deviations
@@ -46,15 +47,17 @@ System of record: `src/data/*.json` (content) and in-memory `store` (session). N
 RegretMachine/
   AGENTS.md  CLAUDE.md  GEMINI.md  README.md  package.json  vite.config.ts
   index.html  gallery.html  public/health.html
-  docs/  (prd, architecture, design, schema, security, copy, phases, progress, SPEC_CHECKLIST, ...)
+  docs/  (prd, architecture, design, ASSETS, schema, security, copy, phases, progress, SPEC_CHECKLIST, ...)
   tools/ (requirements.py, gen_docs.py, check_claims.py)
-  evidence/  (P0..P12 screenshots and logs, created by agents)
+  evidence/  (P0..P12, v1.2, V2-before, V2-r1..r5 screenshots and logs)
   src/
-    main.ts
+    main.ts  gallery.ts
+    assets/ textures/ (self-hosted CC0 PBR textures <= 150 KB each)
     core/   env.ts store.ts machine.ts scoring.ts result.ts i18n.ts idle.ts types.ts
-    data/   claims.json scenes.json copy.en.json copy.hi.json personas.json laptops.json ladder.json
-    ui/     tokens.css base.css decay.ts components/ (sticker.ts starburst.ts pricetag.ts button.ts chip.ts tape.ts splitreveal.ts yearflip.ts)
-    screens/ attract.ts shelf.ts scene-lecture.ts scene-battery.ts scene-creator.ts scene-private.ts receipt.ts fairfight.ts result.ts staff.ts
+    data/   claims.json scenes.json copy.en.json copy.hi.json personas.json laptops.json ladder.json fairfight.json
+    stage3d/ index.ts stage.ts laptop-model.ts materials.ts lights.ts particles.ts quality.ts fallback.ts scenes3d.ts
+    ui/     tokens.css base.css components.css screens.css f1-layout.css p5-screens.css scenes.css overlays-and-gallery.css decay.ts components/
+    screens/ attract.ts shelf.ts scene-lecture.ts scene-battery.ts scene-creator.ts scene-private.ts scene-frame.ts receipt.ts fairfight.ts result.ts staff.ts
     engines/ audio.ts loop.ts input.ts sharecard.ts qr.ts
   tests/unit/  tests/e2e/
   .github/workflows/ci.yml

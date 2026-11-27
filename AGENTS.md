@@ -21,9 +21,9 @@ Build every requirement ID of the phase. Use exact names from schema.md and arch
 Restate the task in 3 lines. Work in bundles of phases, completing one phase gate at a time in order (commit and tag per phase, update progress.md after every phase). Run tests as you go. No unrelated refactors. If unsure, STOP and ask (see section 12).
 
 ## 5. Tech rules
-- Fixed stack: Vite, TypeScript (strict), Vitest, Playwright, axe-core. Fonts via `@fontsource` (Archivo, Mukta, DM Mono), self-hosted.
-- Allowed additions only with a one-line justification in progress.md: one QR library, `@axe-core/playwright`, `@fontsource-variable/*` if needed.
-- FORBIDDEN: UI frameworks and component kits (React, Vue, Tailwind, Bootstrap, shadcn), `any`, `innerHTML` with variable data, `localStorage`/`sessionStorage`/cookies, analytics, `fetch` to other origins, CDN links, committing secrets, inline `<style>`/`style=""` in markup (CSP), animation libraries, Intel logo files, real competitor laptop names as the "bad" laptop.
+- Fixed stack: Vite, TypeScript (strict), Vitest, Playwright, axe-core, `three` (with `@types/three` devDependency, pinned exact version, lazy-loaded after first paint; no Draco, KTX2, workers, or wasm due to `script-src 'self'`). Fonts via `@fontsource` (Archivo, Mukta, DM Mono), self-hosted.
+- Allowed additions only with a one-line justification in progress.md: `three` (+ `@types/three`), one QR library, `@axe-core/playwright`, `@fontsource-variable/*` if needed.
+- FORBIDDEN: UI frameworks and component kits (React, Vue, Tailwind, Bootstrap, shadcn), GSAP or extra animation libraries, `any`, `innerHTML` with variable data, `localStorage`/`sessionStorage`/cookies, analytics, `fetch` to other origins, CDN links, committing secrets, inline `<style>`/`style=""` in markup (CSP), Intel logo files, real competitor laptop names as the "bad" laptop.
 - Env is read only in `src/core/env.ts`.
 
 ## 6. Code conventions

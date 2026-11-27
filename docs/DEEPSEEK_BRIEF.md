@@ -34,9 +34,9 @@ Build every requirement ID of the phase. Use exact names from schema.md and arch
 Restate the task in 3 lines. Work in bundles of phases, completing one phase gate at a time in order (commit and tag per phase, update progress.md after every phase). Run tests as you go. No unrelated refactors. If unsure, STOP and ask (see section 12).
 
 ## 5. Tech rules
-- Fixed stack: Vite, TypeScript (strict), Vitest, Playwright, axe-core. Fonts via `@fontsource` (Archivo, Mukta, DM Mono), self-hosted.
-- Allowed additions only with a one-line justification in progress.md: one QR library, `@axe-core/playwright`, `@fontsource-variable/*` if needed.
-- FORBIDDEN: UI frameworks and component kits (React, Vue, Tailwind, Bootstrap, shadcn), `any`, `innerHTML` with variable data, `localStorage`/`sessionStorage`/cookies, analytics, `fetch` to other origins, CDN links, committing secrets, inline `<style>`/`style=""` in markup (CSP), animation libraries, Intel logo files, real competitor laptop names as the "bad" laptop.
+- Fixed stack: Vite, TypeScript (strict), Vitest, Playwright, axe-core, `three` (with `@types/three` devDependency, pinned exact version, lazy-loaded after first paint; no Draco, KTX2, workers, or wasm due to `script-src 'self'`). Fonts via `@fontsource` (Archivo, Mukta, DM Mono), self-hosted.
+- Allowed additions only with a one-line justification in progress.md: `three` (+ `@types/three`), one QR library, `@axe-core/playwright`, `@fontsource-variable/*` if needed.
+- FORBIDDEN: UI frameworks and component kits (React, Vue, Tailwind, Bootstrap, shadcn), GSAP or extra animation libraries, `any`, `innerHTML` with variable data, `localStorage`/`sessionStorage`/cookies, analytics, `fetch` to other origins, CDN links, committing secrets, inline `<style>`/`style=""` in markup (CSP), Intel logo files, real competitor laptop names as the "bad" laptop.
 - Env is read only in `src/core/env.ts`.
 
 ## 6. Code conventions
@@ -192,17 +192,17 @@ ADD-07: Shareable result card (PNG made in browser, Web Share API or download) [
 ADD-08: Store-staff screen: plain-words ask list + QR to NEXT_STEP_URL [P3,P5]
 ADD-09: Fair Fight screen concedes where rivals lead (honesty builds trust with the jury) [P10]
 ADD-10: No analytics, no cookies, no data collection, no accounts [P0,P11]
-ADD-11: Performance budget: JS+CSS+fonts <= 600 KB gzip; interactive < 2.5 s on mid phone (throttl [P11]
+ADD-11: Performance budget: total gzip <= 1.2 MB, JS <= 450 KB gzip, 3D chunk lazy-loaded after fi [P11]
 ADD-12: Evidence: unit tests for scoring/result; Playwright e2e screenshots per screen [P11]
 ADD-13: Facilitator mode (?facilitator=1): skip scene, jump to result, reset. Demo-day lifesaver [P2,P4]
 ADD-14: Layouts: kiosk landscape 16:9 and phone portrait 390x844, same code [P1,P11]
 ADD-15: Honest labelling: scenes are marked 'Illustration'; vendor numbers marked 'Intel-claimed,  [P2,P6-P10]
-DSN-01: Sale Tag Decay identity: Indian electronics-flyer look in Act I [P1]
-DSN-02: Decay engine: --decay 0..1 drains colour, adds grain, scratches, crack [P1]
+DSN-01: Showroom to Dust identity: dark obsidian retail showroom (#0B0C0E wall, #17191D floor, neo [P1]
+DSN-02: Decay engine: --decay 0..1 dims lights, adds #7E8A83 cast, dust motes, lid scratches, scre [P1]
 DSN-03: Typography: Archivo (display), Mukta (body, Hindi), DM Mono (receipt only) [P1]
-DSN-04: Receipt tape: running regret list that prints as events happen [P1,P5]
-DSN-05: Motion: one orchestrated Year Flip; everything else answers user action [P1,P3]
-DSN-06: Clear skin for the reveal: cool white + Clear Blue, no stickers [P1,P5]
+DSN-04: Receipt tape: DM Mono running regret list on paper panel over dark desk [P1,P5]
+DSN-05: Motion: real-time 3D dolly/sway/hover/rotate, Year transition time-lapse, split reveal wip [P1,P3]
+DSN-06: Bright studio reveal: clean #EEF3FA to #FFFFFF studio with Clear Blue (#0B63F6) in Reveal  [P1,P5]
 DEL-01: Public URL live (GitHub Pages) [P12]
 DEL-02: README: what it is, how to run, claims policy, credits [P12]
 DEL-03: One-page system design for the jury (docs/system-design.md) [P12]
@@ -211,15 +211,16 @@ DEL-05: 60-second screen recording as fallback if venue Wi-Fi fails [P12]
 
 ## Docs map (cite file + section in prompts)
 - docs/architecture.md: 1. System diagram; 2. Stack; 3. Decisions and deviations; 4. Repository layout; 5. Module contracts (TypeScript); 6. Screens and URL parameters (no server routes); 7. Data flows; 8. Algorithms (exact); 9. Environment variables; 10. Error handling; 11. Observability; 12. Testing strategy; 13. Deployment; 14. Integration notes
+- docs/ASSETS.md: 
 - docs/copy.md: Voice; Jargon lint (SRC-04); Hindi
 - docs/DEEPSEEK_STARTER_PROMPT.md: Style; The loop; First reply (after you read the brief); Prompt template for the coding agent (always use this); Report review procedure; Trap table (fast coding models do these); Order of work; Behaviour
 - docs/demo-script.md: Likely jury questions
-- docs/design.md: 1. Direction in one paragraph; 2. What is product UI and what is mockup; 3. Tokens (`src/ui/tokens.css`); 4. Typography; 5. Material recipes; 6. Layout grid (landscape 1920x1080 stage, scaled to fit, letterboxed with `--clear-white` bars only in Clear skin, `--sale-yellow` otherwise); 7. Components; 8. Screens table; 9. States; 10. Responsive and accessibility; 11. Motion rules; 12. Design acceptance checklist (agent ticks with screenshots in evidence/P1 and per phase); 13. Declared deviations
+- docs/design.md: 1. Direction in one paragraph; 2. What is product UI and what is 3D stage; 3. Tokens (`src/ui/tokens.css`); 4. Typography; 5. Material recipes; 6. Layout grid; 7. Components; 8. Screens table; 9. States; 10. Responsive and accessibility; 11. Motion rules; 12. Design acceptance checklist (V2); 13. Declared deviations & V1 -> V2 history
 - docs/phases.md: Clock rules (hard); Definition of Done (every phase); P0 Repo, tooling, CI, Pages deploy (1 h); P1 Design system + app shell (3 h); P2 Content data + state engine (2 h); P3 Shared engines (2.5 h); P4 Attract, Shelf, persona (2 h); P5 Receipt, Result, Staff screen (CUT LINE 1) (2.5 h); P6 Scene: The long day (battery) (2 h); P7 Scene: The lecture hall (on-device AI) (CUT LINE 2) (2 h); P8 Scene: Private files (privacy) (2 h); P9 Scene: Creator night (performance) (CUT LINE 3) (2 h); P10 Fair Fight + Hindi pass (1 h); P11 Hardening (3 h)
 - docs/prd.md: 0. Reading rules for agents; 1. One-line pitch; 2. The problem in plain English; 3. Who it is for; 4. Product shape; 5. Principles (non-negotiable); 6. Core user journey (the demo path); 7. Demo cut lines; 8. Requirements; 9. Module behaviour; 10. Recommendation logic (summary; formulas in architecture.md); 11. Out of scope; 12. Success criteria; 13. Risks
-- docs/progress.md: Phase status; SPEC GAP log; Decisions log; External facts the agent had to look up; Open questions for the human; Slice log (newest first)
+- docs/progress.md: Phase status; SPEC GAP log; Decisions log; External facts the agent had to look up; Open questions for the human; P6 acceptance checklist; P7 acceptance checklist; P8 acceptance checklist; P9 acceptance checklist; P10 acceptance checklist; P11 acceptance checklist; P12 acceptance checklist; Slice log (newest first); Domain Test Matrix (TEST-HARDENING)
 - docs/schema.md: 1. Conventions; 2. Files; 3. Claims policy (ADD-03, SRC-21); 4. In-memory state; 5. Integrity rules and their tests; 6. Seed data rules
 - docs/security.md: 1. Threat model; 2. Secrets; 3. Content Security Policy (meta tag, because Pages cannot set headers); 4. Input handling; 5. Privacy copy; 6. Dependency and CI hygiene; 7. Required security tests; 8. Incident checklist (demo day)
 - docs/setup-checklist.md: Human tasks (cannot be done by agents)
 - docs/SPEC_CHECKLIST.md: 
-- docs/system-design.md: 
+- docs/system-design.md: Architecture & data flow; Scoring & regret formula; Claims & privacy policy; Verification summary
