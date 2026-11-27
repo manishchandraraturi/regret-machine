@@ -28,7 +28,7 @@
   body {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100dvh;
   }
 
   #app {
@@ -40,7 +40,7 @@
   .rm-shell {
     width: min(100%, 1920px);
     max-width: 1920px;
-    min-height: min(100vh, 1080px);
+    min-height: min(100dvh, 1080px);
     margin: auto;
   }
 }
@@ -50,23 +50,49 @@
   margin: 0 auto;
 }
 
-/* Marquee edge fade (no hard clip while drifting) */
+/* Attract tags: always stay fully visible on screen, gentle in-place sway */
 .rm-marquee {
-  padding: var(--s5) var(--s6);
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0,
-    black var(--s6),
-    black calc(100% - var(--s6)),
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent 0,
-    black var(--s6),
-    black calc(100% - var(--s6)),
-    transparent 100%
-  );
+  display: flex;
+  width: 100%;
+  overflow: visible;
+  padding: var(--s3) 0;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.rm-marquee-track {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: clamp(10px, 1.4vw, 24px);
+  width: 100%;
+  animation: none;
+}
+
+.rm-attract .rm-pricetag {
+  min-width: clamp(140px, 11.5vw, 185px);
+}
+
+@keyframes rm-sway {
+  from {
+    transform: rotate(-1.5deg);
+  }
+  to {
+    transform: rotate(1.5deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rm-marquee-track .rm-pricetag-card {
+    animation: rm-sway 4.5s ease-in-out infinite alternate;
+  }
+
+  .rm-marquee-track .rm-pricetag:nth-child(2) .rm-pricetag-card {
+    animation-delay: -1.5s;
+  }
+
+  .rm-marquee-track .rm-pricetag:nth-child(3) .rm-pricetag-card {
+    animation-delay: -3s;
+  }
 }
 
 /* Attract two-column centered hero */
@@ -78,7 +104,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   align-items: center;
-  gap: var(--s6);
+  gap: clamp(12px, 2.5dvh, 32px);
 }
 
 .rm-attract-copy {
@@ -86,16 +112,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  gap: var(--s5);
+  gap: clamp(10px, 2dvh, 24px);
   min-width: 0;
 }
 
-.rm-attract-copy .rm-marquee {
-  max-width: 100%;
-}
-
 .rm-attract-copy .type-flyer {
-  font-size: clamp(64px, 6.8vw, 144px);
+  font-size: clamp(64px, min(6.6vw, 11dvh), 144px);
 }
 
 .rm-attract-visual {
@@ -109,8 +131,105 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: min(460px, 100%);
-  padding: var(--s5) var(--s4);
+  width: min(460px, 48dvh, 100%);
+  padding: clamp(12px, 2dvh, 24px) var(--s4);
+}
+
+/* Shelf viewport fit >= 1280x640 (and 700px+ landscape) */
+@media (min-width: 700px) {
+  .rm-shelf {
+    gap: clamp(6px, 1.6dvh, 20px);
+    justify-content: space-between;
+  }
+
+  .rm-shelf > .type-title {
+    font-size: clamp(26px, min(3vw, 4.8dvh), 52px);
+  }
+
+  .rm-shelf-grid {
+    gap: clamp(12px, 1.6vw, 24px);
+  }
+
+  .rm-shelf-item {
+    gap: clamp(4px, 0.8dvh, 12px);
+    padding: clamp(6px, 1dvh, 16px) var(--s3);
+  }
+
+  .rm-shelf-stickers {
+    gap: var(--s1);
+  }
+
+  .rm-shelf-stickers .rm-sticker {
+    font-size: clamp(13px, min(1.25vw, 2.4dvh), 20px);
+    padding: 2px var(--s2);
+    border-width: 2px;
+  }
+
+  .rm-shelf-item .rm-pricetag {
+    padding: var(--s1) 0 0;
+    min-width: clamp(150px, 14vw, 180px);
+  }
+
+  .rm-shelf-item .rm-pricetag-card {
+    padding: clamp(10px, 1.6dvh, 20px) var(--s4) clamp(6px, 1dvh, 14px);
+  }
+
+  .rm-shelf-item .rm-pricetag-price {
+    font-size: clamp(24px, 3.8dvh, 36px);
+  }
+
+  .rm-shelf-item .rm-laptop {
+    width: auto;
+  }
+
+  .rm-shelf-item .rm-laptop-lid {
+    width: clamp(118px, 18dvh, 204px);
+    height: auto;
+    aspect-ratio: 204 / 134;
+    padding: clamp(4px, 0.8dvh, 8px);
+  }
+
+  .rm-shelf-item .rm-laptop-base {
+    width: clamp(134px, 20.5dvh, 232px);
+    height: auto;
+  }
+}
+
+@media (max-height: 760px) and (min-width: 700px) {
+  .rm-btn,
+  .rm-chip {
+    min-height: 48px;
+  }
+
+  .rm-wordmark {
+    font-size: clamp(24px, 2.4vw, 38px);
+  }
+}
+
+@media (max-width: 699px) {
+  .rm-marquee-track {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s2);
+  }
+
+  .rm-attract .rm-pricetag {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .rm-attract .rm-pricetag-card {
+    padding: var(--s3) var(--s2) var(--s2);
+  }
+
+  .rm-attract .rm-pricetag-price {
+    font-size: 20px;
+  }
+
+  .rm-attract .rm-pricetag-mrp,
+  .rm-attract .rm-pricetag-label {
+    font-size: 12px;
+  }
 }
 
 .rm-attract-stage .rm-laptop {

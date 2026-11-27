@@ -47,10 +47,16 @@ test.describe('F1 Layout polish: centered stage, marquee fade, Attract hero', ()
           expect(wordSize).toBeGreaterThanOrEqual(46);
           expect(wordSize).toBeLessThanOrEqual(50);
         }
-        const mask = await page
-          .locator('.rm-marquee')
-          .evaluate((el) => getComputedStyle(el).maskImage || getComputedStyle(el).webkitMaskImage);
-        expect(mask).toContain('linear-gradient');
+        const tags = page.locator('.rm-marquee .rm-pricetag');
+        await expect(tags).toHaveCount(3);
+        for (let i = 0; i < 3; i++) {
+          const tBox = await tags.nth(i).boundingBox();
+          expect(tBox).not.toBeNull();
+          if (tBox) {
+            expect(tBox.x).toBeGreaterThanOrEqual(0);
+            expect(tBox.x + tBox.width).toBeLessThanOrEqual(vp.width);
+          }
+        }
       }
 
       if (vp.width === 390) {
