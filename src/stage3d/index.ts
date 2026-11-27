@@ -1,12 +1,14 @@
 import { shouldUse3DStage } from './fallback';
 import type { StageState } from './scenes3d';
-import type { Stage3DController } from './stage';
+import type { Stage3DController, StageWindowRect } from './stage';
 
 export type { StageState } from './scenes3d';
+export type { StageWindowRect } from './stage';
 
 export interface Stage3DHandle {
   active: boolean;
   sync(next: StageState): void;
+  setStageWindow(rect: StageWindowRect | null): void;
   getQuality(): ReturnType<Stage3DController['getQuality']> | null;
   dispose(): void;
 }
@@ -23,6 +25,7 @@ export async function mountStage3D(
     return {
       active: false,
       sync(): void {},
+      setStageWindow(): void {},
       getQuality(): null {
         return null;
       },
@@ -59,6 +62,7 @@ export async function mountStage3D(
     return {
       active: false,
       sync(): void {},
+      setStageWindow(): void {},
       getQuality(): null {
         return null;
       },
@@ -70,6 +74,9 @@ export async function mountStage3D(
     active: true,
     sync(next: StageState): void {
       ctrl?.sync(next);
+    },
+    setStageWindow(rect: StageWindowRect | null): void {
+      ctrl?.setStageWindow(rect);
     },
     getQuality() {
       return ctrl ? ctrl.getQuality() : null;

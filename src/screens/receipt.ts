@@ -67,7 +67,11 @@ export function createReceiptScreen(audio: Audio): Screen {
         onClick: () => ctx.go('fairfight'),
       });
 
-      wrap.append(heading, tape.element, scoreEl, small, cta);
+      const stageWin = document.createElement('div');
+      stageWin.className = 'stage-window';
+      stageWin.setAttribute('aria-hidden', 'true');
+
+      wrap.append(heading, tape.element, scoreEl, small, cta, stageWin);
       root.replaceChildren(wrap);
 
       return () => {

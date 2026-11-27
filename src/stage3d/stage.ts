@@ -6,8 +6,16 @@ import { createAdaptiveQuality, type QualityState } from './quality';
 import { createShowroomModels, type StageState } from './scenes3d';
 import { loadShowroomTextures } from './textures';
 
+export interface StageWindowRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 export interface Stage3DController {
   sync(next: StageState): void;
+  setStageWindow(rect: StageWindowRect | null): void;
   getQuality(): QualityState;
   dispose(): void;
 }
@@ -79,6 +87,29 @@ export function createWebGLStage(
   let lastPointerRenderMs = -500;
   let dirty = true;
   let disposed = false;
+  let targetOffX = 0;
+  let targetOffY = 0;
+  let curOffX = 0;
+  let curOffY = 0;
+
+  const applyViewOffset = (dtMs: number): void => {
+    const W = Math.max(1, window.innerWidth);
+    const H = Math.max(1, window.innerHeight);
+    if (softGpu) {
+      curOffX = targetOffX;
+      curOffY = targetOffY;
+    } else {
+      const k = 1 - Math.exp(-dtMs / 130);
+      curOffX += (targetOffX - curOffX) * k;
+      curOffY += (targetOffY - curOffY) * k;
+    }
+    if (Math.abs(curOffX) > 0.5 || Math.abs(curOffY) > 0.5) {
+      camera.setViewOffset(W, H, curOffX, curOffY, W, H);
+    } else {
+      camera.clearViewOffset();
+    }
+    camera.updateProjectionMatrix();
+  };
 
   const renderFrame = (nowMs: number): void => {
     const dtMs = Math.max(1, Math.min(100, nowMs - lastMs));
@@ -102,6 +133,7 @@ export function createWebGLStage(
       isPlinth,
     });
     particles.update(dtSec, state.decay, q.degraded || softGpu, !isClear);
+    applyViewOffset(dtMs);
     models.update({ state, tSec, dtSec, pointerX, pointerY, camera, snap: softGpu });
     renderer.render(scene, camera);
   };
@@ -159,6 +191,21 @@ export function createWebGLStage(
   return {
     sync(next: StageState): void {
       state = { ...next };
+      dirty = true;
+      if (softGpu) scheduleSoftFrame();
+    },
+    setStageWindow(rect: StageWindowRect | null): void {
+      const W = Math.max(1, window.innerWidth);
+      const H = Math.max(1, window.innerHeight);
+      if (rect && rect.width > 0 && rect.height > 0) {
+        const cx = rect.x + rect.width / 2;
+        const cy = rect.y + rect.height / 2;
+        targetOffX = W / 2 - cx;
+        targetOffY = H / 2 - cy;
+      } else {
+        targetOffX = 0;
+        targetOffY = 0;
+      }
       dirty = true;
       if (softGpu) scheduleSoftFrame();
     },

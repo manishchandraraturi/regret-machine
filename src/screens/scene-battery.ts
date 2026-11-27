@@ -6,6 +6,7 @@ import { createLoop } from '../engines/loop';
 import { createButton } from '../ui/components/button';
 import { createClaimChip } from '../ui/components/claimchip';
 import { createSplitReveal } from '../ui/components/splitreveal';
+import { createRevealControls } from './reveal-controls';
 import type { SceneFactory } from './scenes';
 
 const CLOCK_LABELS = [
@@ -34,6 +35,7 @@ export function createBatteryScene(audio?: Audio): SceneFactory {
       let lowAlerted = false;
       let phase: 'PLAY' | 'FAIL' | 'REVEAL' = 'PLAY';
       let finished = false;
+      let cleanupReveal: (() => void) | null = null;
 
       const wrap = document.createElement('div');
       wrap.className = 'rm-scene-play';
@@ -71,6 +73,7 @@ export function createBatteryScene(audio?: Audio): SceneFactory {
       const completeScene = (): void => {
         if (finished) return;
         finished = true;
+        cleanupReveal?.();
         loop.stop();
         detachInput();
         onDone({
@@ -107,10 +110,6 @@ export function createBatteryScene(audio?: Audio): SceneFactory {
         fill.style.setProperty('width', '0%');
         fill.classList.add('rm-battery-fill--low');
 
-        const failBanner = document.createElement('p');
-        failBanner.className = 'rm-fail-banner type-body';
-        failBanner.textContent = ctx.t('scene.battery.fail');
-
         phase = 'REVEAL';
         wrap.dataset.phase = 'REVEAL';
         ctx.setStageHint?.({ scenePhase: 'REVEAL', sceneAlert: true });
@@ -127,7 +126,10 @@ export function createBatteryScene(audio?: Audio): SceneFactory {
 
         const claimsRow = document.createElement('div');
         claimsRow.className = 'rm-claims-row';
+        const seenClaims = new Set<string>();
         for (const cid of meta.claims) {
+          if (seenClaims.has(cid)) continue;
+          seenClaims.add(cid);
           const c = ctx.claim(cid);
           claimsRow.appendChild(
             createClaimChip({
@@ -138,13 +140,11 @@ export function createBatteryScene(audio?: Audio): SceneFactory {
           );
         }
 
-        const nextBtn = createButton({
-          label: ctx.t('btn.next'),
-          onClick: completeScene,
-        });
+        const revealCtrl = createRevealControls(ctx, completeScene);
+        cleanupReveal = revealCtrl.cleanup;
 
         taskGrid.replaceChildren();
-        revealHost.replaceChildren(failBanner, split, claimsRow, nextBtn);
+        revealHost.replaceChildren(split, claimsRow, revealCtrl.element);
       };
 
       const loop = createLoop();
@@ -188,6 +188,7 @@ export function createBatteryScene(audio?: Audio): SceneFactory {
       });
 
       return () => {
+        cleanupReveal?.();
         loop.stop();
         detachInput();
       };

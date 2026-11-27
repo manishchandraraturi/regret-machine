@@ -21,7 +21,7 @@ export function createResultScreen(onReset: () => void): Screen {
       heading.textContent = ctx.t('result.title');
 
       const grid = document.createElement('div');
-      grid.className = 'rm-result-grid';
+      grid.className = 'rm-result-grid stage-window';
 
       const card = document.createElement('div');
       card.className = 'rm-result-card';

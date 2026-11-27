@@ -85,15 +85,14 @@
   }
 }
 
-/* SplitReveal: aged dark Act II left vs Bright Studio Clear right */
+/* SplitReveal: transparent over dual-laptop 3D showcase */
 .rm-split {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   border-radius: var(--r-panel);
-  border: 1px solid color-mix(in oklab, var(--paper-white) 20%, transparent);
-  box-shadow: 0 18px 40px color-mix(in oklab, var(--ink-black) 55%, transparent);
   overflow: hidden;
+  background: transparent;
 }
 
 @media (max-width: 699px) {
@@ -103,11 +102,35 @@
 }
 
 .rm-split-half {
-  padding: clamp(16px, 2.5dvh, 28px);
+  padding: clamp(14px, 2.2dvh, 24px);
   display: flex;
   flex-direction: column;
-  gap: var(--s3);
-  min-height: 196px;
+  gap: var(--s2);
+  min-height: 164px;
+  background: transparent;
+}
+
+.rm-split-half > .type-title,
+.rm-split-half > .type-body {
+  padding: var(--s1) var(--s3);
+  border-radius: var(--s2);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--wall-obsidian) 72%, transparent),
+    color-mix(in oklab, var(--wall-obsidian) 56%, transparent)
+  );
+  color: var(--paper-white);
+  align-self: flex-start;
+}
+
+.rm-split-half.skin-clear > .type-title,
+.rm-split-half.skin-clear > .type-body {
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--studio-white) 86%, transparent),
+    color-mix(in oklab, var(--studio-ice) 76%, transparent)
+  );
+  color: var(--clear-ink);
 }
 
 .rm-split-divider {

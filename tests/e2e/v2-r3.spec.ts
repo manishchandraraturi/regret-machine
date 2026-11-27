@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { attachCspGuard } from './csp';
+import { runClockUntilVisible } from './helpers';
 
 const VIEWPORTS = [
   { width: 1920, height: 1080 },
@@ -38,20 +39,34 @@ test.describe('V2 R3 Three.js showroom & fallback', () => {
       await page.screenshot({ path: `evidence/V2-r3/shelf-${vp.width}x${vp.height}.png` });
 
       await page.getByRole('button', { name: 'Buy it' }).click();
-      await page.getByRole('button', { name: 'Next' }).click();
-      await page.clock.runFor(16_500);
-      await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
+      await expect(page.locator('[data-screen="flip"]')).toBeVisible();
+      await expect(page.locator('[data-screen="flip"] .stage-window')).toBeAttached();
+      await expect(page.getByRole('button', { name: 'Next' })).toHaveCount(0);
       await page.clock.runFor(450);
-      await page.screenshot({ path: `evidence/V2-r4/lecture-reveal-${vp.width}x${vp.height}.png` });
-      await page.clock.runFor(6_000);
-      await page.getByRole('button', { name: 'Next' }).click();
-      await page.clock.runFor(22_200);
-      await page.clock.runFor(22_200);
-      await page.getByRole('button', { name: 'Next' }).click();
-      await page.clock.runFor(22_200);
+      await page.screenshot({ path: `evidence/U1/flip-${vp.width}x${vp.height}.png` });
+      await page.clock.runFor(1_400);
+
+      await expect(page.locator('[data-screen="lecture"]')).toBeVisible();
+      await page.clock.runFor(600);
+      await page.screenshot({ path: `evidence/U1/lecture-play-${vp.width}x${vp.height}.png` });
+      await runClockUntilVisible(page, '[data-phase="REVEAL"]', 18_000);
+      await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
+      await expect(page.locator('[data-screen="lecture"] .stage-window')).toBeAttached();
+      await expect(page.getByRole('button', { name: 'Next' })).toHaveCount(0);
+      await page.clock.runFor(450);
+      await page.screenshot({ path: `evidence/U1/reveal-${vp.width}x${vp.height}.png` });
+
+      await runClockUntilVisible(page, '[data-screen="battery"]', 10_000);
+      await expect(page.locator('[data-screen="battery"]')).toBeVisible();
+      await page.clock.runFor(2_000);
+      await page.screenshot({ path: `evidence/U1/battery-play-${vp.width}x${vp.height}.png` });
+      await runClockUntilVisible(page, '[data-screen="creator"]', 25_000);
+      await page.keyboard.press('ArrowRight');
+      await runClockUntilVisible(page, '[data-screen="private"]', 26_000);
+      await page.keyboard.press('ArrowRight');
+      await runClockUntilVisible(page, '[data-screen="receipt"]', 26_000);
       await expect(page.locator('[data-screen="receipt"]')).toBeVisible();
       await page.clock.runFor(1_500);
-      await page.screenshot({ path: `evidence/V2-r4/receipt-${vp.width}x${vp.height}.png` });
 
       await page.getByRole('button', { name: 'See the fair fight' }).click();
       await page.getByRole('button', { name: 'Next' }).click();

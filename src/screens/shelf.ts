@@ -27,7 +27,7 @@ export function createShelfScreen(audio: Audio): Screen {
       heading.textContent = ctx.t('shelf.title');
 
       const grid = document.createElement('div');
-      grid.className = 'rm-shelf-grid';
+      grid.className = 'rm-shelf-grid stage-window';
 
       const laptops = getLaptops();
       const tagHandles = new Map<string, PriceTagHandle>();

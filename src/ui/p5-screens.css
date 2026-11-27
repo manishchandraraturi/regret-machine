@@ -57,12 +57,116 @@
   display: flex;
   flex-direction: column;
   gap: clamp(8px, 1.4dvh, 16px);
-  padding: clamp(12px, 2dvh, 24px);
-  border-radius: var(--r-panel);
-  border: 1px solid color-mix(in oklab, var(--paper-white) 20%, transparent);
-  background: color-mix(in oklab, var(--floor-graphite) 88%, var(--wall-obsidian));
+  padding: clamp(8px, 1.4dvh, 16px);
+  background: transparent;
   color: var(--paper-white);
-  box-shadow: 0 16px 36px color-mix(in oklab, var(--ink-black) 52%, transparent);
+}
+
+.rm-scrim {
+  display: inline-block;
+  padding: var(--s2) var(--s3);
+  border-radius: var(--r-panel);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--wall-obsidian) 78%, transparent),
+    color-mix(in oklab, var(--wall-obsidian) 62%, transparent)
+  );
+}
+
+.stage-window {
+  min-height: 180px;
+}
+
+.stage-window:empty {
+  pointer-events: none;
+}
+
+@media (min-width: 700px) {
+  .rm-scene-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: var(--s5);
+    align-items: center;
+    flex: 1;
+  }
+
+  .rm-scene-layout > .stage-window {
+    min-height: 42dvh;
+    width: 100%;
+  }
+}
+
+@media (max-width: 699px) {
+  .rm-scene-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s3);
+  }
+
+  .rm-scene-layout > .stage-window {
+    min-height: 40dvh;
+    width: 100%;
+  }
+}
+
+.rm-reveal-progress {
+  position: relative;
+  width: 160px;
+  height: 4px;
+  border-radius: var(--r-btn);
+  background: color-mix(in oklab, var(--paper-white) 24%, transparent);
+  overflow: hidden;
+}
+
+.rm-reveal-progress-fill {
+  width: 100%;
+  height: 100%;
+  background: var(--spot-warm);
+  transform-origin: left center;
+  animation: rm-reveal-bar 6s linear forwards;
+}
+
+@keyframes rm-reveal-bar {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.rm-year-cinematic {
+  display: grid;
+  place-items: center;
+  min-height: 68dvh;
+  position: relative;
+}
+
+.rm-year-cinematic .stage-window {
+  position: absolute;
+  inset: 0;
+}
+
+.rm-year-slam {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(56px, 11vw, 152px);
+  line-height: 0.95;
+  margin: 0;
+  background: linear-gradient(125deg, var(--stock-red), var(--spot-warm));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rm-year-slam-in 420ms var(--ease) both;
+}
+
+@keyframes rm-year-slam-in {
+  from {
+    opacity: 0;
+    transform: scale(1.18) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .rm-scene-play > div:empty {
@@ -85,18 +189,11 @@
   font-size: 20px;
 }
 
-/* Receipt over dark showroom desk */
+/* Receipt over dark showroom desk (transparent; scrim only behind text) */
 .rm-receipt-wrap {
-  background: linear-gradient(
-    165deg var(--in-oklab),
-    color-mix(in oklab, var(--floor-graphite) 92%, var(--wall-obsidian)),
-    var(--wall-obsidian)
-  );
+  background: transparent;
   color: var(--paper-white);
   padding: clamp(14px, 2.5dvh, 32px);
-  border-radius: var(--r-panel);
-  border: 1px solid color-mix(in oklab, var(--paper-white) 18%, transparent);
-  box-shadow: 0 20px 44px color-mix(in oklab, var(--ink-black) 60%, transparent);
   display: flex;
   flex-direction: column;
   align-items: flex-start;

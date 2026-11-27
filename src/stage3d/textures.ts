@@ -126,6 +126,15 @@ function drawDecayStreaks(ctx: CanvasRenderingContext2D, w: number, h: number, d
     ctx.fillStyle = 'rgba(228, 38, 43, 0.72)';
     ctx.fillRect(w * 0.18, 0, 3, h);
     ctx.fillRect(w * 0.73, h * 0.15, 2, h * 0.85);
+    // One small crack on the 3D laptop screen only
+    ctx.strokeStyle = 'rgba(244, 241, 234, 0.82)';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(w * 0.78, 0);
+    ctx.lineTo(w * 0.72, h * 0.22);
+    ctx.lineTo(w * 0.76, h * 0.36);
+    ctx.lineTo(w * 0.66, h * 0.54);
+    ctx.stroke();
   }
 }
 

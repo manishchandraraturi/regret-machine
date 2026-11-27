@@ -48,7 +48,7 @@ function buildAttractCopy(ctx: Ctx, startGame: () => void): HTMLElement {
 
 function buildAttractVisual(ctx: Ctx): HTMLElement {
   const visualCol = document.createElement('div');
-  visualCol.className = 'rm-attract-visual';
+  visualCol.className = 'rm-attract-visual stage-window';
 
   const stage = document.createElement('div');
   stage.className = 'rm-attract-stage';

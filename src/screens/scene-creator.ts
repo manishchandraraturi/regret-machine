@@ -5,6 +5,7 @@ import { createLoop } from '../engines/loop';
 import { createButton } from '../ui/components/button';
 import { createClaimChip } from '../ui/components/claimchip';
 import { createSplitReveal } from '../ui/components/splitreveal';
+import { createRevealControls } from './reveal-controls';
 import type { SceneFactory } from './scenes';
 
 export function stepCreatorFill(
@@ -34,6 +35,7 @@ export function createCreatorScene(audio?: Audio): SceneFactory {
       let stuttered = false;
       let phase: 'PLAY' | 'FAIL' | 'REVEAL' = 'PLAY';
       let finished = false;
+      let cleanupReveal: (() => void) | null = null;
 
       const wrap = document.createElement('div');
       wrap.className = 'rm-scene-play';
@@ -85,6 +87,7 @@ export function createCreatorScene(audio?: Audio): SceneFactory {
       const completeScene = (): void => {
         if (finished) return;
         finished = true;
+        cleanupReveal?.();
         loop.stop();
         window.removeEventListener('keydown', onKeyDown);
         window.removeEventListener('keyup', onKeyUp);
@@ -122,7 +125,10 @@ export function createCreatorScene(audio?: Audio): SceneFactory {
 
         const claimsRow = document.createElement('div');
         claimsRow.className = 'rm-claims-row';
+        const seenClaims = new Set<string>();
         for (const cid of ['C-03', 'C-04']) {
+          if (seenClaims.has(cid)) continue;
+          seenClaims.add(cid);
           const c = ctx.claim(cid);
           claimsRow.appendChild(
             createClaimChip({
@@ -133,13 +139,12 @@ export function createCreatorScene(audio?: Audio): SceneFactory {
           );
         }
 
-        const nextBtn = createButton({
-          label: ctx.t('btn.next'),
-          onClick: completeScene,
-        });
+        const revealCtrl = createRevealControls(ctx, completeScene);
+        cleanupReveal = revealCtrl.cleanup;
 
+        stutterSlot.replaceChildren();
         holdBtn.remove();
-        revealHost.replaceChildren(split, baselineEl, claimsRow, nextBtn);
+        revealHost.replaceChildren(split, baselineEl, claimsRow, revealCtrl.element);
       };
 
       const loop = createLoop();
@@ -170,6 +175,7 @@ export function createCreatorScene(audio?: Audio): SceneFactory {
       });
 
       return () => {
+        cleanupReveal?.();
         loop.stop();
         window.removeEventListener('keydown', onKeyDown);
         window.removeEventListener('keyup', onKeyUp);

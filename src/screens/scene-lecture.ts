@@ -6,6 +6,7 @@ import { createLoop } from '../engines/loop';
 import { createButton } from '../ui/components/button';
 import { createClaimChip } from '../ui/components/claimchip';
 import { createSplitReveal } from '../ui/components/splitreveal';
+import { createRevealControls } from './reveal-controls';
 import type { SceneFactory } from './scenes';
 
 export function createLectureScene(audio?: Audio): SceneFactory {
@@ -22,6 +23,7 @@ export function createLectureScene(audio?: Audio): SceneFactory {
       let wifiDropped = false;
       let phase: 'PLAY' | 'FAIL' | 'REVEAL' = 'PLAY';
       let finished = false;
+      let cleanupReveal: (() => void) | null = null;
 
       const wrap = document.createElement('div');
       wrap.className = 'rm-scene-play';
@@ -48,6 +50,7 @@ export function createLectureScene(audio?: Audio): SceneFactory {
       const completeScene = (): void => {
         if (finished) return;
         finished = true;
+        cleanupReveal?.();
         loop.stop();
         detachInput();
         onDone({
@@ -115,13 +118,11 @@ export function createLectureScene(audio?: Audio): SceneFactory {
           closeLabel: ctx.t('btn.close'),
         });
 
-        const nextBtn = createButton({
-          label: ctx.t('btn.next'),
-          onClick: completeScene,
-        });
+        const revealCtrl = createRevealControls(ctx, completeScene);
+        cleanupReveal = revealCtrl.cleanup;
 
         arena.replaceChildren();
-        revealHost.replaceChildren(split, gloss, chip, nextBtn);
+        revealHost.replaceChildren(split, gloss, chip, revealCtrl.element);
       };
 
       const loop = createLoop();
@@ -156,6 +157,7 @@ export function createLectureScene(audio?: Audio): SceneFactory {
       });
 
       return () => {
+        cleanupReveal?.();
         loop.stop();
         detachInput();
       };

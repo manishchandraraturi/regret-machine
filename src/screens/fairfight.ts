@@ -15,6 +15,7 @@ export function createFairFightScreen(): Screen {
       const heading = document.createElement('h1');
       heading.className = 'type-title';
       heading.textContent = ctx.t('ff.title');
+      heading.classList.add('stage-window');
 
       const sub = document.createElement('p');
       sub.className = 'type-body';

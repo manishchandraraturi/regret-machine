@@ -24,7 +24,6 @@
   width: 164px;
   height: 164px;
   opacity: calc(1 - var(--decay));
-  filter: drop-shadow(0 0 22px color-mix(in oklab, var(--stock-red) 62%, transparent));
   transition: opacity var(--t-fast) var(--ease);
 }
 

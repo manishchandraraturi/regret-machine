@@ -28,7 +28,7 @@ import { createShelfScreen } from './screens/shelf';
 import { createStaffScreen } from './screens/staff';
 import type { Stage3DHandle, StageState } from './stage3d';
 import { createButton } from './ui/components/button';
-import { createCrackOverlay, setDecay } from './ui/decay';
+import { setDecay } from './ui/decay';
 
 function buildFacilitatorBar(
   t: (k: string) => string,
@@ -135,7 +135,6 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
   shell.className = 'rm-shell decay-scope';
   shell.lang = initialLang;
   setDecay(shell, 0);
-  shell.appendChild(createCrackOverlay());
 
   const main = document.createElement('main');
   let cleanupScreen: (() => void) | null = null;
@@ -145,7 +144,20 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
   const hints: StageHint = { hoveredLaptopId: null, scenePhase: 'PLAY', sceneAlert: false, buyFlash: false };
 
   const machine = createMachine(getScenesConfig(), { skipFairFight: false, onNavigate: renderScreen });
-  const sync3d = (): void => stage3d?.sync(buildSnapshot(store, machine.current(), hints));
+  const syncStageWindow = (): void => {
+    if (!stage3d) return;
+    const win = main.querySelector<HTMLElement>('.stage-window');
+    if (!win) {
+      stage3d.setStageWindow(null);
+      return;
+    }
+    const r = win.getBoundingClientRect();
+    stage3d.setStageWindow({ x: r.left, y: r.top, width: r.width, height: r.height });
+  };
+  const sync3d = (): void => {
+    stage3d?.sync(buildSnapshot(store, machine.current(), hints));
+    syncStageWindow();
+  };
   const t = (k: string): string => translate(store.getState().lang, k);
   const setStageHint = (next: Partial<StageHint>): void => {
     Object.assign(hints, next);

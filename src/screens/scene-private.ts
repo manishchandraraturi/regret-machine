@@ -5,6 +5,7 @@ import { attachInput } from '../engines/input';
 import { createLoop } from '../engines/loop';
 import { createButton } from '../ui/components/button';
 import { createSplitReveal } from '../ui/components/splitreveal';
+import { createRevealControls } from './reveal-controls';
 import type { SceneFactory } from './scenes';
 
 export function createPrivateScene(audio?: Audio): SceneFactory {
@@ -20,6 +21,7 @@ export function createPrivateScene(audio?: Audio): SceneFactory {
       let correct = 0;
       let phase: 'PLAY' | 'FAIL' | 'REVEAL' = 'PLAY';
       let finished = false;
+      let cleanupReveal: (() => void) | null = null;
 
       const wrap = document.createElement('div');
       wrap.className = 'rm-scene-play';
@@ -52,6 +54,7 @@ export function createPrivateScene(audio?: Audio): SceneFactory {
       const completeScene = (): void => {
         if (finished) return;
         finished = true;
+        cleanupReveal?.();
         loop.stop();
         detachInput();
         onDone({
@@ -130,14 +133,12 @@ export function createPrivateScene(audio?: Audio): SceneFactory {
           claimText: `${ctx.t('scene.private.note')} (${ctx.t('tag.our-advice')})`,
         });
 
-        const nextBtn = createButton({
-          label: ctx.t('btn.next'),
-          onClick: completeScene,
-        });
+        const revealCtrl = createRevealControls(ctx, completeScene);
+        cleanupReveal = revealCtrl.cleanup;
 
         cardsRow.replaceChildren();
         decisionRow.replaceChildren();
-        revealHost.replaceChildren(split, nextBtn);
+        revealHost.replaceChildren(split, revealCtrl.element);
       };
 
       const loop = createLoop();
@@ -159,6 +160,7 @@ export function createPrivateScene(audio?: Audio): SceneFactory {
       });
 
       return () => {
+        cleanupReveal?.();
         loop.stop();
         detachInput();
       };

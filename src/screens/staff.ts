@@ -20,7 +20,7 @@ export function createStaffScreen(onReset: () => void): Screen {
       wrap.dataset.screen = 'staff';
 
       const heading = document.createElement('h1');
-      heading.className = 'type-title';
+      heading.className = 'type-title stage-window';
       heading.textContent = ctx.t('staff.title');
 
       const useLine = document.createElement('p');
