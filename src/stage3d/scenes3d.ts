@@ -120,23 +120,23 @@ function positionShelfLaptops(
     const hovered = state.hoveredLaptopId === id;
     const tx = isAttract
       ? portrait
-        ? (idx - 1) * 1.55
-        : 0.72 + idx * 1.48
+        ? (idx - 1) * 1.15
+        : (idx - 1) * 1.38
       : portrait
-        ? (idx - 1) * 1.75
+        ? (idx - 1) * 1.45
         : (idx - 1) * 2.68;
-    const ty = isAttract ? (portrait ? 0.02 + idx * 0.08 : 0.01 + idx * 0.06) : 0.04;
+    const ty = isAttract ? (portrait ? 0.02 + idx * 0.06 : 0.02 + idx * 0.08) : 0.04;
     const tz = isAttract
       ? portrait
-        ? 0.2 - idx * 0.85
-        : 0.65 - idx * 1.12
+        ? 0.2 - idx * 0.65
+        : 0.55 - idx * 0.95
       : selected
         ? 0.52
         : 0;
-    const lift = hovered ? 0.18 : selected ? 0.08 : 0;
+    const lift = hovered ? 0.2 : selected ? 0.1 : 0;
 
     rig.group.visible = true;
-    rig.group.scale.setScalar(isAttract && portrait ? 0.82 : 1);
+    rig.group.scale.setScalar(isAttract ? (portrait ? 0.78 : 0.92) : 1);
     rig.group.position.x = THREE.MathUtils.lerp(rig.group.position.x, tx, alpha);
     rig.group.position.y = THREE.MathUtils.lerp(rig.group.position.y, ty + lift, alpha);
     rig.group.position.z = THREE.MathUtils.lerp(rig.group.position.z, tz, alpha);
@@ -162,16 +162,16 @@ function positionStudioLaptop(
   studioRig.group.visible = true;
   studioShadow.visible = true;
   const isFF = screen === 'fairfight';
-  const tx = isFF ? (portrait ? 0 : 2.55) : portrait ? 0 : -2.1;
-  const tz = isFF ? -0.9 : portrait ? 0.25 : 0.6;
-  studioRig.group.scale.setScalar(portrait ? 0.7 : 0.72);
+  const tx = 0;
+  const tz = isFF ? 0.15 : 0.3;
+  studioRig.group.scale.setScalar(portrait ? 0.68 : isFF ? 0.72 : 0.64);
   studioRig.group.position.set(
     THREE.MathUtils.lerp(studioRig.group.position.x, tx, snap ? 1 : 0.22),
     0,
     tz,
   );
   studioShadow.position.set(studioRig.group.position.x, -0.015, tz);
-  studioRig.group.rotation.y = snap ? -0.35 : studioRig.group.rotation.y + dtSec * 0.35;
+  studioRig.group.rotation.y = snap ? -0.32 : studioRig.group.rotation.y + dtSec * 0.35;
   studioRig.setDecay(0);
   studioRig.setScreenMode('studio', 0);
 }
@@ -199,7 +199,7 @@ function positionSingleAndReveal(
 
   rigs.forEach((r, i) => {
     r.group.visible = !isStudioScreen && i === selectedIdx;
-    r.group.scale.setScalar(1);
+    r.group.scale.setScalar(portrait ? 0.85 : 1.05);
     r.setHighlight(false, false);
   });
 
@@ -210,15 +210,18 @@ function positionSingleAndReveal(
 
   activeRig.setDecay(state.decay);
   if (isReveal) {
-    activeRig.group.position.set(-1.65, 0.02, 0.25);
-    activeRig.group.rotation.y = 0.22;
+    const revScale = portrait ? 0.72 : 1.15;
+    const revX = portrait ? 0.92 : 1.55;
+    activeRig.group.scale.setScalar(revScale);
+    activeRig.group.position.set(-revX, 0.02, 0.25);
+    activeRig.group.rotation.y = 0.24;
     activeRig.setScreenMode(resolveFailMode(screen, 'FAIL', true), state.decay);
     studioRig.group.visible = true;
     studioShadow.visible = true;
-    studioRig.group.scale.setScalar(1);
-    studioRig.group.position.set(1.65, 0.02, 0.25);
-    studioShadow.position.set(1.65, -0.015, 0.25);
-    studioRig.group.rotation.y = -0.22 + (snap ? 0 : Math.sin(tSec * 0.7) * 0.08);
+    studioRig.group.scale.setScalar(revScale);
+    studioRig.group.position.set(revX, 0.02, 0.25);
+    studioShadow.position.set(revX, -0.015, 0.25);
+    studioRig.group.rotation.y = -0.24 + (snap ? 0 : Math.sin(tSec * 0.7) * 0.08);
     studioRig.setDecay(0);
     studioRig.setScreenMode('studio', 0);
     return;
@@ -228,12 +231,12 @@ function positionSingleAndReveal(
   studioShadow.visible = false;
   const stutter = screen === 'creator' && state.sceneAlert && !snap ? Math.sin(tSec * 46) * 0.04 : 0;
   if (screen === 'receipt') {
-    activeRig.group.position.set(1.3, 0.0, 0.1);
-    activeRig.group.rotation.y = -0.45;
+    activeRig.group.position.set(0, 0.0, 0.15);
+    activeRig.group.rotation.y = -0.35;
     activeRig.setScreenMode('dead', 1);
   } else {
-    activeRig.group.position.set(1.95 + stutter, 0.0, 0.25);
-    activeRig.group.rotation.y = -0.35;
+    activeRig.group.position.set(stutter, 0.0, 0.25);
+    activeRig.group.rotation.y = -0.28 + (snap ? 0 : Math.sin(tSec * 0.8) * 0.06);
     activeRig.setScreenMode(resolveFailMode(screen, state.scenePhase, state.sceneAlert), state.decay);
   }
 }

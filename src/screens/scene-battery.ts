@@ -51,11 +51,16 @@ export function createBatteryScene(audio?: Audio): SceneFactory {
 
       hud.append(batteryHero, clockWrap);
 
+      const cue = document.createElement('div');
+      cue.className = 'rm-float-cue';
+      cue.setAttribute('aria-hidden', 'true');
+      cue.textContent = ctx.t('scene.battery.cue');
+
       const taskGrid = document.createElement('div');
       taskGrid.className = 'rm-bubble-arena';
 
       const revealHost = document.createElement('div');
-      wrap.append(hud, taskGrid, revealHost);
+      wrap.append(hud, cue, taskGrid, revealHost);
       playArea.replaceChildren(wrap);
 
       const completeScene = (): void => {
@@ -81,9 +86,13 @@ export function createBatteryScene(audio?: Audio): SceneFactory {
         btn.className = 'rm-task-bubble';
         btn.dataset.taskIndex = String(idx);
         btn.setAttribute('aria-label', CLOCK_LABELS[idx] ?? '19:00');
-        btn.append(makeSvgIcon(ICON_PATHS[iconKey], 'rm-bubble-icon'));
+        const ring = document.createElement('span');
+        ring.className = 'rm-bubble-ring';
+        ring.setAttribute('aria-hidden', 'true');
+        btn.append(ring, makeSvgIcon(ICON_PATHS[iconKey], 'rm-bubble-icon'));
         btn.addEventListener('click', () => {
           if (phase !== 'PLAY' || btn.getAttribute('aria-disabled') === 'true') return;
+          cue.classList.add('rm-float-cue--hidden');
           btn.setAttribute('aria-disabled', 'true');
           btn.classList.add('rm-task-bubble--done');
           tasksDone += 1;
@@ -97,7 +106,6 @@ export function createBatteryScene(audio?: Audio): SceneFactory {
         phase = 'REVEAL';
         wrap.dataset.phase = 'REVEAL';
         audio?.buzz();
-        ctx.setStageHint?.({ scenePhase: 'REVEAL', sceneAlert: true });
 
         const rv = createRevealView({
           ctx,
@@ -109,14 +117,17 @@ export function createBatteryScene(audio?: Audio): SceneFactory {
           onComplete: completeScene,
         });
         cleanupReveal = rv.cleanup;
+        cue.remove();
         hud.replaceChildren();
         taskGrid.replaceChildren();
         revealHost.replaceChildren(rv.element);
+        ctx.setStageHint?.({ scenePhase: 'REVEAL', sceneAlert: true });
       };
 
       const loop = createLoop();
       loop.start((_dt, tMs) => {
         if (phase === 'PLAY') {
+          if (tMs >= 3000) cue.classList.add('rm-float-cue--hidden');
           const ratio = Math.max(0, 1 - tMs / playMs);
           fill.style.setProperty('transform', `scaleX(${ratio.toFixed(3)})`);
           pctLabel.textContent = `${Math.round(ratio * 100)}%`;

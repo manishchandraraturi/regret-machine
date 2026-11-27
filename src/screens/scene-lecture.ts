@@ -52,11 +52,16 @@ export function createLectureScene(audio?: Audio): SceneFactory {
 
       hud.append(dotsWrap, summaryCard, wifiPill);
 
+      const cue = document.createElement('div');
+      cue.className = 'rm-float-cue';
+      cue.setAttribute('aria-hidden', 'true');
+      cue.textContent = ctx.t('scene.lecture.cue');
+
       const arena = document.createElement('div');
       arena.className = 'rm-lecture-lanes';
 
       const revealHost = document.createElement('div');
-      wrap.append(hud, arena, revealHost);
+      wrap.append(hud, cue, arena, revealHost);
       playArea.replaceChildren(wrap);
 
       const completeScene = (): void => {
@@ -83,8 +88,16 @@ export function createLectureScene(audio?: Audio): SceneFactory {
 
         btn.addEventListener('click', () => {
           if (phase !== 'PLAY' || btn.getAttribute('aria-disabled') === 'true') return;
+          cue.classList.add('rm-float-cue--hidden');
           btn.setAttribute('aria-disabled', 'true');
           btn.classList.add('rm-sticky-note--caught');
+          const plus = document.createElement('span');
+          plus.className = 'rm-plus-one';
+          plus.setAttribute('aria-hidden', 'true');
+          plus.style.gridColumn = btn.style.gridColumn;
+          plus.textContent = '+1';
+          plus.addEventListener('animationend', () => plus.remove(), { once: true });
+          arena.appendChild(plus);
           if (dots[caught]) dots[caught].classList.add('rm-dot--filled');
           caught += 1;
           dotsWrap.setAttribute('aria-label', `${caught} / ${notesTotal}`);
@@ -109,7 +122,6 @@ export function createLectureScene(audio?: Audio): SceneFactory {
         if (phase === 'REVEAL') return;
         phase = 'REVEAL';
         wrap.dataset.phase = 'REVEAL';
-        ctx.setStageHint?.({ scenePhase: 'REVEAL', sceneAlert: true });
 
         const rv = createRevealView({
           ctx,
@@ -121,14 +133,17 @@ export function createLectureScene(audio?: Audio): SceneFactory {
           onComplete: completeScene,
         });
         cleanupReveal = rv.cleanup;
+        cue.remove();
         arena.replaceChildren();
         hud.replaceChildren();
         revealHost.replaceChildren(rv.element);
+        ctx.setStageHint?.({ scenePhase: 'REVEAL', sceneAlert: true });
       };
 
       const loop = createLoop();
       loop.start((_dt, tMs) => {
         if (phase === 'PLAY') {
+          if (tMs >= 3000) cue.classList.add('rm-float-cue--hidden');
           const target = Math.min(notesTotal, Math.floor(tMs / 1800) + 1);
           while (spawned < target) {
             spawnNote(spawned);

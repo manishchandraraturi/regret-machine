@@ -42,14 +42,14 @@
   }
 
   .rm-shelf-item .rm-laptop-lid {
-    width: clamp(112px, 17dvh, 198px);
+    width: clamp(90px, 13.5dvh, 170px);
     height: auto;
     aspect-ratio: 204 / 130;
     padding: 4px;
   }
 
   .rm-shelf-item .rm-laptop-deck {
-    width: clamp(124px, 19dvh, 218px);
+    width: clamp(100px, 15.2dvh, 188px);
     padding: 4px 10px 5px;
     gap: 3px;
   }
@@ -64,6 +64,19 @@
 }
 
 @media (max-height: 800px) and (min-width: 700px) {
+  .rm-shell {
+    padding: clamp(8px, 1.3dvh, 18px) clamp(20px, 2.4vw, 36px);
+    gap: clamp(6px, 1.1dvh, 12px);
+  }
+
+  .rm-shelf {
+    gap: clamp(4px, 0.9dvh, 10px);
+  }
+
+  .rm-shelf-item {
+    padding: clamp(6px, 0.9dvh, 12px) var(--s3);
+  }
+
   .rm-btn,
   .rm-chip {
     min-height: 48px;
@@ -86,8 +99,30 @@
   }
 
   .rm-scene-play {
-    padding: clamp(8px, 1.4dvh, 16px);
+    padding: clamp(6px, 1.1dvh, 14px);
     gap: clamp(6px, 1dvh, 10px);
+  }
+
+  .rm-scene-layout:has([data-phase='REVEAL']) > .stage-window {
+    min-height: clamp(168px, 31dvh, 250px);
+  }
+
+  .rm-reveal-hero {
+    gap: var(--s2);
+  }
+
+  .rm-reveal-word {
+    font-size: clamp(20px, 2.4vw, 32px);
+    padding: var(--s1) var(--s3);
+  }
+
+  .rm-result-card {
+    padding: clamp(10px, 1.5dvh, 20px);
+    gap: var(--s2);
+  }
+
+  .rm-result-stage-window {
+    min-height: clamp(120px, 21dvh, 230px);
   }
 
   .rm-wifi-banner,

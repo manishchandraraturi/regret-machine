@@ -146,12 +146,17 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
   const machine = createMachine(getScenesConfig(), { skipFairFight: false, onNavigate: renderScreen });
   const syncStageWindow = (): void => {
     if (!stage3d) return;
-    const win = main.querySelector<HTMLElement>('.stage-window');
+    const wins = Array.from(main.querySelectorAll<HTMLElement>('.stage-window'));
+    const win = wins[wins.length - 1] ?? null;
     if (!win) {
       stage3d.setStageWindow(null);
       return;
     }
     const r = win.getBoundingClientRect();
+    if (r.width <= 0 || r.height <= 0) {
+      stage3d.setStageWindow(null);
+      return;
+    }
     stage3d.setStageWindow({ x: r.left, y: r.top, width: r.width, height: r.height });
   };
   const sync3d = (): void => {
@@ -189,6 +194,7 @@ export function mountApp(root: HTMLElement, search = window.location.search): ()
   const screenMap = buildScreens(shell, audio, fullReset);
   function renderScreen(screenId: ScreenId): void {
     cleanupScreen?.();
+    if (typeof document !== 'undefined') document.documentElement.scrollTop = 0;
     hints.hoveredLaptopId = null;
     hints.scenePhase = 'PLAY';
     hints.sceneAlert = false;

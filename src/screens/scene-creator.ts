@@ -41,6 +41,12 @@ export function createCreatorScene(audio?: Audio): SceneFactory {
       const center = document.createElement('div');
       center.className = 'rm-export-wrap';
 
+      const exportStage = document.createElement('div');
+      exportStage.className = 'rm-export-stage';
+      const pulseRing = document.createElement('div');
+      pulseRing.className = 'rm-hold-pulse-ring';
+      pulseRing.setAttribute('aria-hidden', 'true');
+
       const holdBtn = document.createElement('button');
       holdBtn.type = 'button';
       holdBtn.className = 'rm-export-btn';
@@ -55,12 +61,19 @@ export function createCreatorScene(audio?: Audio): SceneFactory {
       labelEl.className = 'rm-export-label';
       labelEl.textContent = ctx.t('scene.creator.export');
 
+      const cue = document.createElement('div');
+      cue.className = 'rm-float-cue';
+      cue.setAttribute('aria-hidden', 'true');
+      cue.textContent = ctx.t('scene.creator.cue');
+
       holdBtn.append(pctEl, labelEl);
-      center.appendChild(holdBtn);
+      exportStage.append(pulseRing, holdBtn);
+      center.append(exportStage, cue);
 
       const setHeld = (val: boolean): void => {
         held = val;
         holdBtn.classList.toggle('rm-export-btn--held', val);
+        if (val) cue.classList.add('rm-float-cue--hidden');
       };
       holdBtn.addEventListener('pointerdown', () => setHeld(true));
       holdBtn.addEventListener('pointerup', () => setHeld(false));
@@ -98,7 +111,6 @@ export function createCreatorScene(audio?: Audio): SceneFactory {
         phase = 'REVEAL';
         wrap.dataset.phase = 'REVEAL';
         audio?.buzz();
-        ctx.setStageHint?.({ scenePhase: 'REVEAL', sceneAlert: true });
 
         const rv = createRevealView({
           ctx,
@@ -113,6 +125,7 @@ export function createCreatorScene(audio?: Audio): SceneFactory {
         cleanupReveal = rv.cleanup;
         center.replaceChildren();
         revealHost.replaceChildren(rv.element);
+        ctx.setStageHint?.({ scenePhase: 'REVEAL', sceneAlert: true });
       };
 
       const loop = createLoop();

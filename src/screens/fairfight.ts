@@ -4,8 +4,16 @@ import { createButton } from '../ui/components/button';
 import { ICON_PATHS, makeSvgIcon } from './scene-icons';
 
 function shortWords(text: string, maxWords = 5): string {
-  const words = text.trim().split(/\s+/);
-  return words.length <= maxWords ? text : words.slice(0, maxWords).join(' ');
+  const noParens = text.trim().replace(/\s*\([^)]*\)/g, '');
+  const clause = noParens.split(/;/)[0]?.trim() ?? noParens;
+  const words = clause.split(/\s+/);
+  if (words.length <= maxWords) return clause.replace(/[,;:\-(]+$/, '').trim();
+  const sliced = words.slice(0, maxWords).join(' ');
+  const clean = sliced
+    .replace(/\s+(?:and|or)(?:\s+\S{1,3})?$/i, '')
+    .replace(/(?:\s+(?:on|in|for|to|of|with|at|by|from|the|a|an))+$/i, '')
+    .replace(/[,;:\-(]+$/, '');
+  return clean.trim() || sliced;
 }
 
 export function createFairFightScreen(): Screen {
@@ -18,10 +26,12 @@ export function createFairFightScreen(): Screen {
       wrap.className = 'rm-shelf skin-clear rm-ff-u5';
       wrap.dataset.screen = 'fairfight';
 
+      const top = document.createElement('div');
+      top.className = 'rm-ff-top';
       const head = document.createElement('div');
       head.className = 'rm-ff-head';
       const heading = document.createElement('h1');
-      heading.className = 'type-title stage-window';
+      heading.className = 'type-title';
       heading.textContent = ctx.t('ff.title');
 
       const infoBtn = document.createElement('button');
@@ -30,6 +40,11 @@ export function createFairFightScreen(): Screen {
       infoBtn.setAttribute('aria-label', ctx.t('reveal.details'));
       infoBtn.textContent = 'i';
       head.append(heading, infoBtn);
+
+      const stageWin = document.createElement('div');
+      stageWin.className = 'stage-window rm-ff-stage-window';
+      stageWin.setAttribute('aria-hidden', 'true');
+      top.append(head, stageWin);
 
       const dialog = document.createElement('dialog');
       dialog.className = 'rm-claim-sheet';
@@ -59,7 +74,7 @@ export function createFairFightScreen(): Screen {
         const tr = document.createElement('tr');
         const rowHead = document.createElement('th');
         rowHead.scope = 'row';
-        rowHead.textContent = shortWords(ctx.t(row.rowKey), 5);
+        rowHead.textContent = shortWords(ctx.t(row.rowKey), 6);
         tr.appendChild(rowHead);
 
         for (const colKey of ['intel', 'amd', 'qc'] as const) {
@@ -110,8 +125,9 @@ export function createFairFightScreen(): Screen {
         label: ctx.t('btn.next'),
         onClick: () => ctx.go('result'),
       });
+      cta.classList.add('rm-ff-cta');
 
-      wrap.append(head, tableWrap, cta, dialog);
+      wrap.append(top, tableWrap, cta, dialog);
       root.replaceChildren(wrap);
       return () => {};
     },

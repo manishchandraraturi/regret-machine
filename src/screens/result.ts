@@ -22,7 +22,10 @@ export function createResultScreen(onReset: () => void): Screen {
       heading.textContent = ctx.t('result.title');
 
       const grid = document.createElement('div');
-      grid.className = 'rm-result-grid stage-window';
+      grid.className = 'rm-result-grid';
+
+      const leftCol = document.createElement('div');
+      leftCol.className = 'rm-result-left';
 
       const card = document.createElement('div');
       card.className = 'rm-result-card';
@@ -40,6 +43,11 @@ export function createResultScreen(onReset: () => void): Screen {
       regret.textContent = `${rec.regret} / 100 · ${ctx.t(rec.labelKey)}`;
 
       card.append(cardTitle, tier, regret);
+
+      const stageWin = document.createElement('div');
+      stageWin.className = 'stage-window rm-result-stage-window';
+      stageWin.setAttribute('aria-hidden', 'true');
+      leftCol.append(card, stageWin);
 
       const rightCol = document.createElement('div');
       rightCol.className = 'rm-shelf';
@@ -100,7 +108,7 @@ export function createResultScreen(onReset: () => void): Screen {
       );
 
       rightCol.append(asksList, actions, dialog);
-      grid.append(card, rightCol);
+      grid.append(leftCol, rightCol);
 
       const footer = document.createElement('footer');
       footer.className = 'rm-footer';

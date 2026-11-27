@@ -154,12 +154,8 @@
 }
 
 @keyframes split-wipe {
-  from {
-    transform: translateX(-50%) scaleY(0);
-  }
-  to {
-    transform: translateX(-50%) scaleY(1);
-  }
+  from { transform: translateX(-50%) scaleY(0); }
+  to { transform: translateX(-50%) scaleY(1); }
 }
 
 .rm-split-claim {
@@ -227,29 +223,12 @@
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .rm-btn,
-  .rm-starburst,
-  .rm-pricetag-card,
-  .rm-chip {
-    transition: none;
-  }
-
-  .rm-tape-line,
-  .rm-split-divider {
-    animation: none;
-  }
-
-  .rm-yearflip-sheet--peeling {
-    animation: year-fade 300ms linear forwards;
-  }
-
+  .rm-btn, .rm-starburst, .rm-pricetag-card, .rm-chip { transition: none; }
+  .rm-tape-line, .rm-split-divider { animation: none; }
+  .rm-yearflip-sheet--peeling { animation: year-fade 300ms linear forwards; }
   @keyframes year-fade {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
+    from { opacity: 1; }
+    to { opacity: 0; }
   }
 }
 

@@ -120,7 +120,6 @@ export function createPrivateScene(audio?: Audio): SceneFactory {
         phase = 'REVEAL';
         wrap.dataset.phase = 'REVEAL';
         audio?.buzz();
-        ctx.setStageHint?.({ scenePhase: 'REVEAL', sceneAlert: true });
 
         const rv = createRevealView({
           ctx,
@@ -136,6 +135,7 @@ export function createPrivateScene(audio?: Audio): SceneFactory {
         decisionRow.replaceChildren();
         uploadBar.hidden = true;
         revealHost.replaceChildren(rv.element);
+        ctx.setStageHint?.({ scenePhase: 'REVEAL', sceneAlert: true });
       };
 
       const loop = createLoop();
