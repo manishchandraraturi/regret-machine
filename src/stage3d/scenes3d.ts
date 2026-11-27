@@ -32,8 +32,14 @@ const SHELF_IDS = ['lap-zesta', 'lap-voltra', 'lap-nimbus'] as const;
 const SHELF_COLORS = ['#FF6FA5', '#66E0BE', '#B9A7FF'] as const;
 
 function resolveFailMode(screen: ScreenId, phase: string, alert: boolean): ScreenMode {
-  if (phase === 'PLAY' && !alert) return 'attract';
-  if (screen === 'battery') return 'battery-fail';
+  if (phase === 'PLAY' && !alert) {
+    if (screen === 'lecture') return 'lecture-play';
+    if (screen === 'battery') return 'battery-play';
+    if (screen === 'creator') return 'creator-play';
+    if (screen === 'private') return 'private-play';
+    return 'attract';
+  }
+  if (screen === 'battery') return phase === 'REVEAL' ? 'dead' : 'battery-fail';
   if (screen === 'lecture') return 'wifi-fail';
   if (screen === 'creator') return 'creator-fail';
   if (screen === 'private') return 'private-fail';
@@ -237,7 +243,8 @@ function positionSingleAndReveal(
   } else {
     activeRig.group.position.set(stutter, 0.0, 0.25);
     activeRig.group.rotation.y = -0.28 + (snap ? 0 : Math.sin(tSec * 0.8) * 0.06);
-    activeRig.setScreenMode(resolveFailMode(screen, state.scenePhase, state.sceneAlert), state.decay);
+    const alertPulse = state.scenePhase === 'FAIL' || state.sceneAlert ? (snap ? 0.35 : 0.4 * Math.abs(Math.sin(tSec * 7))) : 0;
+    activeRig.setScreenMode(resolveFailMode(screen, state.scenePhase, state.sceneAlert), state.decay, alertPulse);
   }
 }
 

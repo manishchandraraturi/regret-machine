@@ -4,7 +4,7 @@ import { createScreenSurface, type ScreenMode, type ShowroomTextures } from './t
 export interface LaptopRig {
   group: THREE.Group;
   setDecay(decay: number): void;
-  setScreenMode(mode: ScreenMode, decay: number): void;
+  setScreenMode(mode: ScreenMode, decay: number, flashBoost?: number): void;
   setHighlight(hovered: boolean, selected: boolean): void;
   dispose(): void;
 }
@@ -225,9 +225,13 @@ export function buildLaptopRig(
   return {
     group: root,
     setDecay,
-    setScreenMode(mode: ScreenMode, decay: number): void {
+    setScreenMode(mode: ScreenMode, decay: number, flashBoost = 0): void {
       currentMode = mode;
       screenSurface.redraw(mode, decay);
+      if ('emissiveIntensity' in screenMat) {
+        const base = Math.max(0.22, 0.78 - decay * 0.45);
+        screenMat.emissiveIntensity = base + flashBoost;
+      }
     },
     setHighlight(hovered: boolean, selected: boolean): void {
       rimMat.opacity = selected ? 0.85 : hovered ? 0.45 : 0;

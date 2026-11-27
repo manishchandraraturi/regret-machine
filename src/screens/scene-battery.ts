@@ -7,7 +7,12 @@ import { createRevealView } from './reveal-view';
 import { ICON_PATHS, makeSvgIcon } from './scene-icons';
 import type { SceneFactory } from './scenes';
 
-const TASK_ICONS: Array<keyof typeof ICON_PATHS> = ['meeting', 'send', 'share'];
+const BATTERY_TASKS = [
+  { icon: 'mail', labelKey: 'task.mail' },
+  { icon: 'share', labelKey: 'task.share' },
+  { icon: 'calendar', labelKey: 'task.calendar' },
+  { icon: 'reportDoc', labelKey: 'task.report' },
+] as const;
 const CLOCK_LABELS = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:30', '15:30', '16:30', '17:30', '19:00'] as const;
 
 export function createBatteryScene(audio?: Audio): SceneFactory {
@@ -80,16 +85,22 @@ export function createBatteryScene(audio?: Audio): SceneFactory {
       };
 
       const spawnTask = (idx: number): void => {
-        const iconKey = TASK_ICONS[idx % TASK_ICONS.length] ?? 'meeting';
+        const task = BATTERY_TASKS[idx % BATTERY_TASKS.length] ?? BATTERY_TASKS[0];
+        const taskLabel = ctx.t(task.labelKey);
+        const clock = CLOCK_LABELS[idx] ?? '19:00';
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'rm-task-bubble';
         btn.dataset.taskIndex = String(idx);
-        btn.setAttribute('aria-label', CLOCK_LABELS[idx] ?? '19:00');
+        btn.setAttribute('aria-label', `${clock} ${taskLabel}`);
         const ring = document.createElement('span');
         ring.className = 'rm-bubble-ring';
         ring.setAttribute('aria-hidden', 'true');
-        btn.append(ring, makeSvgIcon(ICON_PATHS[iconKey], 'rm-bubble-icon'));
+        const lbl = document.createElement('span');
+        lbl.className = 'rm-task-label';
+        lbl.setAttribute('aria-hidden', 'true');
+        lbl.textContent = taskLabel;
+        btn.append(ring, makeSvgIcon(ICON_PATHS[task.icon], 'rm-bubble-icon'), lbl);
         btn.addEventListener('click', () => {
           if (phase !== 'PLAY' || btn.getAttribute('aria-disabled') === 'true') return;
           cue.classList.add('rm-float-cue--hidden');

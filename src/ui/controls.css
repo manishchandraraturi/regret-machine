@@ -28,8 +28,6 @@
   background: var(--glass-bg);
   color: var(--paper-white);
   border-color: var(--glass-border);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow);
 }
 
@@ -43,8 +41,6 @@
   background: var(--glass-clear-bg);
   color: var(--clear-ink);
   border-color: var(--glass-clear-border);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-clear-shadow);
 }
 
@@ -107,8 +103,6 @@
   border: 1px solid var(--glass-border);
   background: var(--glass-bg);
   color: var(--paper-white);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow);
   font-family: var(--font-body);
   font-size: clamp(17px, 1.3vw, 20px);

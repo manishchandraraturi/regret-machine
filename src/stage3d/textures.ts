@@ -7,6 +7,10 @@ import metalRoughnessUrl from '../assets/textures/metal-roughness.webp';
 
 export type ScreenMode =
   | 'attract'
+  | 'lecture-play'
+  | 'battery-play'
+  | 'creator-play'
+  | 'private-play'
   | 'battery-fail'
   | 'wifi-fail'
   | 'creator-fail'
@@ -89,33 +93,55 @@ function drawScreenBase(
   ctx.fillRect(40 + w * 0.45, 72, w * 0.55 - 64, h - 108);
 }
 
+function drawPlaySceneOverlay(ctx: CanvasRenderingContext2D, w: number, h: number, mode: ScreenMode): boolean {
+  const labels: Partial<Record<ScreenMode, { tag: string; color: string }>> = {
+    'lecture-play': { tag: 'WI-FI WEAK', color: '#F59E0B' },
+    'battery-play': { tag: 'DRAINING FAST', color: '#F59E0B' },
+    'creator-play': { tag: 'EXPORTING...', color: '#0B63F6' },
+    'private-play': { tag: 'LOCAL LOCK', color: '#22C55E' },
+  };
+  const cfg = labels[mode];
+  if (!cfg) return false;
+  ctx.fillStyle = cfg.color;
+  ctx.fillRect(54, h * 0.40, w - 108, 48);
+  ctx.fillStyle = '#0B0C0E';
+  ctx.font = '800 22px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(cfg.tag, w / 2, h * 0.40 + 32);
+  return true;
+}
+
 function drawFailureOverlay(ctx: CanvasRenderingContext2D, w: number, h: number, mode: ScreenMode): void {
+  if (drawPlaySceneOverlay(ctx, w, h, mode)) return;
   if (mode === 'battery-fail' || mode === 'dead') {
     ctx.fillStyle = '#07080A';
     ctx.fillRect(0, 0, w, h);
     ctx.strokeStyle = '#E4262B';
     ctx.lineWidth = 6;
-    ctx.strokeRect(w * 0.38, h * 0.36, w * 0.2, h * 0.28);
+    ctx.strokeRect(w * 0.38, h * 0.28, w * 0.22, h * 0.26);
     ctx.fillStyle = '#E4262B';
-    ctx.fillRect(w * 0.58, h * 0.44, 10, h * 0.12);
-    ctx.fillRect(w * 0.4, h * 0.39, 18, h * 0.22);
+    ctx.fillRect(w * 0.60, h * 0.35, 10, h * 0.12);
+    ctx.fillRect(w * 0.40, h * 0.31, 18, h * 0.20);
+    ctx.font = '800 26px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(mode === 'dead' ? 'BATTERY 0%' : 'LOW BATTERY', w / 2, h * 0.72);
     return;
   }
 
-  ctx.fillStyle = 'rgba(11, 12, 14, 0.78)';
+  ctx.fillStyle = 'rgba(11, 12, 14, 0.82)';
   ctx.fillRect(0, 0, w, h);
   ctx.fillStyle = '#E4262B';
-  ctx.fillRect(48, h * 0.38, w - 96, 68);
+  ctx.fillRect(42, h * 0.36, w - 84, 72);
   ctx.fillStyle = '#FFF3E0';
-  ctx.font = '700 28px sans-serif';
+  ctx.font = '800 28px sans-serif';
   ctx.textAlign = 'center';
   const msg =
     mode === 'wifi-fail'
-      ? 'NO WI-FI SIGNAL'
+      ? 'NO WI-FI'
       : mode === 'creator-fail'
-        ? 'FRAME DROP / STALL'
-        : 'UPLOADING DATA...';
-  ctx.fillText(msg, w / 2, h * 0.38 + 44);
+        ? 'FRAME DROP'
+        : 'CLOUD UPLOAD!';
+  ctx.fillText(msg, w / 2, h * 0.36 + 46);
 }
 
 function drawDecayStreaks(ctx: CanvasRenderingContext2D, w: number, h: number, decay: number): void {

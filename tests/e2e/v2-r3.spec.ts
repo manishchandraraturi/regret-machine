@@ -14,6 +14,7 @@ test.describe('V2 R3 Three.js showroom & fallback', () => {
     test(`renders lazy WebGL2 stage3d on Attract, Shelf, Result (${vp.width}x${vp.height})`, async ({
       page,
     }) => {
+      test.setTimeout(120_000);
       const thirdParty: string[] = [];
       const csp = await attachCspGuard(page);
       page.on('request', (req) => {

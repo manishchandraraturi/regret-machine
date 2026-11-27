@@ -1,7 +1,6 @@
-import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { attachCspGuard } from './csp';
-import { gotoLite, runClockUntilVisible } from './helpers';
+import { analyzeAxeOnPausedClock, gotoLite, runClockUntilVisible, withPausedClock } from './helpers';
 
 const VIEWPORTS = [
   { name: 'desktop', width: 1920, height: 1080 },
@@ -40,9 +39,10 @@ test.describe('P9 Creator night (performance) = CUT LINE 3', () => {
       await expect(page.locator('[data-screen="creator"]')).toBeVisible();
       await page.getByTestId('creator-hold-btn').dispatchEvent('pointerdown');
       await page.clock.runFor(3_000);
-      await page.screenshot({ path: `evidence/P9/play-${vp.width}x${vp.height}.png` });
-
-      const axePlay = await new AxeBuilder({ page }).analyze();
+      const axePlay = await withPausedClock(page, async () => {
+        await page.screenshot({ path: `evidence/P9/play-${vp.width}x${vp.height}.png` });
+        return analyzeAxeOnPausedClock(page);
+      });
       console.log(
         `AXE_P9_PLAY[${vp.name}]=` +
           JSON.stringify(axePlay.violations.map((v) => ({ id: v.id, impact: v.impact }))),
@@ -51,20 +51,23 @@ test.describe('P9 Creator night (performance) = CUT LINE 3', () => {
 
       await runClockUntilVisible(page, '[data-testid="creator-stutter"]', 10_000);
       await expect(page.getByTestId('creator-stutter')).toBeVisible();
-      await page.screenshot({ path: `evidence/P9/stutter-${vp.width}x${vp.height}.png` });
+      await withPausedClock(page, async () => {
+        await page.screenshot({ path: `evidence/P9/stutter-${vp.width}x${vp.height}.png` });
+      });
 
       await runClockUntilVisible(page, '[data-phase="REVEAL"]', 12_000);
       await expect(page.locator('[data-phase="REVEAL"]')).toBeVisible();
       await expect(page.locator('[data-phase="REVEAL"]')).toContainText('Illustration');
       await expect(page.locator('[data-phase="REVEAL"]')).toContainText('Intel-claimed, up to');
-      await page.getByRole('button', { name: 'Details' }).click();
-      await expect(page.getByTestId('creator-baseline')).toContainText(
-        'vs earlier-generation Intel chip, Intel-measured',
-      );
-      await page.getByRole('button', { name: 'Close' }).click();
-      await page.screenshot({ path: `evidence/P9/reveal-${vp.width}x${vp.height}.png` });
-
-      const axeReveal = await new AxeBuilder({ page }).analyze();
+      const axeReveal = await withPausedClock(page, async () => {
+        await page.getByRole('button', { name: 'Details' }).click();
+        await expect(page.getByTestId('creator-baseline')).toContainText(
+          'vs earlier-generation Intel chip, Intel-measured',
+        );
+        await page.getByRole('button', { name: 'Close' }).click();
+        await page.screenshot({ path: `evidence/P9/reveal-${vp.width}x${vp.height}.png` });
+        return analyzeAxeOnPausedClock(page);
+      });
       console.log(
         `AXE_P9_REVEAL[${vp.name}]=` +
           JSON.stringify(axeReveal.violations.map((v) => ({ id: v.id, impact: v.impact }))),

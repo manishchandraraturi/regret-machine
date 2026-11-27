@@ -77,6 +77,23 @@ export function createLectureScene(audio?: Audio): SceneFactory {
         });
       };
 
+      const createDocFace = (): DocumentFragment => {
+        const frag = document.createDocumentFragment();
+        const fold = document.createElement('span');
+        fold.className = 'rm-doc-fold';
+        fold.setAttribute('aria-hidden', 'true');
+        const lines = document.createElement('span');
+        lines.className = 'rm-doc-lines';
+        lines.setAttribute('aria-hidden', 'true');
+        for (const cls of ['rm-doc-line', 'rm-doc-line', 'rm-doc-line rm-doc-line--short']) {
+          const line = document.createElement('span');
+          line.className = cls;
+          lines.appendChild(line);
+        }
+        frag.append(fold, lines);
+        return frag;
+      };
+
       const spawnNote = (index: number): void => {
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -84,7 +101,7 @@ export function createLectureScene(audio?: Audio): SceneFactory {
         btn.dataset.noteIndex = String(index);
         btn.style.gridColumn = String((index % 3) + 1);
         btn.setAttribute('aria-label', `#${index + 1}`);
-        btn.append(makeSvgIcon(ICON_PATHS.note, 'rm-note-icon'));
+        btn.appendChild(createDocFace());
 
         btn.addEventListener('click', () => {
           if (phase !== 'PLAY' || btn.getAttribute('aria-disabled') === 'true') return;
@@ -95,7 +112,7 @@ export function createLectureScene(audio?: Audio): SceneFactory {
           plus.className = 'rm-plus-one';
           plus.setAttribute('aria-hidden', 'true');
           plus.style.gridColumn = btn.style.gridColumn;
-          plus.textContent = '+1';
+          plus.textContent = ctx.t('scene.lecture.saved');
           plus.addEventListener('animationend', () => plus.remove(), { once: true });
           arena.appendChild(plus);
           if (dots[caught]) dots[caught].classList.add('rm-dot--filled');

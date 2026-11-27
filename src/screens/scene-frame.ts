@@ -1,6 +1,7 @@
 import { getScenesConfig } from '../core/data';
 import type { Audio, Ctx, SceneId, SceneResult, Screen, ScreenId } from '../core/types';
 import { tweenDecay } from '../ui/decay';
+import { createSceneIntro, createStakeMeter } from './scene-hud';
 import { createSceneRegistry } from './scenes';
 
 export function createSceneFrameScreen(
@@ -31,11 +32,10 @@ export function createSceneFrameScreen(
       title.className = 'type-title';
       title.textContent = ctx.t(`scene.${sceneId}.title`);
 
-      const timer = document.createElement('span');
-      timer.className = 'rm-timer-ring';
-      timer.textContent = `${Math.round(meta.durationMs / 1000)}s`;
+      const stakeMeter = createStakeMeter(sceneId, ctx);
+      const intro = createSceneIntro(sceneId, meta.year, ctx);
 
-      head.append(yearChip, title, timer);
+      head.append(yearChip, title, stakeMeter.element);
 
       const hint = document.createElement('p');
       hint.className = 'type-body rm-scene-hint rm-scrim';
@@ -52,14 +52,24 @@ export function createSceneFrameScreen(
 
       const fadeHint = (): void => {
         hint.classList.add('rm-scene-hint--faded');
+        intro.dismiss();
       };
       stage.addEventListener('pointerdown', fadeHint, { once: true });
 
-      stage.append(head, hint, layout);
+      const startAt = Date.now();
+      const meterTimer = window.setInterval(() => {
+        const tMs = Date.now() - startAt;
+        stakeMeter.update(tMs);
+        if (tMs >= meta.playMs) intro.dismiss();
+      }, 200);
+
+      stage.append(head, intro.element, hint, layout);
       root.replaceChildren(stage);
 
       const factory = registry[sceneId];
       const cleanupScene = factory.mount(playArea, ctx, (result: SceneResult) => {
+        window.clearInterval(meterTimer);
+        intro.dismiss();
         ctx.store.addSceneResult(result);
         const prevDecay = ctx.store.getState().decay;
         const nextDecay = Math.min(1, prevDecay + config.decayPerScene);
@@ -69,6 +79,8 @@ export function createSceneFrameScreen(
       });
 
       return () => {
+        window.clearInterval(meterTimer);
+        intro.dismiss();
         stage.removeEventListener('pointerdown', fadeHint);
         cleanupScene();
       };
